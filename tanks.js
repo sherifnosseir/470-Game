@@ -1,4 +1,3 @@
-//testingwindowsside
 // Require dependencies
 var app = require('http').createServer(handler)
 , fs = require('fs')
