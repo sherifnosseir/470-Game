@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	
 	<title>tanks</title>
   <!-- Include the socket.io javascript on the client side -->
   <script src="socket.io/socket.io.js"></script>
@@ -18,8 +17,15 @@
  
     <script>
       // Establish the connection with the server
-      //var socket = io.connect('http://localhost:8000'); 
- 	    var socket = io.connect ('http://cmpt470.csil.sfu.ca:9016');
+		var environment = "development";
+		if(environment == "production")
+		{
+			var socket = io.connect ('http://cmpt470.csil.sfu.ca:9016');
+		}
+		else
+		{
+			var socket = io.connect('http://localhost:8000'); 
+		}
       // on every message recived we print the new datas inside the #broadcast-msg div
      
       socket.on('ticker_up', function(data) {
