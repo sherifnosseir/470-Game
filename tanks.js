@@ -16,7 +16,7 @@ data.y=10;
  
 // on server started we can load our client.html page
 function handler(req, res) {
-  fs.readFile(__dirname + '/tanks.html', function(err, data) {
+  fs.readFile(__dirname + '/tankView.html', function(err, data) {
     if(err) {
       console.log(err);
       res.writeHead(500);
@@ -30,10 +30,17 @@ function handler(req, res) {
 // creating a new websocket to keep the content updated without any AJAX request
 io.sockets.on('connection', function(socket) {
  
-  setInterval(function(){
+  setInterval(function()
+{   	
+	if(data.y>200)data.y=10;
+	data.y++;
     io.sockets.volatile.emit( 'draw' , data);
-  },1000);
+  },100);
 
+  socket.on('move_left',function(){
+	data.x=data.x-5;});
+  socket.on('move_right',function(){
+	data.x=data.x+5;});
 
   socket.on('user_click', function(data) { 
       ticker = ticker+1;

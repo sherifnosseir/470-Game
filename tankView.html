@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame
+		Remove this if you use the .htaccess -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+		<title>tankView</title>
+		<meta name="description" content="" />
+		<meta name="author" content="Gregory Zhou" />
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<script src="../socket.io/socket.io.js"></script>
+  		<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	</head>
+
+	<body>
+		<div>
+			<header>
+				<h1>tankView</h1>
+			</header>
+
+
+			<div>
+				<canvas id="canvas" width="400" height="400">
+					
+				</canvas>
+			</div>
+			<script>
+			function draw(x,y){
+			var canvas = document.getElementById("canvas");
+ 			var ctx = canvas.getContext("2d");
+			ctx.fillStyle = "rgb(200,0,0)";
+ 			ctx.fillRect (x, y, 15, 10);	
+			}
+
+
+				$(document).ready(function() {
+   // put all your jQuery goodness in here.
+  document.addEventListener("keydown",function(e){
+        
+        if(e.keyCode=="65")
+        {
+            socket.emit('move_left');
+        
+            
+        }else if(e.keyCode == "68")
+        {
+               socket.emit('move_right'); 
+            
+        }
+        
+    
+    });
+  var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+  socket.on('draw', function (data) {
+    draw(data.x,data.y);
+  });
+  
+});
+			</script>
+
+			<footer>
+				<p>
+					&copy; Copyright  by Gregory Zhou
+				</p>
+			</footer>
+		</div>
+	</body>
+</html>
