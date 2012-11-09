@@ -3,10 +3,17 @@
 var app = require('http').createServer(handler)
 , fs = require('fs')
 , io = require('socket.io').listen(app);
- 
-// creating the server ( localhost:8000 )
-app.listen(8080);
 
+var environment = "development" 
+// creating the server ( localhost:8000 )
+if(environment == "production")
+{
+	app.listen(8080);
+}
+else
+{
+	app.listen(8000);
+}
 
 var ticker = 0;
 var data=Object();
