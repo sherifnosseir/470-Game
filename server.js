@@ -21,7 +21,7 @@ http.createServer(function (request, response) {
             break;
     }
      
-    path.exists(filePath, function(exists) {
+    fs.exists(filePath, function(exists) {
      
         if (exists) {
             fs.readFile(filePath, function(error, content) {
@@ -41,6 +41,6 @@ http.createServer(function (request, response) {
         }
     });
      
-}).listen(8080);
+}).listen(8000);
  
 console.log('Server running');
