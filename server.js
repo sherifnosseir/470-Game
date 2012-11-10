@@ -4,7 +4,7 @@ var app = require('http').createServer(handler)
   , fs = require('fs')
   , path = require('path')
 
-app.listen(8080);
+app.listen(8000);
 
 function handler (req, res) {
     var filePath=__dirname+req.rul;

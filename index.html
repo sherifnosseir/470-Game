@@ -40,35 +40,14 @@
 		// movement [client side]
 		document.addEventListener("keydown", function(e) {
 			//console.log('zzzzzzzzz');
-			switch(e.keyCode)
-			{
-				case 65:
-					socket.emit('move_left');
-					break;
-				case 68:
-					socket.emit('move_right');
-					break;
-				case 87:
-					socket.emit('move_up');
-					break;
-				case 83:
-					socket.emit('move_down');
-					break;
-				case 32:
-					socket.emit('shoot');
-					break;
-				default:
-					
-					break;
-			}
-			/*if (e.keyCode=="65") {
+			if (e.keyCode=="65") {
 				//console.log('aseaseaseaseaseasease');
 				socket.emit('move_left');
 			}
 			else if (e.keyCode="68") {
 				socket.emit('move_right');
 			}
-			*/
+
 		});		
 	};
 
@@ -87,6 +66,9 @@
 			console.log(tanksArray[i].x);
 			draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
 		};
+
+
+
 	});
 
 	socket.on('setID', function(id) {
