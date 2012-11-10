@@ -4,7 +4,7 @@ var app = require('http').createServer(handler)
   , fs = require('fs')
   , path = require('path')
 
-app.listen(8080);
+app.listen(8000);
 
 function handler (req, res) {
     var filePath=__dirname+req.rul;
@@ -25,8 +25,6 @@ function handler (req, res) {
 
 var id = 0;
 var tanksArray = Array();
-
-
 
 
 setInterval(function() {
@@ -126,6 +124,11 @@ io.sockets.on('connection', function(socket) {
 				tanksArray[index].y = tanksArray[index].y - 10;
 			}
 		});
+	});
+	
+	socket.on('shoot', function()
+	{
+		
 	});
 
     socket.on('disconnect', function() {
