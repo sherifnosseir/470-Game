@@ -15,11 +15,17 @@
 		
 <script>
 
-	function draw(x,y){
+	function draw(x,y,colourID){
 		var canvas = document.getElementById("canvas");
 		var ctx = canvas.getContext("2d");
 		//ctx.clearRect(0 , 0, 500, 500);
-		ctx.fillStyle = "rgb(200,0,0)";
+		if(colourID%2 == 0) {
+			ctx.fillStyle = "rgb(255,0,0)";
+		}
+		else {
+			ctx.fillStyle = "rgb(0,0,255)";			
+		}
+
 		ctx.fillRect (x, y, 15, 10);	
 	}
 
@@ -44,7 +50,8 @@
 		});		
 	};
 
-	var socket = io.connect('http://localhost:8000');
+	//var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+	var socket = io.connect('http://localhost:8080');
 	var idClient;
 
 	socket.on('connect', function() {
@@ -59,7 +66,7 @@
 		for (i = 0; i<tanksArray.length; i++) {
 			console.log(tanksArray[i].id);
 			console.log(tanksArray[i].x);
-			draw(tanksArray[i].x, tanksArray[i].y);
+			draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
 		};
 
 
