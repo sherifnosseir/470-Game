@@ -6,6 +6,8 @@ var app = require('http').createServer(handler)
 
 app.listen(8000);
 
+var id = 0;
+
 function handler (req, res) {
     var filePath=__dirname+req.rul;
     var extname = path.extname(filePath);
@@ -25,6 +27,11 @@ function handler (req, res) {
 
 io.sockets.on('connection', function (socket) {
 
+    socket.on('connect', function() {
+        id++;
+        var newTank = Object();
+        io.sockets.emit('setID', id);
+    });
 
 
 });
