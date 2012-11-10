@@ -31,7 +31,7 @@ var tanksArray = Array();
 
 setInterval(function() {
     io.sockets.volatile.emit('draw', tanksArray);
-}, 1000);
+}, 50);
 
 
 
