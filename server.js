@@ -63,6 +63,7 @@ app.listen(8080);
 function handler (req, res) {
 	var filePath=__dirname+req.rul;
     var extname = path.extname(filePath);
+    console.log(req.url);
 
     
   fs.readFile(__dirname + req.url,
