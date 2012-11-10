@@ -27,8 +27,6 @@ var id = 0;
 var tanksArray = Array();
 
 
-
-
 setInterval(function() {
     io.sockets.volatile.emit('draw', tanksArray);
 }, 50);
@@ -126,6 +124,11 @@ io.sockets.on('connection', function(socket) {
 				tanksArray[index].y = tanksArray[index].y - 10;
 			}
 		});
+	});
+	
+	socket.on('shoot', function()
+	{
+		
 	});
 
     socket.on('disconnect', function() {
