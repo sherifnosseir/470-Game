@@ -82,7 +82,51 @@ io.sockets.on('connection', function(socket) {
         });
     });
 
-
+	socket.on('move_down', function()
+	{
+		socket.get('idClient', function(err, idClient)
+		{
+			var index = 0;
+			for(i=0; i<tanksArray.length; i++)
+			{
+				if(tanksArray[i].id == idClient)
+				{
+					index = i;
+				}
+			}
+			if(tanksArray[index].y>500)
+			{
+				tanksArray[index].y = 10;
+			}
+			else
+			{
+				tanksArray[index].y = tanksArray[index].y + 10;
+			}
+		});
+	});
+	
+	socket.on('move_up', function()
+	{
+		socket.get('idClient', function(err, idClient)
+		{
+			var index = 0;
+			for(i=0; i<tanksArray.length; i++)
+			{
+				if(tanksArray[i].id == idClient)
+				{
+					index = i;
+				}
+			}
+			if(tanksArray[index].y<30)
+			{
+				tanksArray[index].y = 500;
+			}
+			else
+			{
+				tanksArray[index].y = tanksArray[index].y - 10;
+			}
+		});
+	});
 
     socket.on('disconnect', function() {
         socket.get('idClient', function(err, idClient) {
