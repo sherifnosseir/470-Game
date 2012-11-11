@@ -1,6 +1,7 @@
 var mouseX = 0;
  var mouseY = 0;
-
+var clientData=new Object();
+clientData.frameNum=0;
  $('canvas').mousemove(function(e) {
  	//var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
  	//var clientCoords = "CLIENT( " + e.clientX + ", " + e.clientY + " )";
@@ -12,8 +13,8 @@ var mouseX = 0;
  	mouseX = e.pageX-8;
  	mouseY = e.pageY-117;
 
- 	clearCanvas();
- 	draw(mouseX, mouseY, 1);
+ 	//clearCanvas();
+ 	//draw(mouseX, mouseY, 1);
 
  	//console.log("(" + mouseX + ", " + mouseY + ")");
  	//draw(e.pageX, e.pageY, 1);
@@ -67,11 +68,15 @@ var mouseX = 0;
  });
 
  socket.on('draw', function(tanksArray) {
+ 	clientData.frameNum++;
+ 	if(clientData.frameNum>2)clientData.frameNum=0;
  	clearCanvas();
  	for (i = 0; i<tanksArray.length; i++) {
- 	 console.log(tanksArray[i].id);
- 	 console.log(tanksArray[i].x);
- 	 draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
+ 	 //console.log(tanksArray[i].id);
+ 	 //console.log(tanksArray[i].x);
+ 	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
+ 	 
+ 	 drawBody(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
  	};
 
 
