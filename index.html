@@ -14,7 +14,16 @@
 		</div>		
 		
 <script>
-//add some comment
+
+	$('canvas').mousemove(function(e) {
+		var pageCoords = "PAGE( " + e.pageX + ", " + e.pageY + " )";
+		var clientCoords = "CLIENT( " + e.clientX + ", " + e.clientY + " )";
+		console.log(pageCoords);
+		console.log(clientCoords);
+		//draw(e.pageX, e.pageY, 1);
+		draw(e.clientX, e.clientY, 1);
+
+	});
 
 	function draw(x,y,colourID){
 		var canvas = document.getElementById("canvas");
