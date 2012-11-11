@@ -25,7 +25,7 @@ function handler (req, res) {
 
 var id = 0;
 var tanksArray = Array();
-
+var velocity = 10;
 
 setInterval(function() {
     io.sockets.volatile.emit('draw', tanksArray);
@@ -45,7 +45,8 @@ io.sockets.on('connection', function(socket) {
     io.sockets.emit('setID', id);
     socket.set('idClient', id);
 
-    // movement [server side]
+    // movement [server side] old
+    /*
     socket.on('move_left', function() {
         socket.get('idClient', function(err, idClient) {
             var index = 0;
@@ -125,6 +126,29 @@ io.sockets.on('connection', function(socket) {
 			}
 		});
 	});
+    */
+
+    socket.on('mouse_click', function(mouseX, mouseY) {
+        //console.log('mouseclick@' + mouseX +", "+ mouseY);
+        socket.get('idClient', function(err, idClient) {
+            var index = 0;
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
+
+
+
+/*
+            tanksArray[index].x = mouseX;
+            tanksArray[index].y = mouseY;
+*/
+
+
+
+        });
+    });
 	
 	socket.on('shoot', function()
 	{
