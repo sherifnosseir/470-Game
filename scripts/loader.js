@@ -9,7 +9,7 @@ window.addEventListener("load", function() {
         load : [
             "/scripts/jquery-1.8.2.min.js",
             "/socket.io/socket.io.js",
-            "/scripts/gameScript.js"
+            "/scripts/clientScript.js"
         ],
         // called when all files have finished loading
         // and executing
