@@ -40,7 +40,28 @@
 		// movement [client side]
 		document.addEventListener("keydown", function(e) {
 			//console.log('zzzzzzzzz');
-			if (e.keyCode=="65") {
+			switch(e.keyCode)
+			{
+				case 65:
+					socket.emit('move_left');
+					break;
+				case 68:
+					socket.emit('move_right');
+					break;
+				case 87:
+					socket.emit('move_up');
+					break;
+				case 83:
+					socket.emit('move_down');
+					break;
+				case 32:
+					socket.emit('shoot');
+					break;
+				default:
+					
+					break;
+			}
+			/*if (e.keyCode=="65") {
 				//console.log('aseaseaseaseaseasease');
 				socket.emit('move_left');
 			}
