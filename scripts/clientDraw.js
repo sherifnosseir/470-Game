@@ -1,5 +1,7 @@
 tankSprite=new Image();
-tankSprite.src = "images/tankssheet.png"
+tankSprite.src = "images/tankssheet.png";
+turret=new Image();
+turret.src = "images/tankturret.png";
 
 function drawBody(x,y,frameNum){
 	
@@ -8,24 +10,17 @@ function drawBody(x,y,frameNum){
  	ctx.drawImage(tankSprite,0,frameNum*81,63,81,x,y,32,41);
 }
 
-function drawTurret(){
-	
+function drawTurret(x,y){
+	var canvas = document.getElementById("canvas");
+ 	var ctx = canvas.getContext("2d");
+ 	ctx.drawImage(turret,0,0,67,67,x+16-17,y+20-17,34,34);
 }
 
 
-function draw(x,y,colourID){
- 	var canvas = document.getElementById("canvas");
- 	var ctx = canvas.getContext("2d");
- 	//ctx.clearRect(0 , 0, 500, 500);
- 	if(colourID%2 == 0) {
- 	 ctx.fillStyle = "rgb(255,0,0)";
- 	}
- 	else {
- 	 ctx.fillStyle = "rgb(0,0,255)";	  
- 	}
-
- 	 ctx.fillRect (x, y, 15, 10); 
- }
+function draw(x,y,frameNum){
+	drawBody(x,y,frameNum);
+	drawTurret(x,y);
+}
 
  function clearCanvas() {
  	var canvas = document.getElementById("canvas");

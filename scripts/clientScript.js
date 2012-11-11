@@ -76,7 +76,7 @@ clientData.frameNum=0;
  	 //console.log(tanksArray[i].x);
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
- 	 drawBody(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
+ 	 draw(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
  	};
 
 
