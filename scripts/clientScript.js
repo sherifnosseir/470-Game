@@ -1,3 +1,6 @@
+var socket = io.connect('http://localhost:8080');
+var idClient;
+
 var mouseX = 0;
 var mouseY = 0;
 var clientData=new Object();
@@ -15,12 +18,13 @@ $('canvas').mousemove(function(e) {
 	// actually, it seems that client relative to your view, regardless of scroll/zoom
 	// page is
 
- 	clearCanvas();
- 	draw(mouseX, mouseY, 1);
  	//clearCanvas();
  	//draw(mouseX, mouseY, 1);
-	mouseX = e.offsetX;
-	mouseY = e.offsetY;
+ 	//clearCanvas();
+ 	//draw(mouseX, mouseY, 1);
+    mouseX = e.pageX - $(this).offset().left;
+    mouseY = Math.floor(e.pageY - $(this).offset().top);
+	console.log('mousemove@' + mouseX +", "+ mouseY);
 
 	/*
 
@@ -39,7 +43,7 @@ $('canvas').mousemove(function(e) {
 // movement [client side]
 $('canvas').click(function(e){
     mouseX = e.pageX - $(this).offset().left;
-    mouseY = Math.floor(e.pageY - $(this).offset().top);	
+    mouseY = Math.floor(e.pageY - $(this).offset().top);
 	console.log('mouseclick@' + mouseX +", "+ mouseY);
 	socket.emit('mouse_click', mouseX, mouseY);
 });
@@ -82,14 +86,8 @@ document.addEventListener("keydown", function(e) {
 	*/
  });	 
 
- socket.on('draw', function(tanksArray) {
- 	clearCanvas();
- 	for (i = 0; i<tanksArray.length; i++) {
- 	 console.log(tanksArray[i].id);
- 	 console.log(tanksArray[i].x);
- 	 draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
- 	};
- socket.on('draw', function(tanksArray) {
+ 
+socket.on('draw', function(tanksArray) {
  	clientData.frameNum++;
  	if(clientData.frameNum>2)clientData.frameNum=0;
  	clearCanvas();
@@ -101,21 +99,13 @@ document.addEventListener("keydown", function(e) {
  	 draw(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
  	};
 //var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
-var socket = io.connect('http://localhost:8080');
-var idClient;
+
 
 socket.on('connect', function() {
 });
 
-socket.on('draw', function(tanksArray) {
-	clearCanvas();
-	for (i = 0; i<tanksArray.length; i++) {
-	 //console.log(tanksArray[i].id);
-	 //console.log(tanksArray[i].x);
-	 draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
-	};
-});
 
 socket.on('setID', function(id) {
 	idClient = id;
+});
 });

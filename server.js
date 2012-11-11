@@ -25,13 +25,44 @@ function handler (req, res) {
 
 var id = 0;
 var tanksArray = Array();
-var velocity = 10;
-
-setInterval(function() {
-    io.sockets.volatile.emit('draw', tanksArray);
-}, 50);
+var velocity = 6;
+var fps = 42;
 
 
+
+function moveTank() {
+    for (index = 0; index < tanksArray.length; index++) {
+
+        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 1) && 
+            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 1)) {
+                //nomovement
+        }
+        else {
+            var currentX = tanksArray[index].x;
+            var currentY = tanksArray[index].y;
+            
+            var angle = tanksArray[index].wheelAngle;
+
+            //console.log(angle);
+            
+            var velocityX = (Math.cos(angle))*velocity;
+            var velocityY = (Math.sin(angle))*velocity;
+
+            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
+                tanksArray[index].x = currentX - velocityX;
+                tanksArray[index].y = currentY - velocityY;
+            }
+            else {
+                tanksArray[index].x = currentX + velocityX;
+                tanksArray[index].y = currentY + velocityY;
+            }
+
+        }
+
+
+
+    };
+};
 
 io.sockets.on('connection', function(socket) {
 
@@ -39,8 +70,12 @@ io.sockets.on('connection', function(socket) {
     id++;
     var newTank = Object();
     newTank.id = id;
-    newTank.x = 0;  // tank coordinates
-    newTank.y = 0;
+    newTank.x = 250;  // tank coordinates
+    newTank.y = 250;
+    newTank.turretAngle = 0;
+    newTank.wheelAngle = 180;
+    newTank.destX = 0;
+    newTank.destY = 0;
     tanksArray[tanksArray.length] = newTank;
     io.sockets.emit('setID', id);
     socket.set('idClient', id);
@@ -128,6 +163,8 @@ io.sockets.on('connection', function(socket) {
 	});
     */
 
+
+
     socket.on('mouse_click', function(mouseX, mouseY) {
         //console.log('mouseclick@' + mouseX +", "+ mouseY);
         socket.get('idClient', function(err, idClient) {
@@ -138,15 +175,32 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 
+            tanksArray[index].destX = mouseX;
+            tanksArray[index].destY = mouseY;
+
+            var currentX = tanksArray[index].x;
+            var currentY = tanksArray[index].y;
+            
+            var angle = Math.atan((currentY - mouseY)/(currentX - mouseX));
+
+            //console.log(angle);
+            
+            tanksArray[index].wheelAngle = angle;
+
+            var velocityX = (Math.cos(angle))*velocity;
+            var velocityY = (Math.sin(angle))*velocity;
 
 
 /*
-            tanksArray[index].x = mouseX;
-            tanksArray[index].y = mouseY;
+            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
+                tanksArray[index].x = currentX - velocityX;
+                tanksArray[index].y = currentY - velocityY;
+            }
+            else {
+                tanksArray[index].x = currentX + velocityX;
+                tanksArray[index].y = currentY + velocityY;
+            }
 */
-
-
-
         });
     });
 	
@@ -173,5 +227,14 @@ io.sockets.on('connection', function(socket) {
 
 
 });
+
+setInterval(function() {
+    moveTank();
+    io.sockets.volatile.emit('draw', tanksArray);
+}, fps);
+
+
+
+
 
 console.log('Server running');
