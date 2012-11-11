@@ -29,13 +29,19 @@ var velocity = 6;
 var fps = 42;
 
 
+/*
+    tank size = 31*42
+    half = 15*21
+*/
+
 
 function moveTank() {
     for (index = 0; index < tanksArray.length; index++) {
 
-        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 1) && 
-            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 1)) {
-                //nomovement
+        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
+            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
+                tanksArray[index].x = tanksArray[index].destX;
+                tanksArray[index].y = tanksArray[index].destY;
         }
         else {
             var currentX = tanksArray[index].x;
@@ -73,9 +79,9 @@ io.sockets.on('connection', function(socket) {
     newTank.x = 250;  // tank coordinates
     newTank.y = 250;
     newTank.turretAngle = 0;
-    newTank.wheelAngle = 180;
-    newTank.destX = 0;
-    newTank.destY = 0;
+    newTank.wheelAngle = 0;
+    newTank.destX = 250;
+    newTank.destY = 250;
     tanksArray[tanksArray.length] = newTank;
     io.sockets.emit('setID', id);
     socket.set('idClient', id);
@@ -175,13 +181,22 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 
+
+            //15*21
+
             tanksArray[index].destX = mouseX;
             tanksArray[index].destY = mouseY;
 
             var currentX = tanksArray[index].x;
             var currentY = tanksArray[index].y;
             
-            var angle = Math.atan((currentY - mouseY)/(currentX - mouseX));
+
+            if ((currentX + 15 - mouseX) == 0) {
+                var angle = Math.PI/2;
+            }
+            else {
+                var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
+            }
 
             //console.log(angle);
             
@@ -189,7 +204,8 @@ io.sockets.on('connection', function(socket) {
 
             var velocityX = (Math.cos(angle))*velocity;
             var velocityY = (Math.sin(angle))*velocity;
-
+            tanksArray[index].destX = tanksArray[index].destX-15;
+            tanksArray[index].destY = tanksArray[index].destY-21;
 
 /*
             if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
