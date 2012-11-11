@@ -15,15 +15,24 @@
 		
 <script>
 
+	var mouseX = 0;
+	var mouseY = 0;
+
 	$('canvas').mousemove(function(e) {
-		var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
+		//var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
 		//var clientCoords = "CLIENT( " + e.clientX + ", " + e.clientY + " )";
 		// .clientX and .offsetX are 'browser dependent', and you should use .pageX - apparently
 
-		console.log("o(" + (e.pageX-8) + ", " + (e.pageY-117) + ")");
+		//console.log("o(" + (e.pageX-8) + ", " + (e.pageY-117) + ")");
 				
+		
+		mouseX = e.pageX-8;
+		mouseY = e.pageY-117;
+
 		clearCanvas();
-		draw(e.pageX-8, e.pageY-117, 1);
+		draw(mouseX, mouseY, 1);
+
+		//console.log("(" + mouseX + ", " + mouseY + ")");
 		//draw(e.pageX, e.pageY, 1);
 
 
@@ -68,6 +77,7 @@
 					socket.emit('move_down');
 					break;
 				case 32:
+					console.log('PEWPEW@' + "(" + mouseX + ", " + mouseY + "), lol");
 					socket.emit('shoot');
 					break;
 				default:
@@ -82,7 +92,6 @@
 				socket.emit('move_right');
 			}
 			*/
-
 		});		
 	};
 
