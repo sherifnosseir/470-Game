@@ -41,7 +41,7 @@ var mouseX = 0;
  	ctx.clearRect(0 , 0, 500, 500);
  }
 
- window.onload = function() {
+
  	// movement [client side]
  	document.addEventListener("keydown", function(e) {
  	 //console.log('zzzzzzzzz');
@@ -76,7 +76,6 @@ var mouseX = 0;
  	 }
  	 */
  	 });	 
- };
 
  //var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
  var socket = io.connect('http://localhost:8080');

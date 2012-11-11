@@ -1,7 +1,18 @@
 #loadingView{
 	width:500 px;
 	height:500 px;
+	position:absolute;
 
+}
+#gameView{
+	position:absolute;
+}
+.loadingVisable{
+	visibility:visible;
+}
+.loadingHide{
+	visibility:hidden;
+	
 }
 
 h1{
