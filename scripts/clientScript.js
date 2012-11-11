@@ -1,3 +1,4 @@
+//var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 var socket = io.connect('http://localhost:8080');
 var idClient;
 
@@ -98,7 +99,6 @@ socket.on('draw', function(tanksArray) {
  	 
  	 draw(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
  	};
-//var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 
 
 socket.on('connect', function() {

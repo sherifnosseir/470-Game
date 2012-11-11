@@ -192,7 +192,13 @@ io.sockets.on('connection', function(socket) {
             
 
             if ((currentX + 15 - mouseX) == 0) {
-                var angle = Math.PI/2;
+                if ((currentY + 21 - mouseY) > 0) {
+                    var angle = Math.PI/-2;    
+                }
+                else {
+                    var angle = Math.PI/2;
+                }
+                
             }
             else {
                 var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
