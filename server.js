@@ -25,6 +25,7 @@ function handler (req, res) {
 
 var id = 0;
 var tanksArray = Array();
+var bulletArray = Array();
 var velocity = 6;
 var fps = 42;
 
@@ -75,9 +76,12 @@ io.sockets.on('connection', function(socket) {
 
     id++;
     var newTank = Object();
+	
     newTank.id = id;
     newTank.x = 250;  // tank coordinates
     newTank.y = 250;
+	newTank.numShots = 0;
+	newTank.bullets = Array();
     newTank.turretAngle = 0;
     newTank.wheelAngle = 0;
     newTank.destX = 250;
@@ -228,9 +232,22 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('shoot', function()
 	{
+		socket.get('idClient', function(err, idClient) {
+            var index = 0;
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
 		
+		
+			var newBullet = Object();
+			newBullet.x = tanksArray[index].x;
+			newBullet.y = tanksArray[index].y;	
+			bulletArray[bulletArray.length] = newBullet;
+		});
 	});
-
+	
     socket.on('disconnect', function() {
         socket.get('idClient', function(err, idClient) {
             var index = 0;
@@ -243,16 +260,19 @@ io.sockets.on('connection', function(socket) {
             console.log('Disconnect', idClient);
             console.log(tanksArray.length);
         });
-    });
-
-
-
-
+    });	
 });
+
+function moveBullets () {
+	for (var i=0; i < bulletArray.length; i++) {
+		bulletArray[i].x = bulletArray[i].x + 10;
+	};
+}
 
 setInterval(function() {
     moveTank();
-    io.sockets.volatile.emit('draw', tanksArray);
+	moveBullets();
+    io.sockets.volatile.emit('draw', tanksArray, bulletArray);
 }, fps);
 
 

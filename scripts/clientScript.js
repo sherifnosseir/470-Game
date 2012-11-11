@@ -88,7 +88,7 @@ document.addEventListener("keydown", function(e) {
  });	 
 
  
-socket.on('draw', function(tanksArray) {
+socket.on('draw', function(tanksArray, bulletArray) {
  	clientData.frameNum++;
  	if(clientData.frameNum>2)clientData.frameNum=0;
  	clearCanvas();
@@ -97,7 +97,7 @@ socket.on('draw', function(tanksArray) {
  	 //console.log(tanksArray[i].x);
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
- 	 draw(tanksArray[i].x, tanksArray[i].y,clientData.frameNum);
+ 	 draw(tanksArray[i], bulletArray, clientData.frameNum);
  	};
 
 

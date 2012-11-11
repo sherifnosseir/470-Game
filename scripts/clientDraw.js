@@ -16,10 +16,25 @@ function drawTurret(x,y){
  	ctx.drawImage(turret,0,0,67,67,x+16-17,y+20-17,34,34);
 }
 
+function drawBullets (bullets) {
+	var canvas = document.getElementById("canvas");
+ 	var ctx = canvas.getContext("2d");
+	ctx.fillStyle = "rgb(0,0,255)";
+	
+	
+	for(i = 0; i<bullets.length; i++)
+	{
+		console.log("Bullet Movement : " + bullets[i].x);
+		ctx.fillRect (bullets[i].x, bullets[i].y, 5, 5);
+	}
+}
 
-function draw(x,y,frameNum){
-	drawBody(x,y,frameNum);
-	drawTurret(x,y);
+
+
+function draw(tank, bullets, frameNum){
+	drawBody(tank.x, tank.y, frameNum);
+	drawTurret(tank.x, tank.y);
+	drawBullets(bullets);
 }
 
  function clearCanvas() {
