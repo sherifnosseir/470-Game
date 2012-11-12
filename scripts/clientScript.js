@@ -71,7 +71,7 @@ document.addEventListener("keydown", function(e) {
 	*/
 	case 32:
 	console.log('PEWPEW@' + "(" + mouseX + ", " + mouseY + "), lol");
-	socket.emit('shoot');
+	socket.emit('shoot', mouseX, mouseY);
 	break;
 	default:
 

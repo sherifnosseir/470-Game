@@ -27,6 +27,7 @@ var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
+var bulletVelocity = 10;
 var fps = 42;
 
 
@@ -230,7 +231,7 @@ io.sockets.on('connection', function(socket) {
         });
     });
 	
-	socket.on('shoot', function()
+	socket.on('shoot', function(mouseX, mouseY)
 	{
 		socket.get('idClient', function(err, idClient) {
             var index = 0;
@@ -240,10 +241,16 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 		
-		
 			var newBullet = Object();
+			
+			//Calculate Bullet Movement
+			var xDirection = mouseX - tanksArray[index].x;
+			var yDirection = mouseY - tanksArray[index].y;
+			
+			newBullet.angle = Math.atan2(yDirection, xDirection);
 			newBullet.x = tanksArray[index].x;
-			newBullet.y = tanksArray[index].y;	
+			newBullet.y = tanksArray[index].y;
+			
 			bulletArray[bulletArray.length] = newBullet;
 		});
 	});
@@ -265,7 +272,8 @@ io.sockets.on('connection', function(socket) {
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
-		bulletArray[i].x = bulletArray[i].x + 10;
+			bulletArray[i].x = bulletArray[i].x + Math.cos(bulletArray[i].angle)*bulletVelocity;
+			bulletArray[i].y = bulletArray[i].y + Math.sin(bulletArray[i].angle)*bulletVelocity;
 	};
 }
 
