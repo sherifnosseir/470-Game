@@ -11,10 +11,20 @@ function drawBody(x,y,frameNum){
 }
 
 function drawTurret(x,y){
-	console.log(mouseX);
 	var canvas = document.getElementById("canvas");
  	var ctx = canvas.getContext("2d");
- 	ctx.drawImage(turret,0,0,67,67,x+16-17,y+20-17,34,34);
+	
+	//Calculate Turret Angle
+	var xDirection = mouseX - x;
+	var yDirection = mouseY - y;
+	var angle = Math.atan2(yDirection, xDirection);
+	
+	ctx.save();
+	ctx.translate(x+17, y+17);
+	ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
+ 	ctx.drawImage(turret,0,0,67,67,-17,-17,34,34);
+	ctx.translate(-x, -y);
+	ctx.restore();
 }
 
 function drawBullets (bullets) {
@@ -22,10 +32,8 @@ function drawBullets (bullets) {
  	var ctx = canvas.getContext("2d");
 	ctx.fillStyle = "rgb(0,0,255)";
 	
-	
 	for(i = 0; i<bullets.length; i++)
 	{
-		console.log("Bullet Movement : " + i + " : " + bullets[i].x);
 		ctx.fillRect (bullets[i].x, bullets[i].y, 5, 5);
 	}
 }

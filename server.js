@@ -293,7 +293,7 @@ io.sockets.on('connection', function(socket) {
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
-		if((bulletArray[i].x < 520 && bulletArray[i].x > -25) && (bulletArray[i].y > -25 && bulletArray[i].y < 520))
+		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500))
 		{
 			if(bulletArray[i] != "undefined")
 			{
