@@ -26,8 +26,8 @@ function handler (req, res) {
 var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
-var bulletEmptySlotArray = Array();
-bulletEmptySlotArray[0] = "undefined";
+var bulletEmptySlotArray = Array(); //This Array will keep track of empty slots in bulletArray
+bulletEmptySlotArray[0] = "undefined"; 
 var velocity = 6;
 var bulletVelocity = 10;
 var fps = 42;
@@ -235,6 +235,7 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('shoot', function(mouseX, mouseY)
 	{
+		//Get ClientID
 		socket.get('idClient', function(err, idClient) {
             var index = 0;
             for (i=0; i<tanksArray.length; i++) {
@@ -243,9 +244,9 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 		
-			if(tanksArray[index].numShots <=3)
+			if(tanksArray[index].numShots <=3) //Check if user has more than 4 shots
 			{
-				tanksArray[index].numShots = tanksArray[index].numShots+1;
+				tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
 			
 				var newBullet = Object();
 			
@@ -258,10 +259,11 @@ io.sockets.on('connection', function(socket) {
 				newBullet.y = tanksArray[index].y+21;
 				newBullet.clientID = index;
 			
-				var foundPlace = false;
+				var foundPlace = false; //True if a free slot is available in bulletArray, then we wont need to create another Array slow
 				for (var j=0; j < bulletEmptySlotArray.length; j++) {
 					if(bulletEmptySlotArray[j] != "undefined")
 					{
+						//If a free index is found, then just use that index instead of creating a new one
 						bulletArray[bulletEmptySlotArray[j]] = newBullet;
 						bulletEmptySlotArray[j] = "undefined";
 						foundPlace = true;
@@ -269,6 +271,7 @@ io.sockets.on('connection', function(socket) {
 				}
 				if(!foundPlace)
 				{
+					//If no index is free, then create a new index at the end of bulletArray
 					bulletArray[bulletArray.length] = newBullet;
 				}
 			}
@@ -284,7 +287,7 @@ io.sockets.on('connection', function(socket) {
                     index = i;
                 }
             };
-            tanksArray.splice(index, 1);
+            //tanksArray.splice(index, 1);
             console.log('Disconnect', idClient);
             console.log(tanksArray.length);
         });
@@ -293,9 +296,9 @@ io.sockets.on('connection', function(socket) {
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
-		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500))
+		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
 		{
-			if(bulletArray[i] != "undefined")
+			if(bulletArray[i] != "undefined") //Check if bullet exists
 			{
 				bulletArray[i].x = bulletArray[i].x + Math.cos(bulletArray[i].angle)*bulletVelocity;
 				bulletArray[i].y = bulletArray[i].y + Math.sin(bulletArray[i].angle)*bulletVelocity;
@@ -303,17 +306,27 @@ function moveBullets () {
 		}
 		else
 		{
-			if(bulletArray[i] != "undefined")
+			if(bulletArray[i] != "undefined") //This implies that a bullet is out of range, but not removed yet
 			{
-				if (tanksArray[bulletArray[i].clientID].numShots > 0) {
-					tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1;	
-				}
-				bulletArray[i] = "undefined";
 				
-				for (var index=0; index < bulletEmptySlotArray.length; index++) {
-					if(bulletEmptySlotArray[index] == "undefined")
+				if(tanksArray[bulletArray[i].clientID] != "undefined") //This is a fix for disconnections, bullets wont know who's their client
+				{
+					if (tanksArray[bulletArray[i].clientID].numShots > 0) {
+						tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1; //Decrease numShots when bullets goes off the screen
+					}
+					bulletArray[i] = "undefined"; //Make slot ready for another bullet
+				
+				}
+				else
+				{
+					bulletArray[i] = "undefined";
+				}
+				
+				//This is an optimization, looks for the first free slot to add the newly emptied index in bulletArray 
+				for (var index=0; index < bulletEmptySlotArray.length; index++) { //Find a free slot
+					if(bulletEmptySlotArray[index] == "undefined") //Check if its taken
 					{
-						bulletEmptySlotArray[index] = i;
+						bulletEmptySlotArray[index] = i; //Add index to the array
 						break;
 					}
 				};

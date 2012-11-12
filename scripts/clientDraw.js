@@ -3,11 +3,22 @@ tankSprite.src = "images/tankssheet.png";
 turret=new Image();
 turret.src = "images/tankturret.png";
 
-function drawBody(x,y,frameNum){
+function drawBody(tank,frameNum){
 	
  	var canvas = document.getElementById("canvas");
  	var ctx = canvas.getContext("2d");
- 	ctx.drawImage(tankSprite,0,frameNum*81,63,81,x,y,32,41);
+
+	var x = tank.x;
+	var y = tank.y;
+	
+	//This is a transformation to rotate objects on canvas
+	ctx.save();
+	ctx.translate(x+17, y+17);
+	ctx.rotate((tank.wheelAngle+(Math.PI)/2)%(2*Math.PI));
+ 	ctx.drawImage(tankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+	ctx.translate(-x, -y);
+	ctx.restore();
+ 	
 }
 
 function drawTurret(x,y){
@@ -19,6 +30,7 @@ function drawTurret(x,y){
 	var yDirection = mouseY - y;
 	var angle = Math.atan2(yDirection, xDirection);
 	
+	//This is a transformation to rotate objects on canvas
 	ctx.save();
 	ctx.translate(x+17, y+17);
 	ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
@@ -30,10 +42,18 @@ function drawTurret(x,y){
 function drawBullets (bullets) {
 	var canvas = document.getElementById("canvas");
  	var ctx = canvas.getContext("2d");
-	ctx.fillStyle = "rgb(0,0,255)";
 	
 	for(i = 0; i<bullets.length; i++)
 	{
+		if(bullets[i].clientID%2 == 0)
+		{
+			ctx.fillStyle = "rgb(0,0,255)";
+		}
+		else
+		{
+			ctx.fillStyle = "rgb(255,0,0)";
+		}
+		
 		ctx.fillRect (bullets[i].x, bullets[i].y, 5, 5);
 	}
 }
@@ -41,7 +61,7 @@ function drawBullets (bullets) {
 
 
 function draw(tank, bullets, frameNum){
-	drawBody(tank.x, tank.y, frameNum);
+	drawBody(tank, frameNum);
 	drawTurret(tank.x, tank.y);
 	drawBullets(bullets);
 }
