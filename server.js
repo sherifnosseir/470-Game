@@ -27,6 +27,7 @@ var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
 var bulletEmptySlotArray = Array();
+bulletEmptySlotArray[0] = "undefined";
 var velocity = 6;
 var bulletVelocity = 10;
 var fps = 42;
@@ -257,12 +258,16 @@ io.sockets.on('connection', function(socket) {
 				newBullet.y = tanksArray[index].y+21;
 				newBullet.clientID = index;
 			
-				if(bulletEmptySlotArray.length > 0)
-				{
-					bulletArray[bulletEmptySlotArray[0]] = newBullet;
-					delete bulletEmptySlotArray[0];
+				var foundPlace = false;
+				for (var j=0; j < bulletEmptySlotArray.length; j++) {
+					if(bulletEmptySlotArray[j] != "undefined")
+					{
+						bulletArray[bulletEmptySlotArray[j]] = newBullet;
+						bulletEmptySlotArray[j] = "undefined";
+						foundPlace = true;
+					}
 				}
-				else
+				if(!foundPlace)
 				{
 					bulletArray[bulletArray.length] = newBullet;
 				}
@@ -304,6 +309,14 @@ function moveBullets () {
 					tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1;	
 				}
 				bulletArray[i] = "undefined";
+				
+				for (var index=0; index < bulletEmptySlotArray.length; index++) {
+					if(bulletEmptySlotArray[index] == "undefined")
+					{
+						bulletEmptySlotArray[index] = i;
+						break;
+					}
+				};
 			}
 		}
 	};

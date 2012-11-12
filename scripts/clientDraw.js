@@ -25,7 +25,7 @@ function drawBullets (bullets) {
 	
 	for(i = 0; i<bullets.length; i++)
 	{
-		console.log("Bullet Movement : " + bullets[i].x);
+		console.log("Bullet Movement : " + i + " : " + bullets[i].x);
 		ctx.fillRect (bullets[i].x, bullets[i].y, 5, 5);
 	}
 }
