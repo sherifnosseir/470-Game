@@ -11,6 +11,7 @@ function drawBody(x,y,frameNum){
 }
 
 function drawTurret(x,y){
+	console.log(mouseX);
 	var canvas = document.getElementById("canvas");
  	var ctx = canvas.getContext("2d");
  	ctx.drawImage(turret,0,0,67,67,x+16-17,y+20-17,34,34);

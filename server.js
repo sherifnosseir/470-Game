@@ -26,6 +26,7 @@ function handler (req, res) {
 var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
+var bulletEmptySlotArray = Array();
 var velocity = 6;
 var bulletVelocity = 10;
 var fps = 42;
@@ -241,17 +242,32 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 		
-			var newBullet = Object();
+			if(tanksArray[index].numShots <=3)
+			{
+				tanksArray[index].numShots = tanksArray[index].numShots+1;
 			
-			//Calculate Bullet Movement
-			var xDirection = mouseX - tanksArray[index].x;
-			var yDirection = mouseY - tanksArray[index].y;
+				var newBullet = Object();
 			
-			newBullet.angle = Math.atan2(yDirection, xDirection);
-			newBullet.x = tanksArray[index].x;
-			newBullet.y = tanksArray[index].y;
+				//Calculate Bullet Movement
+				var xDirection = mouseX - tanksArray[index].x;
+				var yDirection = mouseY - tanksArray[index].y;
 			
-			bulletArray[bulletArray.length] = newBullet;
+				newBullet.angle = Math.atan2(yDirection, xDirection);
+				newBullet.x = tanksArray[index].x+15;
+				newBullet.y = tanksArray[index].y+21;
+				newBullet.clientID = index;
+			
+				if(bulletEmptySlotArray.length > 0)
+				{
+					bulletArray[bulletEmptySlotArray[0]] = newBullet;
+					delete bulletEmptySlotArray[0];
+				}
+				else
+				{
+					bulletArray[bulletArray.length] = newBullet;
+				}
+			}
+			
 		});
 	});
 	
@@ -272,8 +288,24 @@ io.sockets.on('connection', function(socket) {
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
-			bulletArray[i].x = bulletArray[i].x + Math.cos(bulletArray[i].angle)*bulletVelocity;
-			bulletArray[i].y = bulletArray[i].y + Math.sin(bulletArray[i].angle)*bulletVelocity;
+		if((bulletArray[i].x < 520 && bulletArray[i].x > -25) && (bulletArray[i].y > -25 && bulletArray[i].y < 520))
+		{
+			if(bulletArray[i] != "undefined")
+			{
+				bulletArray[i].x = bulletArray[i].x + Math.cos(bulletArray[i].angle)*bulletVelocity;
+				bulletArray[i].y = bulletArray[i].y + Math.sin(bulletArray[i].angle)*bulletVelocity;
+			}
+		}
+		else
+		{
+			if(bulletArray[i] != "undefined")
+			{
+				if (tanksArray[bulletArray[i].clientID].numShots > 0) {
+					tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1;	
+				}
+				bulletArray[i] = "undefined";
+			}
+		}
 	};
 }
 
