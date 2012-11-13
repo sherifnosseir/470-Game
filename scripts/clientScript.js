@@ -92,13 +92,11 @@ socket.on('draw', function(tanksArray, bulletArray) {
  	clientData.frameNum++;
  	if(clientData.frameNum>2)clientData.frameNum=0;
  	clearCanvas();
- 	for (i = 0; i<tanksArray.length; i++) {
  	 //console.log(tanksArray[i].id);
  	 //console.log(tanksArray[i].x);
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
- 	 draw(tanksArray[i], bulletArray, clientData.frameNum);
- 	};
+ 	 draw(tanksArray, bulletArray, clientData.frameNum);
 
 
 socket.on('connect', function() {
