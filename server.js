@@ -287,7 +287,27 @@ io.sockets.on('connection', function(socket) {
                     index = i;
                 }
             };
-            //tanksArray.splice(index, 1);
+			
+			
+			
+			var change = false;
+			for (i=0; i < bulletArray.length; i++) {
+				
+				if(bulletArray[i] != "undefined")
+				{
+					if (bulletArray[i].clientID == index) {
+						bulletArray[i] = "undefined";
+						change = true;
+					}
+				}
+			}
+			if(change)
+			{
+				optimizeBulletsArray();
+			}
+			
+            tanksArray.splice(index, 1);
+
             console.log('Disconnect', idClient);
             console.log(tanksArray.length);
         });
@@ -322,15 +342,20 @@ function moveBullets () {
 					bulletArray[i] = "undefined";
 				}
 				
-				//This is an optimization, looks for the first free slot to add the newly emptied index in bulletArray 
-				for (var index=0; index < bulletEmptySlotArray.length; index++) { //Find a free slot
-					if(bulletEmptySlotArray[index] == "undefined") //Check if its taken
-					{
-						bulletEmptySlotArray[index] = i; //Add index to the array
-						break;
-					}
-				};
+				optimizeBulletsArray();
 			}
+		}
+	};
+}
+
+function optimizeBulletsArray()
+{
+	//This is an optimization, looks for the first free slot to add the newly emptied index in bulletArray 
+	for (var index=0; index < bulletEmptySlotArray.length; index++) { //Find a free slot
+		if(bulletEmptySlotArray[index] == "undefined") //Check if its taken
+		{
+			bulletEmptySlotArray[index] = i; //Add index to the array
+			break;
 		}
 	};
 }
