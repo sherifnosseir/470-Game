@@ -88,7 +88,7 @@ io.sockets.on('connection', function(socket) {
     newTank.destX = 250;
     newTank.destY = 250;
     tanksArray[tanksArray.length] = newTank;
-    io.sockets.emit('setID', id);
+    socket.emit('setID', id);
     socket.set('idClient', id);
 
     // movement [server side] old
