@@ -88,6 +88,14 @@ document.addEventListener("keydown", function(e) {
  });	 
 
  
+socket.on('connect', function() {
+});
+
+
+socket.on('setID', function(id) {
+	idClient = id;
+});
+
 socket.on('draw', function(tanksArray, bulletArray) {
  	clientData.frameNum++;
  	if(clientData.frameNum>2)clientData.frameNum=0;
@@ -97,13 +105,4 @@ socket.on('draw', function(tanksArray, bulletArray) {
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
  	 draw(tanksArray, bulletArray, clientData.frameNum);
-
-
-socket.on('connect', function() {
-});
-
-
-socket.on('setID', function(id) {
-	idClient = id;
-});
 });

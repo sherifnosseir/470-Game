@@ -251,12 +251,15 @@ io.sockets.on('connection', function(socket) {
 				//Calculate Bullet Movement
 				var xDirection = mouseX - tanksArray[index].x;
 				var yDirection = mouseY - tanksArray[index].y;
-			
-				newBullet.angle = Math.atan2(yDirection, xDirection);
+				
+				var angle = Math.atan2(yDirection, xDirection);
+				
+				newBullet.angle = angle;
 				newBullet.x = tanksArray[index].x+15;
 				newBullet.y = tanksArray[index].y+21;
 				newBullet.clientID = index;
-			
+				
+				tanksArray[index].turretAngle = angle;
 				bulletArray[bulletArray.length] = newBullet;
 			}
 			
@@ -276,8 +279,6 @@ io.sockets.on('connection', function(socket) {
 			var tracker = 0;
 			while(tracker < len)
 			{
-				console.log("B Array Length : " + bulletArray.length);
-				console.log("This is loop number : " + tracker);
 				if (bulletArray[tracker].clientID == index) {
 					bulletArray.splice(tracker, 1);
 					len--;

@@ -14,7 +14,6 @@ function drawBody(tank,frameNum){
 		var y = tank[i].y;
 		var angle = tank[i].wheelAngle;
 		
-		console.log("Tank " + i + " has a wheel angle of " + angle*(180/Math.PI));
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
 		ctx.translate(x+17, y+17);
@@ -33,11 +32,22 @@ function drawTurret(tank){
 	for (var i=0; i < tank.length; i++) {
 		var x = tank[i].x;
 		var y = tank[i].y;
+		var angle = Math.PI;
 		
-		//Calculate Turret Angle
-		var xDirection = mouseX - x;
-		var yDirection = mouseY - y;
-		var angle = Math.atan2(yDirection, xDirection);
+		console.log("id : " + idClient);
+		console.log("Tank id : " + tank[i].id);
+		if(tank[i].id == idClient)
+		{
+			//Calculate Turret Angle
+			var xDirection = mouseX - x;
+			var yDirection = mouseY - y;
+			angle = Math.atan2(yDirection, xDirection);
+		}
+		else
+		{
+			angle = tank[i].turretAngle;
+		}
+		
 
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
