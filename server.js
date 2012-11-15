@@ -62,8 +62,6 @@ io.sockets.on('connection', function(socket) {
 
     socket.emit('setID', id);
     socket.set('idClient', id);
-
-	socket.set('indexClient', tanksArray.length-1);
     
     for (var i=0; i < mapWidth; i++) {
 	pixelMap[i] = Array();
@@ -162,56 +160,60 @@ io.sockets.on('connection', function(socket) {
 
 
     socket.on('mouse_click', function(mouseX, mouseY) {
-        //console.log('mouseclick@' + mouseX +", "+ mouseY);
-        	var index;
-			socket.get('indexClient', function(err, indexClient) {
-				index = indexClient;
-			});
 
+		var index;
+        socket.get('idClient', function(err, idClient) {
+          	index = 0;
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
+		});
 
             //15*21
-			
-			if(tanksArray[index].hp > 0)
-			{
-	            tanksArray[index].destX = mouseX;
-	            tanksArray[index].destY = mouseY;
+		
+		if(tanksArray[index].hp > 0)
+		{
+            tanksArray[index].destX = mouseX;
+            tanksArray[index].destY = mouseY;
 
-	            var currentX = tanksArray[index].x;
-	            var currentY = tanksArray[index].y;
-            
+            var currentX = tanksArray[index].x;
+            var currentY = tanksArray[index].y;
+           
 
-	            if ((currentX + 15 - mouseX) == 0) {
-	                if ((currentY + 21 - mouseY) > 0) {
-	                    var angle = Math.PI/-2;    
-	                }
-	                else {
-	                    var angle = Math.PI/2;
-	                }
-                
-	            }
-	            else {
-	                var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
-	            }
+            if ((currentX + 15 - mouseX) == 0) {
+                if ((currentY + 21 - mouseY) > 0) {
+                    var angle = Math.PI/-2;    
+                }
+                else {
+                    var angle = Math.PI/2;
+                }
+               
+            }
+            else {
+                var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
+            }
 
-	            //console.log(angle);
-            
-	            tanksArray[index].wheelAngle = angle;
+            //console.log(angle);
+           
+            tanksArray[index].wheelAngle = angle;
 
-	            var velocityX = (Math.cos(angle))*velocity;
-	            var velocityY = (Math.sin(angle))*velocity;
-	            tanksArray[index].destX = tanksArray[index].destX-15;
-	            tanksArray[index].destY = tanksArray[index].destY-21;
-			}
+            var velocityX = (Math.cos(angle))*velocity;
+            var velocityY = (Math.sin(angle))*velocity;
+            tanksArray[index].destX = tanksArray[index].destX-15;
+            tanksArray[index].destY = tanksArray[index].destY-21;
+		}
 
 /*
-	            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
-	                tanksArray[index].x = currentX - velocityX;
-	                tanksArray[index].y = currentY - velocityY;
-	            }
-	            else {
-	                tanksArray[index].x = currentX + velocityX;
-	                tanksArray[index].y = currentY + velocityY;
-	            }
+            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
+                tanksArray[index].x = currentX - velocityX;
+                tanksArray[index].y = currentY - velocityY;
+            }
+            else {
+                tanksArray[index].x = currentX + velocityX;
+                tanksArray[index].y = currentY + velocityY;
+            }
 */
     });
 	
@@ -219,11 +221,16 @@ io.sockets.on('connection', function(socket) {
 	{
 		//Get ClientID
 		var index;
-		socket.get('indexClient', function(err, indexClient) {
-			index = indexClient;
+        socket.get('idClient', function(err, idClient) {
+          	index = 0;
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
 		});
             
-		
+		console.log(index);
 			if(tanksArray[index].numShots <=3 && tanksArray[index].hp > 0) //Check if user has more than 4 shots
 			{
 				tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
@@ -251,8 +258,13 @@ io.sockets.on('connection', function(socket) {
 	
     socket.on('disconnect', function() {
 		var index;
-		socket.get('indexClient', function(err, indexClient) {
-			index = indexClient;
+        socket.get('idClient', function(err, idClient) {
+          	index = 0;
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
 		});
 		
 		var id;
