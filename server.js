@@ -276,7 +276,7 @@ io.sockets.on('connection', function(socket) {
 		var tracker = 0;
 		while(tracker < len)
 		{
-			if (bulletArray[tracker].clientID == id) {
+			if (bulletArray[tracker].clientID == id || bulletArray[tracker].clientIndex == index) {
 				bulletArray.splice(tracker, 1);
 				len--;
 			}
