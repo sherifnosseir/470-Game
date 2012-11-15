@@ -105,13 +105,4 @@ socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
  	 draw(tanksArray, bulletArray, clientData.frameNum);
-	
-	var consolelogger = "";
-	for (var i=0; i < pixelMap.length; i++) {
-		for (var j=0; j < pixelMap[i].length; j++) {
-			consolelogger += pixelMap[i][j].type;
-		};
-		console.log(consolelogger);
-		consolelogger = "";
-	};
 });

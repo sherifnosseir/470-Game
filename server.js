@@ -1,6 +1,6 @@
 
 var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
+  , io = require('socket.io').listen(app,{log:false})
   , fs = require('fs')
   , path = require('path')
 
@@ -28,12 +28,22 @@ var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
 var bulletVelocity = 10;
-var fps = 4200;
+var fps = 42;
 
 //Map Variables
 var pixelMap = Array();
 var mapHeight = 500;
 var mapWidth = 500;
+
+for (var i=0; i < mapWidth; i++) {
+	pixelMap[i] = Array();
+	for (var j=0; j < mapHeight; j++) {
+		pixelMap[i][j] = Object();
+		
+		pixelMap[i][j].type = "empty"; //0 : empty
+		pixelMap[i][j].id = -1;
+	};
+};
 
 
 /*
@@ -59,15 +69,6 @@ io.sockets.on('connection', function(socket) {
     tanksArray[tanksArray.length] = newTank;
     socket.emit('setID', id);
     socket.set('idClient', id);
-	
-	for (var i=0; i < mapWidth; i++) {
-		pixelMap[i] = Array();
-		for (var j=0; j < mapHeight; j++) {
-			pixelMap[i][j] = Object();
-			
-			pixelMap[i][j].type = 0; //0 : empty
-		};
-	};
 
     // movement [server side] old
     /*
@@ -278,6 +279,9 @@ io.sockets.on('connection', function(socket) {
 
 function clearObject (x, y, type) 
 {
+	
+	x = Math.floor(x);
+	y = Math.floor(y);
 	if(type == "tank")
 	{
 		/*
@@ -295,19 +299,27 @@ function clearObject (x, y, type)
 			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					pixelMap[i][j].type = 0;
+					pixelMap[i][j].type = "empty";
 				}
 			};
 		};
 	}
 	else if(type == "bullet")
 		{
-			
+				for (var i=0; i < 5; i++) {
+					for (var j=0; j < 5; j++) {
+						pixelMap[x+i][y+j].type = "empty";
+						pixelMap[x+i][y+j].id = -1;
+					};
+				};
 		}
 }
 
-function drawObject(x, y, type)
+function drawObject(x, y, type, object)
 {
+	
+	x = Math.floor(x);
+	y = Math.floor(y);
 	if(type == "tank")
 	{
 		/*
@@ -318,7 +330,11 @@ function drawObject(x, y, type)
 			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					pixelMap[i][j].type = 1;
+					if(x+i < 500 && y+j < 500)
+					{
+						pixelMap[x+i][y+j].type = "tank";
+						pixelMap[x+i][y+j].id = object.id;
+					}
 				}
 			};
 		};
@@ -326,7 +342,12 @@ function drawObject(x, y, type)
 	}
 	else if(type == "bullet")
 		{
-			
+			for (var i=0; i < 5; i++) {
+				for (var j=0; j < 5; j++) {
+					pixelMap[x+i][y+j].type = "bullet";
+					pixelMap[x+i][y+j].id = object.clientID;
+				};
+			};
 		}
 }
 
@@ -335,7 +356,8 @@ function moveTank() {
 
 		
 		//pixelMap
-		drawObject();
+		clearObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
+		drawObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
 		
         if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
             (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
@@ -369,13 +391,35 @@ function moveTank() {
     };
 };
 
+function detectHit (bullet) {
+	for (var i=0; i < 5; i++) {
+		for (var j=0; j < 5; j++) {
+			if(pixelMap[Math.floor(bullet.x)+i][Math.floor(bullet.y)+j].type != "empty" && pixelMap[Math.floor(bullet.x)+i][Math.floor(bullet.y)+j].id != bullet.clientID)
+			{
+				return true;
+			}
+		};
+	};
+	return false;
+}
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
+		clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
 		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
 		{
+			if(detectHit(bulletArray[i]))
+			{
+				console.log("HIT!");
+				tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1; //Decrease numShots when bullets goes off
+				bulletArray.splice(i, 1);
+			}
+			else
+			{
 				bulletArray[i].x = bulletArray[i].x + Math.cos(bulletArray[i].angle)*bulletVelocity;
 				bulletArray[i].y = bulletArray[i].y + Math.sin(bulletArray[i].angle)*bulletVelocity;
+				drawObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
+			}
 		}
 		else
 		{
