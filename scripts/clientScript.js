@@ -25,7 +25,7 @@ $('canvas').mousemove(function(e) {
  	//draw(mouseX, mouseY, 1);
     mouseX = e.pageX - $(this).offset().left;
     mouseY = Math.floor(e.pageY - $(this).offset().top);
-	console.log('mousemove@' + mouseX +", "+ mouseY);
+	//console.log('mousemove@' + mouseX +", "+ mouseY);
 
 	/*
 
@@ -45,7 +45,7 @@ $('canvas').mousemove(function(e) {
 $('canvas').click(function(e){
     mouseX = e.pageX - $(this).offset().left;
     mouseY = Math.floor(e.pageY - $(this).offset().top);
-	console.log('mouseclick@' + mouseX +", "+ mouseY);
+	//console.log('mouseclick@' + mouseX +", "+ mouseY);
 	socket.emit('mouse_click', mouseX, mouseY);
 });
 

@@ -34,8 +34,8 @@ function drawTurret(tank){
 		var y = tank[i].y;
 		var angle = Math.PI;
 		
-		console.log("id : " + idClient);
-		console.log("Tank id : " + tank[i].id);
+		//console.log("id : " + idClient);
+		//console.log("Tank id : " + tank[i].id);
 		if(tank[i].id == idClient)
 		{
 			//Calculate Turret Angle

@@ -35,15 +35,6 @@ var pixelMap = Array();
 var mapHeight = 500;
 var mapWidth = 500;
 
-for (var i=0; i < mapWidth; i++) {
-	pixelMap[i] = Array();
-	for (var j=0; j < mapHeight; j++) {
-		pixelMap[i][j] = Object();
-		
-		pixelMap[i][j].type = "empty"; //0 : empty
-		pixelMap[i][j].id = -1;
-	};
-};
 
 
 /*
@@ -69,6 +60,17 @@ io.sockets.on('connection', function(socket) {
     tanksArray[tanksArray.length] = newTank;
     socket.emit('setID', id);
     socket.set('idClient', id);
+    
+    for (var i=0; i < mapWidth; i++) {
+	pixelMap[i] = Array();
+	for (var j=0; j < mapHeight; j++) {
+		pixelMap[i][j] = Object();
+		
+		pixelMap[i][j].type = "empty"; //0 : empty
+		pixelMap[i][j].id = -1;
+	};
+	};
+
 
     // movement [server side] old
     /*
@@ -236,7 +238,7 @@ io.sockets.on('connection', function(socket) {
 				newBullet.angle = angle;
 				newBullet.x = tanksArray[index].x+15;
 				newBullet.y = tanksArray[index].y+21;
-				newBullet.clientID = index;
+				newBullet.clientID = tanksArray[index].id;
 				
 				tanksArray[index].turretAngle = angle;
 				bulletArray[bulletArray.length] = newBullet;
@@ -288,15 +290,9 @@ function clearObject (x, y, type)
 		    tank size = 31*42
 		    half = 15*21
 		*/
-		
-		/*
-		if(x^2+y^2)<15^2{
-		draw
-		}else{
-		empty
-		*/
-		for (var i=0; i < 42; i++) {
-			for (var j=0; j < 31; j++) {
+
+		for (var i=1; i < 42; i++) {
+			for (var j=1; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
 					pixelMap[i][j].type = "empty";
@@ -306,10 +302,13 @@ function clearObject (x, y, type)
 	}
 	else if(type == "bullet")
 		{
-				for (var i=0; i < 5; i++) {
-					for (var j=0; j < 5; j++) {
+				for (var i=1; i < 5; i++) {
+					for (var j=1; j < 5; j++) {
+						if(x+i < 500 && y+j < 500)
+						{
 						pixelMap[x+i][y+j].type = "empty";
 						pixelMap[x+i][y+j].id = -1;
+						}
 					};
 				};
 		}
@@ -326,8 +325,8 @@ function drawObject(x, y, type, object)
 		    tank size = 31*42
 		    half = 15*21
 		*/
-		for (var i=0; i < 42; i++) {
-			for (var j=0; j < 31; j++) {
+		for (var i=1; i < 42; i++) {
+			for (var j=1; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
 					if(x+i < 500 && y+j < 500)
@@ -342,10 +341,13 @@ function drawObject(x, y, type, object)
 	}
 	else if(type == "bullet")
 		{
-			for (var i=0; i < 5; i++) {
-				for (var j=0; j < 5; j++) {
+			for (var i=1; i < 5; i++) {
+				for (var j=1; j < 5; j++) {
+					if(x+i < 500 && y+j < 500)
+					{
 					pixelMap[x+i][y+j].type = "bullet";
 					pixelMap[x+i][y+j].id = object.clientID;
+					}
 				};
 			};
 		}
@@ -357,7 +359,7 @@ function moveTank() {
 		
 		//pixelMap
 		clearObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
-		drawObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
+		
 		
         if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
             (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
@@ -385,6 +387,7 @@ function moveTank() {
             }
 
         }
+        drawObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
 		
 
 
@@ -394,10 +397,19 @@ function moveTank() {
 function detectHit (bullet) {
 	for (var i=0; i < 5; i++) {
 		for (var j=0; j < 5; j++) {
-			if(pixelMap[Math.floor(bullet.x)+i][Math.floor(bullet.y)+j].type != "empty" && pixelMap[Math.floor(bullet.x)+i][Math.floor(bullet.y)+j].id != bullet.clientID)
-			{
-				return true;
+			var x=Math.floor(bullet.x)+i;
+			var y=Math.floor(bullet.y)+j;
+			if(x<0||y<0)console.log("Zero!!");
+			if(x<500&&y<500){
+				if(pixelMap[x][y].type == "tank" && pixelMap[x][y].id != bullet.clientID)
+				{
+					console.log(pixelMap[x][y].type);
+					console.log(pixelMap[x][y].id);
+					console.log(bullet.clientID);
+				  return true;
+				}
 			}
+			
 		};
 	};
 	return false;
@@ -405,9 +417,10 @@ function detectHit (bullet) {
 
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
-		clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
+		
 		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
 		{
+			clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
 			if(detectHit(bulletArray[i]))
 			{
 				console.log("HIT!");
@@ -432,7 +445,7 @@ function moveBullets () {
 setInterval(function() {
     moveTank();
 	moveBullets();
-    io.sockets.volatile.emit('draw', tanksArray, bulletArray, pixelMap);
+    io.sockets.volatile.emit('draw', tanksArray, bulletArray);
 }, fps);
 
 
