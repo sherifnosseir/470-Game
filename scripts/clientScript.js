@@ -96,7 +96,7 @@ socket.on('setID', function(id) {
 	idClient = id;
 });
 
-socket.on('draw', function(tanksArray, bulletArray) {
+socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
  	clientData.frameNum++;
  	if(clientData.frameNum>2)clientData.frameNum=0;
  	clearCanvas();
@@ -105,4 +105,13 @@ socket.on('draw', function(tanksArray, bulletArray) {
  	 //draw(tanksArray[i].x, tanksArray[i].y, tanksArray[i].id);
  	 
  	 draw(tanksArray, bulletArray, clientData.frameNum);
+	
+	var consolelogger = "";
+	for (var i=0; i < pixelMap.length; i++) {
+		for (var j=0; j < pixelMap[i].length; j++) {
+			consolelogger += pixelMap[i][j].type;
+		};
+		console.log(consolelogger);
+		consolelogger = "";
+	};
 });

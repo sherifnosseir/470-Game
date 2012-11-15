@@ -28,49 +28,18 @@ var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
 var bulletVelocity = 10;
-var fps = 42;
+var fps = 4200;
+
+//Map Variables
+var pixelMap = Array();
+var mapHeight = 500;
+var mapWidth = 500;
 
 
 /*
     tank size = 31*42
     half = 15*21
 */
-
-
-function moveTank() {
-    for (index = 0; index < tanksArray.length; index++) {
-
-        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
-            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
-                tanksArray[index].x = tanksArray[index].destX;
-                tanksArray[index].y = tanksArray[index].destY;
-        }
-        else {
-            var currentX = tanksArray[index].x;
-            var currentY = tanksArray[index].y;
-            
-            var angle = tanksArray[index].wheelAngle;
-
-            //console.log(angle);
-            
-            var velocityX = (Math.cos(angle))*velocity;
-            var velocityY = (Math.sin(angle))*velocity;
-
-            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
-                tanksArray[index].x = currentX - velocityX;
-                tanksArray[index].y = currentY - velocityY;
-            }
-            else {
-                tanksArray[index].x = currentX + velocityX;
-                tanksArray[index].y = currentY + velocityY;
-            }
-
-        }
-
-
-
-    };
-};
 
 io.sockets.on('connection', function(socket) {
 
@@ -90,6 +59,15 @@ io.sockets.on('connection', function(socket) {
     tanksArray[tanksArray.length] = newTank;
     socket.emit('setID', id);
     socket.set('idClient', id);
+	
+	for (var i=0; i < mapWidth; i++) {
+		pixelMap[i] = Array();
+		for (var j=0; j < mapHeight; j++) {
+			pixelMap[i][j] = Object();
+			
+			pixelMap[i][j].type = 0; //0 : empty
+		};
+	};
 
     // movement [server side] old
     /*
@@ -297,6 +275,101 @@ io.sockets.on('connection', function(socket) {
     });	
 });
 
+
+function clearObject (x, y, type) 
+{
+	if(type == "tank")
+	{
+		/*
+		    tank size = 31*42
+		    half = 15*21
+		*/
+		
+		/*
+		if(x^2+y^2)<15^2{
+		draw
+		}else{
+		empty
+		*/
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
+				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+				{
+					pixelMap[i][j].type = 0;
+				}
+			};
+		};
+	}
+	else if(type == "bullet")
+		{
+			
+		}
+}
+
+function drawObject(x, y, type)
+{
+	if(type == "tank")
+	{
+		/*
+		    tank size = 31*42
+		    half = 15*21
+		*/
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
+				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+				{
+					pixelMap[i][j].type = 1;
+				}
+			};
+		};
+		
+	}
+	else if(type == "bullet")
+		{
+			
+		}
+}
+
+function moveTank() {
+    for (index = 0; index < tanksArray.length; index++) {
+
+		
+		//pixelMap
+		drawObject();
+		
+        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
+            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
+                tanksArray[index].x = tanksArray[index].destX;
+                tanksArray[index].y = tanksArray[index].destY;
+        }
+        else {
+            var currentX = tanksArray[index].x;
+            var currentY = tanksArray[index].y;
+            
+            var angle = tanksArray[index].wheelAngle;
+
+            //console.log(angle);
+            
+            var velocityX = (Math.cos(angle))*velocity;
+            var velocityY = (Math.sin(angle))*velocity;
+
+            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
+                tanksArray[index].x = currentX - velocityX;
+                tanksArray[index].y = currentY - velocityY;
+            }
+            else {
+                tanksArray[index].x = currentX + velocityX;
+                tanksArray[index].y = currentY + velocityY;
+            }
+
+        }
+		
+
+
+    };
+};
+
+
 function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
 		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
@@ -315,7 +388,7 @@ function moveBullets () {
 setInterval(function() {
     moveTank();
 	moveBullets();
-    io.sockets.volatile.emit('draw', tanksArray, bulletArray);
+    io.sockets.volatile.emit('draw', tanksArray, bulletArray, pixelMap);
 }, fps);
 
 
