@@ -106,3 +106,14 @@ socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
  	 
  	 draw(tanksArray, bulletArray, clientData.frameNum);
 });
+
+socket.on('updatePlayerStatus', function(tanksArray)
+{
+	for (var i=0; i < tanksArray.length; i++) {
+		if(tanksArray[i].id == idClient)
+		{
+			$('#hp #hp_remaining').html(tanksArray[i].hp+"%");
+			$('#hp #hp_remaining').animate({width: tanksArray[i].hp+"%"});
+		}
+	};
+});

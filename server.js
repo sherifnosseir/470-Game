@@ -49,6 +49,7 @@ io.sockets.on('connection', function(socket) {
     var newTank = Object();
 	
     newTank.id = id;
+	newTank.hp = 100;
     newTank.x = 250;  // tank coordinates
     newTank.y = 250;
 	newTank.numShots = 0;
@@ -58,8 +59,11 @@ io.sockets.on('connection', function(socket) {
     newTank.destX = 250;
     newTank.destY = 250;
     tanksArray[tanksArray.length] = newTank;
+
     socket.emit('setID', id);
     socket.set('idClient', id);
+
+	socket.set('indexClient', tanksArray.length-1);
     
     for (var i=0; i < mapWidth; i++) {
 	pixelMap[i] = Array();
@@ -159,71 +163,68 @@ io.sockets.on('connection', function(socket) {
 
     socket.on('mouse_click', function(mouseX, mouseY) {
         //console.log('mouseclick@' + mouseX +", "+ mouseY);
-        socket.get('idClient', function(err, idClient) {
-            var index = 0;
-            for (i=0; i<tanksArray.length; i++) {
-                if (tanksArray[i].id == idClient) {
-                    index = i;
-                }
-            };
+        	var index;
+			socket.get('indexClient', function(err, indexClient) {
+				index = indexClient;
+			});
 
 
             //15*21
+			
+			if(tanksArray[index].hp > 0)
+			{
+	            tanksArray[index].destX = mouseX;
+	            tanksArray[index].destY = mouseY;
 
-            tanksArray[index].destX = mouseX;
-            tanksArray[index].destY = mouseY;
-
-            var currentX = tanksArray[index].x;
-            var currentY = tanksArray[index].y;
+	            var currentX = tanksArray[index].x;
+	            var currentY = tanksArray[index].y;
             
 
-            if ((currentX + 15 - mouseX) == 0) {
-                if ((currentY + 21 - mouseY) > 0) {
-                    var angle = Math.PI/-2;    
-                }
-                else {
-                    var angle = Math.PI/2;
-                }
+	            if ((currentX + 15 - mouseX) == 0) {
+	                if ((currentY + 21 - mouseY) > 0) {
+	                    var angle = Math.PI/-2;    
+	                }
+	                else {
+	                    var angle = Math.PI/2;
+	                }
                 
-            }
-            else {
-                var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
-            }
+	            }
+	            else {
+	                var angle = Math.atan((currentY + 21 - mouseY)/(currentX + 15 - mouseX));
+	            }
 
-            //console.log(angle);
+	            //console.log(angle);
             
-            tanksArray[index].wheelAngle = angle;
+	            tanksArray[index].wheelAngle = angle;
 
-            var velocityX = (Math.cos(angle))*velocity;
-            var velocityY = (Math.sin(angle))*velocity;
-            tanksArray[index].destX = tanksArray[index].destX-15;
-            tanksArray[index].destY = tanksArray[index].destY-21;
+	            var velocityX = (Math.cos(angle))*velocity;
+	            var velocityY = (Math.sin(angle))*velocity;
+	            tanksArray[index].destX = tanksArray[index].destX-15;
+	            tanksArray[index].destY = tanksArray[index].destY-21;
+			}
 
 /*
-            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
-                tanksArray[index].x = currentX - velocityX;
-                tanksArray[index].y = currentY - velocityY;
-            }
-            else {
-                tanksArray[index].x = currentX + velocityX;
-                tanksArray[index].y = currentY + velocityY;
-            }
+	            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
+	                tanksArray[index].x = currentX - velocityX;
+	                tanksArray[index].y = currentY - velocityY;
+	            }
+	            else {
+	                tanksArray[index].x = currentX + velocityX;
+	                tanksArray[index].y = currentY + velocityY;
+	            }
 */
-        });
     });
 	
 	socket.on('shoot', function(mouseX, mouseY)
 	{
 		//Get ClientID
-		socket.get('idClient', function(err, idClient) {
-            var index = 0;
-            for (i=0; i<tanksArray.length; i++) {
-                if (tanksArray[i].id == idClient) {
-                    index = i;
-                }
-            };
+		var index;
+		socket.get('indexClient', function(err, indexClient) {
+			index = indexClient;
+		});
+            
 		
-			if(tanksArray[index].numShots <=3) //Check if user has more than 4 shots
+			if(tanksArray[index].numShots <=3 && tanksArray[index].hp > 0) //Check if user has more than 4 shots
 			{
 				tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
 			
@@ -245,39 +246,41 @@ io.sockets.on('connection', function(socket) {
 				bulletArray[bulletArray.length] = newBullet;
 			}
 			
-		});
 	});
 	
+	
     socket.on('disconnect', function() {
-        socket.get('idClient', function(err, idClient) {
-            var index = 0;
-            for (i=0; i<tanksArray.length; i++) {
-                if (tanksArray[i].id == idClient) {
-                    index = i;
-                }
-            };
-			
-			var len = bulletArray.length;
-			var tracker = 0;
-			while(tracker < len)
-			{
-				if (bulletArray[tracker].clientID == index) {
-					bulletArray.splice(tracker, 1);
-					len--;
-				}
-				else
-				{
-					tracker++;
-				}
-			}
-			
-            tanksArray.splice(index, 1);
+		var index;
+		socket.get('indexClient', function(err, indexClient) {
+			index = indexClient;
+		});
+		
+		var id;
+		socket.get('idClient', function(err, idClient) {
+			id = idClient;
+		});
 
-            console.log('Disconnect', idClient);
-            console.log(tanksArray.length);
-        });
-    });	
-});
+		var len = bulletArray.length;
+		var tracker = 0;
+		while(tracker < len)
+		{
+			if (bulletArray[tracker].clientID == id) {
+				bulletArray.splice(tracker, 1);
+				len--;
+			}
+			else
+			{
+				tracker++;
+			}
+		}
+
+		
+		tanksArray.splice(index, 1);
+
+		console.log('Disconnect', id);
+		console.log(tanksArray.length);
+	});
+});	
 
 
 function clearObject (x, y, type) 
@@ -407,13 +410,13 @@ function detectHit (bullet) {
 					console.log(pixelMap[x][y].type);
 					console.log(pixelMap[x][y].id);
 					console.log(bullet.clientID);
-				  return true;
+				  return pixelMap[x][y].id;
 				}
 			}
 			
 		};
 	};
-	return false;
+	return -1;
 }
 
 function moveBullets () {
@@ -422,11 +425,26 @@ function moveBullets () {
 		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
 		{
 			clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
-			if(detectHit(bulletArray[i]))
+			var hitClientID = detectHit(bulletArray[i]);
+			if(hitClientID != -1)
 			{
 				console.log("HIT!");
+				
+				var index;
+	            for (j=0; j<tanksArray.length; j++) {
+	                if (tanksArray[j].id == hitClientID) {
+	                    index = j;
+	                }
+	            };
+				
 				tanksArray[bulletArray[i].clientIndex].numShots = tanksArray[bulletArray[i].clientIndex].numShots - 1; //Decrease numShots when bullets goes off
 				bulletArray.splice(i, 1);
+				
+				if(tanksArray[index].hp > 0)
+				{
+					tanksArray[index].hp = tanksArray[index].hp - 10;
+				}
+				io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 			}
 			else
 			{
