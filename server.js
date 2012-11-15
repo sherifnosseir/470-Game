@@ -239,6 +239,7 @@ io.sockets.on('connection', function(socket) {
 				newBullet.x = tanksArray[index].x+15;
 				newBullet.y = tanksArray[index].y+21;
 				newBullet.clientID = tanksArray[index].id;
+				newBullet.clientIndex = index;
 				
 				tanksArray[index].turretAngle = angle;
 				bulletArray[bulletArray.length] = newBullet;
@@ -304,7 +305,7 @@ function clearObject (x, y, type)
 		{
 				for (var i=1; i < 5; i++) {
 					for (var j=1; j < 5; j++) {
-						if(x+i < 500 && y+j < 500)
+						if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
 						{
 						pixelMap[x+i][y+j].type = "empty";
 						pixelMap[x+i][y+j].id = -1;
@@ -329,7 +330,7 @@ function drawObject(x, y, type, object)
 			for (var j=1; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					if(x+i < 500 && y+j < 500)
+					if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
 					{
 						pixelMap[x+i][y+j].type = "tank";
 						pixelMap[x+i][y+j].id = object.id;
@@ -341,9 +342,9 @@ function drawObject(x, y, type, object)
 	}
 	else if(type == "bullet")
 		{
-			for (var i=1; i < 5; i++) {
-				for (var j=1; j < 5; j++) {
-					if(x+i < 500 && y+j < 500)
+			for (var i=0; i < 5; i++) {
+				for (var j=0; j < 5; j++) {
+					if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
 					{
 					pixelMap[x+i][y+j].type = "bullet";
 					pixelMap[x+i][y+j].id = object.clientID;
@@ -424,7 +425,7 @@ function moveBullets () {
 			if(detectHit(bulletArray[i]))
 			{
 				console.log("HIT!");
-				tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1; //Decrease numShots when bullets goes off
+				tanksArray[bulletArray[i].clientIndex].numShots = tanksArray[bulletArray[i].clientIndex].numShots - 1; //Decrease numShots when bullets goes off
 				bulletArray.splice(i, 1);
 			}
 			else
@@ -436,7 +437,7 @@ function moveBullets () {
 		}
 		else
 		{
-			tanksArray[bulletArray[i].clientID].numShots = tanksArray[bulletArray[i].clientID].numShots - 1; //Decrease numShots when bullets goes off
+			tanksArray[bulletArray[i].clientIndex].numShots = tanksArray[bulletArray[i].clientIndex].numShots - 1; //Decrease numShots when bullets goes off
 			bulletArray.splice(i, 1);
 		}
 	};
