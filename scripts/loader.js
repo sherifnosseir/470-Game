@@ -1,6 +1,8 @@
-
+var stage = Object();
 
 window.addEventListener("load", function() {
+
+stage.status = "onload";
 
 // start dynamic loading
 	Modernizr.load([
@@ -16,8 +18,9 @@ window.addEventListener("load", function() {
         // and executing
         
         complete : function() {
-             console.log("All files loaded!");
-             document.getElementById("loadingView").className = "loadingHide";
+            stage.status = "gamePlay";
+            console.log("All files loaded!");
+            document.getElementById("loadingView").className = "loadingHide";
 
 
         }

@@ -6,6 +6,9 @@ var mouseX = 0;
 var mouseY = 0;
 var clientData=new Object();
 clientData.frameNum=0;
+
+var chatActive = false;
+
 $('canvas').mousemove(function(e) {
 	//var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
 	//var clientCoords = "CLIENT( " + e.clientX + ", " + e.clientY + " )";
@@ -50,6 +53,15 @@ $('canvas').click(function(e){
 });
 
 
+$('#chatmsg').focus( function(){
+	chatActive = true;
+});
+
+$('#chatmsg').blur( function(){
+	chatActive = false;
+});
+
+
 //oldermovment + fire
 document.addEventListener("keydown", function(e) {
 	//console.log('zzzzzzzzz');
@@ -69,13 +81,31 @@ document.addEventListener("keydown", function(e) {
 	socket.emit('move_down');
 	break;
 	*/
-	case 32:
-	console.log('PEWPEW@' + "(" + mouseX + ", " + mouseY + "), lol");
-	socket.emit('shoot', mouseX, mouseY);
-	break;
-	default:
+	case 13:
+		if (stage.status == "gamePlay") {
+			if (!chatActive) {
+				$('#chatmsg').focus();
+				//chatActive = true;	
+			}
+			else {
+				//console.log($('#chatmsg').val());
+				socket.emit('chatsend', $('#chatmsg').val()); //also need sender's id, or socket.getit later
+				$('#chatmsg').val('');
+				//somesocketemitgoeshere
+				$('#chatmsg').blur();
+				//chatActive = false;
+			}
+		}
+		break;
 
-	break;
+	case 32:
+		if (!chatActive) {
+			console.log('PEWPEW@' + "(" + mouseX + ", " + mouseY + "), lol");
+			socket.emit('shoot', mouseX, mouseY);
+		}
+		break;
+	default:
+		break;
 	}
 	/*if (e.keyCode=="65") {
 	//console.log('aseaseaseaseaseasease');
@@ -116,4 +146,15 @@ socket.on('updatePlayerStatus', function(tanksArray)
 			$('#hp #hp_remaining').animate({width: tanksArray[i].hp+"%"});
 		}
 	};
+});
+
+socket.on('chatbroadcast', function(newmsg) {
+	$('#insideChat').append('<br>' + newmsg);
+	//$("#insideChat").animate({ scrollTop: $('#insideChat').scrollHeight() }, "fast");
+	//$("#insideChat").scrollTop(100);
+
+	var chatbox = $('#insideChat');
+	chatbox.scrollTop(chatbox[0].scrollHeight - chatbox.height());
+
+
 });

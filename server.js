@@ -27,13 +27,14 @@ var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
-var bulletVelocity = 10;
+var bulletVelocity = 12;
 var fps = 42;
 
 //Map Variables
 var pixelMap = Array();
-var mapHeight = 500;
-var mapWidth = 500;
+var mapWidth = 960;
+var mapHeight = 540;
+
 
 
 
@@ -47,30 +48,33 @@ io.sockets.on('connection', function(socket) {
 
     id++;
     var newTank = Object();
+
+    randomX = Math.floor((Math.random()*mapWidth)+1);
+    randomY = Math.floor((Math.random()*mapHeight)+1);
 	
     newTank.id = id;
 	newTank.hp = 100;
-    newTank.x = 250;  // tank coordinates
-    newTank.y = 250;
+    newTank.x = randomX;  // tank coordinates
+    newTank.y = randomY;
 	newTank.numShots = 0;
 	newTank.bullets = Array();
     newTank.turretAngle = 0;
     newTank.wheelAngle = 0;
-    newTank.destX = 250;
-    newTank.destY = 250;
+    newTank.destX = newTank.x;
+    newTank.destY = newTank.y;
     tanksArray[tanksArray.length] = newTank;
 
     socket.emit('setID', id);
     socket.set('idClient', id);
     
     for (var i=0; i < mapWidth; i++) {
-	pixelMap[i] = Array();
-	for (var j=0; j < mapHeight; j++) {
-		pixelMap[i][j] = Object();
-		
-		pixelMap[i][j].type = "empty"; //0 : empty
-		pixelMap[i][j].id = -1;
-	};
+        pixelMap[i] = Array();
+        for (var j=0; j < mapHeight; j++) {
+            pixelMap[i][j] = Object();
+
+            pixelMap[i][j].type = "empty"; //0 : empty
+            pixelMap[i][j].id = -1;
+	   };
 	};
 
 
@@ -219,7 +223,9 @@ io.sockets.on('connection', function(socket) {
 	
 	socket.on('shoot', function(mouseX, mouseY)
 	{
-		//Get ClientID
+        //console.log("pixelmapfrom Shoot" + pixelMap[mouseX][mouseY].type);
+        
+        //Get ClientID
 		var index;
         socket.get('idClient', function(err, idClient) {
           	index = 0;
@@ -229,8 +235,7 @@ io.sockets.on('connection', function(socket) {
                 }
             };
 		});
-            
-		console.log(index);
+		//console.log(index);
 			if(tanksArray[index].numShots <=3 && tanksArray[index].hp > 0) //Check if user has more than 4 shots
 			{
 				tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
@@ -238,8 +243,8 @@ io.sockets.on('connection', function(socket) {
 				var newBullet = Object();
 			
 				//Calculate Bullet Movement
-				var xDirection = mouseX - tanksArray[index].x;
-				var yDirection = mouseY - tanksArray[index].y;
+				var xDirection = mouseX - 15 - tanksArray[index].x;
+				var yDirection = mouseY - 21 - tanksArray[index].y;
 				
 				var angle = Math.atan2(yDirection, xDirection);
 				
@@ -254,6 +259,38 @@ io.sockets.on('connection', function(socket) {
 			}
 			
 	});
+
+    socket.on('chatsend', function(msg) {
+        //need to socket.get nickname, for now clientID
+        socket.get('idClient', function(err, idClient) {
+            msg = msg.replace(/</g,"&lt;");
+            msg = msg.replace(/>/g,"&gt;");
+            msg = idClient + ': ' + msg; // we'd replace this with usernames if we got a login
+            var sendmsg = '';
+            var result = msg.match(/.{1,55}/g);
+
+            for (i = 0; i<result.length-1; i++) {
+                sendmsg = sendmsg + result[i] + "<br>";
+            }
+            sendmsg = sendmsg + result[result.length-1];
+
+            //headoflongmessage...asefasefseafasefasefasefsea...tailoflongmessage
+
+            //console.log(msg.length);
+            
+            if (msg.length > 200) {
+                sendmsg = idClient + ": Message too long! Stop spamming bro!";
+            }
+            
+/*
+            if(msg.length > 56) {
+                msg = msg.slice(0,55) + "<br>" + msg.slice(55);
+            }
+*/
+            //io.sockets.volatile.emit('chatbroadcast', nickname + ': ' + msg);  //for when we get nicknames and a login
+            io.sockets.volatile.emit('chatbroadcast', sendmsg);
+        });
+    });
 	
 	
     socket.on('disconnect', function() {
@@ -307,20 +344,24 @@ function clearObject (x, y, type)
 		    half = 15*21
 		*/
 
-		for (var i=1; i < 42; i++) {
-			for (var j=1; j < 31; j++) {
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					pixelMap[i][j].type = "empty";
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
+                        {
+                        pixelMap[x+i][y+j].type = "empty";
+                        pixelMap[x+i][y+j].id = -1;
+                        }
 				}
 			};
 		};
 	}
 	else if(type == "bullet")
 		{
-				for (var i=1; i < 5; i++) {
-					for (var j=1; j < 5; j++) {
-						if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
+				for (var i=0; i < 5; i++) {
+					for (var j=0; j < 5; j++) {
+						if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 						{
 						pixelMap[x+i][y+j].type = "empty";
 						pixelMap[x+i][y+j].id = -1;
@@ -341,11 +382,11 @@ function drawObject(x, y, type, object)
 		    tank size = 31*42
 		    half = 15*21
 		*/
-		for (var i=1; i < 42; i++) {
-			for (var j=1; j < 31; j++) {
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 					{
 						pixelMap[x+i][y+j].type = "tank";
 						pixelMap[x+i][y+j].id = object.id;
@@ -357,9 +398,11 @@ function drawObject(x, y, type, object)
 	}
 	else if(type == "bullet")
 		{
+            //console.log("drawobject bullet" + object.x);
+            //console.log("drawobject ase" + object.clientID);
 			for (var i=0; i < 5; i++) {
 				for (var j=0; j < 5; j++) {
-					if(x+i > 0  && y+j > 0 && x+i < 500 && y+j < 500)
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 					{
 					pixelMap[x+i][y+j].type = "bullet";
 					pixelMap[x+i][y+j].id = object.clientID;
@@ -415,13 +458,16 @@ function detectHit (bullet) {
 		for (var j=0; j < 5; j++) {
 			var x=Math.floor(bullet.x)+i;
 			var y=Math.floor(bullet.y)+j;
-			if(x<0||y<0)console.log("Zero!!");
-			if(x<500&&y<500){
+            //console.log("detecthit x" + x);
+            //console.log("detecthit y" + y);
+            //console.log("detectHit id " + pixelMap[x][y].id + " detectHit clientID " + bullet.clientID);
+			//if(x<0||y<0)console.log("Zero!!");
+			if(x<mapWidth&&y<mapHeight){
 				if(pixelMap[x][y].type == "tank" && pixelMap[x][y].id != bullet.clientID)
 				{
-					console.log(pixelMap[x][y].type);
-					console.log(pixelMap[x][y].id);
-					console.log(bullet.clientID);
+					console.log("detectHit Type " + pixelMap[x][y].type);
+					console.log("detectHit id " + pixelMap[x][y].id);
+					console.log("detectHit clientID " + bullet.clientID);
 				  return pixelMap[x][y].id;
 				}
 			}
@@ -432,12 +478,15 @@ function detectHit (bullet) {
 }
 
 function moveBullets () {
+    //console.log(bulletArray.length);
 	for (var i=0; i < bulletArray.length; i++) {
+
+
 		
-		if((bulletArray[i].x < 500 && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < 500)) //Check if a bullet is out of range
+		if((bulletArray[i].x < mapWidth && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < mapHeight)) //Check if a bullet is out of range
 		{
-			clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
 			var hitClientID = detectHit(bulletArray[i]);
+            clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
 			if(hitClientID != -1)
 			{
 				console.log("HIT!");
@@ -454,7 +503,7 @@ function moveBullets () {
 				
 				if(tanksArray[index].hp > 0)
 				{
-					tanksArray[index].hp = tanksArray[index].hp - 10;
+					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - bulletDamage?
 				}
 				io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 			}

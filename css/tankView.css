@@ -1,11 +1,11 @@
 #loadingView{
-	width:500 px;
-	height:500 px;
+	width:960 px;
+	height:540 px;
 	position:absolute;
 
 }
 #gameView{
-	position:absolute;
+	
 }
 .loadingVisable{
 	visibility:visible;
@@ -20,17 +20,48 @@
 	border:1px solid black;
 }
 
+#belowGame {
+
+	width: 960px;
+	border: 1px solid black;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#chat {
+	display: inline-block;
+	position: relative;
+	left: 0px;
+	
+	height: 69px;
+	width: 460px;
+	border: 1px solid black;
+
+}
+#chatmsg {
+	width: 460px;
+}
+
+#insideChat {
+	overflow: auto;
+	width: 460px;
+	height: 69px;
+}
+
 h1{
 	color:blue;
 }
 
 #hp
 {
+	display: inline-block;
+	position: relative;
 	border:1px solid black;
 	height:16px;
-	width:500px;
+	width:473px;
 	clear:both;
 	background-color:red;
+
 }
 
 #hp span#hp_remaining
