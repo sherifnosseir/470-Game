@@ -252,7 +252,7 @@ io.sockets.on('connection', function(socket) {
 				newBullet.x = tanksArray[index].x+15;
 				newBullet.y = tanksArray[index].y+21;
 				newBullet.clientID = tanksArray[index].id;
-				newBullet.clientIndex = index;
+			
 				
 				tanksArray[index].turretAngle = angle;
 				bulletArray[bulletArray.length] = newBullet;
@@ -311,20 +311,12 @@ io.sockets.on('connection', function(socket) {
 
 		var len = bulletArray.length;
 		var tracker = 0;
-		while(tracker < len)
+		for(trk=bulletArray.length-1;trk>=0;trk--)
 		{
-			if (bulletArray[tracker].clientID == id || bulletArray[tracker].clientIndex == index) {
-				bulletArray.splice(tracker, 1);
-				len--;
-			}
-			else
-			{
-				tracker++;
+			if(bulletArray[trk].clientID==id){
+				bulletArray.splice(trk,1);
 			}
 		}
-
-		
-		tanksArray.splice(index, 1);
 
 		console.log('Disconnect', id);
 		console.log(tanksArray.length);
@@ -480,8 +472,10 @@ function detectHit (bullet) {
 function moveBullets () {
     //console.log(bulletArray.length);
 	for (var i=0; i < bulletArray.length; i++) {
-
-
+		var clientIndex=0;
+		for(var tanki=0;tanki<tanksArray.length;tanki++){
+			if(tanksArray[tanki].id == bulletArray[i].clientID)clientIndex=bulletArray[i].clientID;
+		}
 		
 		if((bulletArray[i].x < mapWidth && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < mapHeight)) //Check if a bullet is out of range
 		{
@@ -504,8 +498,9 @@ function moveBullets () {
 				if(tanksArray[index].hp > 0)
 				{
 					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - bulletDamage?
+					io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 				}
-				io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
+				
 			}
 			else
 			{
