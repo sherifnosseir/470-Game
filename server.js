@@ -474,7 +474,8 @@ function moveBullets () {
 	for (var i=0; i < bulletArray.length; i++) {
 		var clientIndex=0;
 		for(var tanki=0;tanki<tanksArray.length;tanki++){
-			if(tanksArray[tanki].id == bulletArray[i].clientID)clientIndex=bulletArray[i].clientID;
+			if(tanksArray[tanki].id == bulletArray[i].clientID)
+			clientIndex=tanki;
 		}
 		
 		if((bulletArray[i].x < mapWidth && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < mapHeight)) //Check if a bullet is out of range
