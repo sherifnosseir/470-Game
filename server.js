@@ -317,6 +317,7 @@ io.sockets.on('connection', function(socket) {
 				bulletArray.splice(trk,1);
 			}
 		}
+		tanksArray.splice(index,1);
 
 		console.log('Disconnect', id);
 		console.log(tanksArray.length);
@@ -476,6 +477,7 @@ function moveBullets () {
 		for(var tanki=0;tanki<tanksArray.length;tanki++){
 			if(tanksArray[tanki].id == bulletArray[i].clientID)
 			clientIndex=tanki;
+
 		}
 		
 		if((bulletArray[i].x < mapWidth && bulletArray[i].x > 0) && (bulletArray[i].y > 0 && bulletArray[i].y < mapHeight)) //Check if a bullet is out of range
@@ -493,7 +495,7 @@ function moveBullets () {
 	                }
 	            };
 				
-				tanksArray[bulletArray[i].clientIndex].numShots = tanksArray[bulletArray[i].clientIndex].numShots - 1; //Decrease numShots when bullets goes off
+				tanksArray[clientIndex].numShots = tanksArray[clientIndex].numShots - 1; //Decrease numShots when bullets goes off
 				bulletArray.splice(i, 1);
 				
 				if(tanksArray[index].hp > 0)
@@ -512,7 +514,8 @@ function moveBullets () {
 		}
 		else
 		{
-			tanksArray[bulletArray[i].clientIndex].numShots = tanksArray[bulletArray[i].clientIndex].numShots - 1; //Decrease numShots when bullets goes off
+
+			tanksArray[clientIndex].numShots = tanksArray[clientIndex].numShots - 1; //Decrease numShots when bullets goes off
 			bulletArray.splice(i, 1);
 		}
 	};
