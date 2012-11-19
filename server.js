@@ -1,15 +1,4 @@
-//Kenny mysql code
-var mysql = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '16stars',
-  database : 'tanks',
-});
 
-connection.connect(function(err) {
-        console.log('Connected to Mysql Server! ');
-});
 
 
 var app = require('http').createServer(handler)
@@ -36,6 +25,7 @@ function handler (req, res) {
   });
 }
 
+
 var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
@@ -55,10 +45,22 @@ var mapHeight = 540;
     tank size = 31*42
     half = 15*21
 */
+//state 0 = login
+//state 1 = load game
+
 
 io.sockets.on('connection', function(socket) {
 
-
+	socket.on('login',function(state,details){
+		console.log("STATE");
+		console.log(state);
+		username = details[0];
+		password = details[1];
+		console.log("Username: " + username + " Password: " + password);
+	
+	
+	});
+	
     id++;
     var newTank = Object();
 

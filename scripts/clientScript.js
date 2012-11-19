@@ -1,4 +1,5 @@
 //var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+var state = 1;
 var socket = io.connect('http://localhost:8080');
 var idClient;
 

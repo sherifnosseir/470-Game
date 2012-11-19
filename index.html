@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="scripts/jquery-1.8.2.min.js"></script>
+		<script src="scripts/md5.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		<link href="./css/tankView.css" rel="stylesheet">	
 		
 		<script src="scripts/modernizr.js"></script>
-    	<script src="scripts/loader.js"></script>
-    	<script src="scripts/clientScript.js"></script>
+		
+		
+		<script src="scripts/loader.js"></script>
+    	<!--<script src="scripts/clientScript.js"></script>-->
 
 		
 		<title>noway</title>
@@ -14,27 +19,38 @@
 		<h1>TanksView</h1>
 		
 		<div id="container">
-			<div id="loadingView" class="loadingVisable">
-				<p>Loading...</p>
+			<div id="row_one">
+				<div id="login">
+					<form id="formlogin" method="post">
+						Username: <input id="username" required type="text" name="username"><br>
+						Password: <input id="password" required type="password" name="password">
+						<input id="submit_button" type="button" value="Submit"></input>
+					</form>
+				</div>
 			</div>
+			
+			<div id="row_two">
+				<div id="loadingView" class="loadingVisable">
+					<p>Loading...</p>
+				</div>
 
-			<div id="gameView">
-				<canvas id="canvas" width="960" height="540">
+				<div id="gameView">
+					<canvas id="canvas" width="960" height="540">
+						
+					</canvas>
 					
-				</canvas>
-				
-			</div>
-			<div id="belowGame">
-				<div id="chat">
-					<div id="insideChat">Chat Here </div>
-					<input id="chatmsg" name="chatmsg" type="text" size="69" />
 				</div>
-				
-				<div id="hp">
-					<span id="hp_remaining">100%</span>
+				<div id="belowGame">
+					<div id="chat">
+						<div id="insideChat">Chat Here </div>
+						<input id="chatmsg" name="chatmsg" type="text" size="69" />
+					</div>
+					
+					<div id="hp">
+						<span id="hp_remaining">100%</span>
+					</div>
 				</div>
-			</div>
-
+				</div>
 		</div>
 			
 		
