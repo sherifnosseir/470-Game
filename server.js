@@ -12,6 +12,8 @@ connection.connect(function(err) {
 });
 
 
+
+
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app,{log:false})
   , fs = require('fs')
@@ -68,7 +70,24 @@ io.sockets.on('connection', function(socket) {
 		username = details[0];
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
-	
+		sql="SELECT * FROM users WHERE username ='"+username+"'and password='"+password+"'";
+		console.log(sql);
+		var result = "";
+		var response = "";
+		connection.query(sql, function(err, rows, fields) {
+			if (err) throw err;
+			result = rows[0];
+			if(result==undefined){
+				response = "Invalid Login/Password";
+			}
+			else{
+				response = "Login Successful";
+			}
+			
+			socket.emit('response', response);
+			console.log('MYSQL: ', result);
+			
+		});
 	
 	});
 	
@@ -89,7 +108,7 @@ io.sockets.on('connection', function(socket) {
     newTank.destX = newTank.x;
     newTank.destY = newTank.y;
     tanksArray[tanksArray.length] = newTank;
-
+	
     socket.emit('setID', id);
     socket.set('idClient', id);
     

@@ -42,8 +42,12 @@ if(state==0){
 			details[0] = $("#username").val(); //username
 			details[1] = calcMD5($("#password").val()); //password (will be encrypted to md5)
 			console.log(details);
-			var socket = io.connect('http://localhost:8080');
+			//var socket = io.connect('http://localhost:8080');
+			var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 			socket.emit('login',state,details);
+			socket.on('response', function(response) {
+				console.log(response);
+			});
 		});
 	});
 
