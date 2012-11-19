@@ -1,3 +1,16 @@
+//Kenny mysql code
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '16stars',
+  database : 'tanks',
+});
+
+connection.connect(function(err) {
+        console.log('Connected to Mysql Server! ');
+});
+
 
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app,{log:false})
