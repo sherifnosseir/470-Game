@@ -39,7 +39,7 @@ function handler (req, res) {
 }
 
 
-var id = 0;
+var id = 1;
 var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;

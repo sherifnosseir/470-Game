@@ -1,7 +1,7 @@
 //var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 var state = 1;
 var socket = io.connect('http://localhost:8080');
-var idClient;
+var clientID;
 
 var mouseX = 0;
 var mouseY = 0;
@@ -10,6 +10,8 @@ clientData.frameNum=0;
 
 var chatActive = false;
 
+
+document.onselectstart = function(){ return false; }
 $('canvas').mousemove(function(e) {
 	//var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
 	//var clientCoords = "CLIENT( " + e.clientX + ", " + e.clientY + " )";
@@ -29,6 +31,7 @@ $('canvas').mousemove(function(e) {
  	//draw(mouseX, mouseY, 1);
     mouseX = e.pageX - $(this).offset().left;
     mouseY = Math.floor(e.pageY - $(this).offset().top);
+
 	//console.log('mousemove@' + mouseX +", "+ mouseY);
 
 	/*
@@ -124,7 +127,7 @@ socket.on('connect', function() {
 
 
 socket.on('setID', function(id) {
-	idClient = id;
+	clientID = id;
 });
 
 socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
@@ -141,7 +144,7 @@ socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
 socket.on('updatePlayerStatus', function(tanksArray)
 {
 	for (var i=0; i < tanksArray.length; i++) {
-		if(tanksArray[i].id == idClient)
+		if(tanksArray[i].id == clientID)
 		{
 			$('#hp #hp_remaining').html(tanksArray[i].hp+"%");
 			$('#hp #hp_remaining').animate({width: tanksArray[i].hp+"%"});

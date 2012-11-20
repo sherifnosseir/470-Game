@@ -21,6 +21,39 @@ function drawBody(tank,frameNum){
 	 	ctx.drawImage(tankSprite,0,frameNum*81,63,81,-16,-20,32,41);
 		ctx.translate(-x, -y);
 		ctx.restore();
+		
+		ctx.beginPath();
+		ctx.rect(tank[i].x-8, tank[i].y-25, tank[i].hp/2, 15);
+		if(tank[i].hp > 75)
+		{
+			ctx.fillStyle = 'green';
+		}
+		else
+		{
+			if(tank[i].hp > 30)
+			{
+				ctx.fillStyle = 'yellow';
+			}
+			else
+			{
+				ctx.fillStyle = 'red';
+			}
+		}
+	
+		ctx.fill();
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = 'black';
+   		ctx.stroke();
+	
+		ctx.fillStyle = "black";
+      	ctx.font = "8pt sans-serif";
+		ctx.textAlign = 'left';
+	    ctx.fillText(tank[i].hp+"%", tank[i].x+5, tank[i].y-13);
+	
+		ctx.fillStyle = "black";
+      	ctx.font = "8pt sans-serif";
+		ctx.textAlign = 'center';
+	    ctx.fillText(tank[i].id, tank[i].x+14, tank[i].y+52);
 	}
  	
 }
@@ -34,9 +67,9 @@ function drawTurret(tank){
 		var y = tank[i].y;
 		var angle = Math.PI;
 		
-		//console.log("id : " + idClient);
+		//console.log("id : " + clientID);
 		//console.log("Tank id : " + tank[i].id);
-		if(tank[i].id == idClient)
+		if(tank[i].id == clientID)
 		{
 			//Calculate Turret Angle
 			var xDirection = mouseX - x;
@@ -66,7 +99,7 @@ function drawBullets (bullets) {
 	
 	for(i = 0; i<bullets.length; i++)
 	{
-		if(bullets[i].clientID%2 == 0)
+		if(bullets[i].clientID == clientID)
 		{
 			ctx.fillStyle = "rgb(0,0,255)";
 		}
@@ -79,12 +112,29 @@ function drawBullets (bullets) {
 	}
 }
 
+function drawCursor () {
+	var canvas = document.getElementById("canvas");
+ 	var ctx = canvas.getContext("2d");
+	
+	ctx.beginPath();
+	ctx.fillStyle = "rgb(0,225,0)";
+	ctx.moveTo(mouseX,mouseY);
+	ctx.lineTo(mouseX+15,mouseY+5);
+	ctx.fillStyle = "rgb(0,0,225)";
+	ctx.lineTo(mouseX+10, mouseY+10);
+	ctx.lineTo(mouseX+10, mouseY+20);
+
+
+	ctx.fill();
+}
+
 
 
 function draw(tanks, bullets, frameNum){
 	drawBody(tanks, frameNum);
 	drawTurret(tanks);
 	drawBullets(bullets);
+	drawCursor();
 }
 
  function clearCanvas() {
