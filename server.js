@@ -77,14 +77,20 @@ io.sockets.on('connection', function(socket) {
 		connection.query(sql, function(err, rows, fields) {
 			if (err) throw err;
 			result = rows[0];
+			user_info = new Array();
 			if(result==undefined){
 				response = "Invalid Login/Password";
+				socket.emit('response', response, user_info);
 			}
 			else{
 				response = "Login Successful";
+				user_info[0] = rows[0]['username'];
+				user_info[1] = rows[0]['nickname'];
+				user_info[2] = rows[0]['team_id'];
+				user_info[3] = rows[0]['tank_id'];
+				socket.emit('response', response, user_info);
 			}
 			
-			socket.emit('response', response);
 			console.log('MYSQL: ', result);
 			
 		});
