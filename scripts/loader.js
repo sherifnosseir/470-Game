@@ -30,18 +30,11 @@ username = "";
 nickname = "";
 team_id = "";
 tank_id = "";
-<<<<<<< HEAD
+
 var state = 0;
 var details = "";
 
 var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
-
-=======
-
-var state = 0;
-var details = "";
-var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
->>>>>>> 39d505aeff2bbc3d811f5fb279555fa18ecfec7b
 if(state==0){
 	$(document).ready(function() {
 		$("#row_two").hide();
@@ -61,16 +54,11 @@ if(state==0){
 					nickname = user_info[1];
 					team_id = user_info[2];
 					tank_id = user_info[3];
-<<<<<<< HEAD
-					
+
 					socket.emit('createUserTank', tank_id);
 					$("#row_one").hide();
 					$("#row_two").show();
 					load();
-=======
-					load();
-					$("#row_two").show();
->>>>>>> 39d505aeff2bbc3d811f5fb279555fa18ecfec7b
 				}
 			});
 		});

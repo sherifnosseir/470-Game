@@ -88,12 +88,7 @@ io.sockets.on('connection', function(socket) {
 				user_info[2] = rows[0]['team_id'];
 				user_info[3] = rows[0]['tank_id'];
 				socket.emit('response', response, user_info);
-<<<<<<< HEAD
 			}			
-=======
-			}
-			
->>>>>>> 39d505aeff2bbc3d811f5fb279555fa18ecfec7b
 			console.log('MYSQL: ', result);
 			
 		});
