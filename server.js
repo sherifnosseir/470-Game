@@ -45,7 +45,6 @@ var bulletArray = Array();
 var velocity = 6;
 var bulletVelocity = 12;
 var fps = 42;
-
 //Map Variables
 var pixelMap = Array();
 var mapWidth = 960;
@@ -77,51 +76,64 @@ io.sockets.on('connection', function(socket) {
 		connection.query(sql, function(err, rows, fields) {
 			if (err) throw err;
 			result = rows[0];
+			user_info = new Array();
 			if(result==undefined){
 				response = "Invalid Login/Password";
+				socket.emit('response', response, user_info);
 			}
 			else{
 				response = "Login Successful";
-			}
-			
-			socket.emit('response', response);
+				user_info[0] = rows[0]['username'];
+				user_info[1] = rows[0]['nickname'];
+				user_info[2] = rows[0]['team_id'];
+				user_info[3] = rows[0]['tank_id'];
+				socket.emit('response', response, user_info);
+			}			
 			console.log('MYSQL: ', result);
 			
 		});
 	
 	});
-	
-    id++;
+
+	socket.on('createUserTank', function(tank_id)
+	{
+		//id++;
     var newTank = Object();
 
     randomX = Math.floor((Math.random()*mapWidth)+1);
     randomY = Math.floor((Math.random()*mapHeight)+1);
-	
-    newTank.id = id;
-	newTank.hp = 100;
+
+    newTank.id = tank_id;
+    newTank.hp = 100;
     newTank.x = randomX;  // tank coordinates
     newTank.y = randomY;
-	newTank.numShots = 0;
-	newTank.bullets = Array();
+        newTank.numShots = 0;
+        newTank.bullets = Array();
     newTank.turretAngle = 0;
     newTank.wheelAngle = 0;
     newTank.destX = newTank.x;
     newTank.destY = newTank.y;
     tanksArray[tanksArray.length] = newTank;
-	
-    socket.emit('setID', id);
-    socket.set('idClient', id);
-    
+    console.log("Tank Array Length: ");
+    console.log(tanksArray.length);
+    console.log("Tank ID:");
+    console.log(tank_id);
+    socket.emit('setID', tank_id);
+    socket.set('idClient', tank_id);
+
     for (var i=0; i < mapWidth; i++) {
         pixelMap[i] = Array();
         for (var j=0; j < mapHeight; j++) {
-            pixelMap[i][j] = Object();
+		pixelMap[i][j] = Object();
 
-            pixelMap[i][j].type = "empty"; //0 : empty
-            pixelMap[i][j].id = -1;
-	   };
-	};
+                pixelMap[i][j].type = "empty"; //0 : empty
+     	        pixelMap[i][j].id = -1;
+        	   };
+	        };
+	});
 
+	
+	
 
     // movement [server side] old
     /*
@@ -519,6 +531,7 @@ function moveBullets () {
     //console.log(bulletArray.length);
 	for (var i=0; i < bulletArray.length; i++) {
 		var clientIndex=0;
+
 		for(var tanki=0;tanki<tanksArray.length;tanki++){
 			if(tanksArray[tanki].id == bulletArray[i].clientID)
 			clientIndex=tanki;

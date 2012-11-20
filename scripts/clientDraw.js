@@ -67,9 +67,9 @@ function drawTurret(tank){
 		var y = tank[i].y;
 		var angle = Math.PI;
 		
-		//console.log("id : " + clientID);
+		//console.log("id : " + tank_id);
 		//console.log("Tank id : " + tank[i].id);
-		if(tank[i].id == clientID)
+		if(tank[i].id == tank_id)
 		{
 			//Calculate Turret Angle
 			var xDirection = mouseX - x;
@@ -99,7 +99,7 @@ function drawBullets (bullets) {
 	
 	for(i = 0; i<bullets.length; i++)
 	{
-		if(bullets[i].clientID == clientID)
+		if(bullets[i].clientID == tank_id)
 		{
 			ctx.fillStyle = "rgb(0,0,255)";
 		}

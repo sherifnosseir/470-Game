@@ -1,6 +1,6 @@
 //var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 var state = 1;
-var socket = io.connect('http://localhost:8080');
+//var socket = io.connect('http://localhost:8080');
 var clientID;
 
 var mouseX = 0;
@@ -144,7 +144,7 @@ socket.on('draw', function(tanksArray, bulletArray, pixelMap) {
 socket.on('updatePlayerStatus', function(tanksArray)
 {
 	for (var i=0; i < tanksArray.length; i++) {
-		if(tanksArray[i].id == clientID)
+		if(tanksArray[i].id == tank_id)
 		{
 			$('#hp #hp_remaining').html(tanksArray[i].hp+"%");
 			$('#hp #hp_remaining').animate({width: tanksArray[i].hp+"%"});
