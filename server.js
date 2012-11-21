@@ -22,20 +22,20 @@ var app = require('http').createServer(handler)
 app.listen(8080);
 
 function handler (req, res) {
+	/*use to handle http request*/
     var filePath=__dirname+req.rul;
     var extname = path.extname(filePath);
     console.log(req.url);
-
-    
-  fs.readFile(__dirname + req.url,
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-    res.writeHead(200);
-    res.end(data);
-  });
+    //if(req.url="/")req.url="/index.html";
+      
+  	fs.readFile(__dirname + req.url, function (err, data) {
+  		if (err) {
+      		res.writeHead(500);
+      		return res.end('Error loading index.html');
+    	}
+    	res.writeHead(200);
+    	res.end(data);
+    });
 }
 
 
@@ -62,10 +62,9 @@ var mapHeight = 540;
 
 
 io.sockets.on('connection', function(socket) {
-
+	/*login handler*/
 	socket.on('login',function(state,details){
-		console.log("STATE");
-		console.log(state);
+		console.log("STATE:"+state);
 		username = details[0];
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
@@ -80,8 +79,7 @@ io.sockets.on('connection', function(socket) {
 			if(result==undefined){
 				response = "Invalid Login/Password";
 				socket.emit('response', response, user_info);
-			}
-			else{
+			}else{
 				response = "Login Successful";
 				user_info[0] = rows[0]['username'];
 				user_info[1] = rows[0]['nickname'];
@@ -89,10 +87,8 @@ io.sockets.on('connection', function(socket) {
 				user_info[3] = rows[0]['tank_id'];
 				socket.emit('response', response, user_info);
 			}			
-			console.log('MYSQL: ', result);
-			
+			console.log('MYSQL: ', result);		
 		});
-	
 	});
 
 	socket.on('createIndiviualUserTank', function()
@@ -101,16 +97,15 @@ io.sockets.on('connection', function(socket) {
 
 	    randomX = Math.floor((Math.random()*mapWidth)+1);
 	    randomY = Math.floor((Math.random()*mapHeight)+1);
-
-		id++
+		id++;
 	    newTank.id = id;
 		newTank.username = "Server Tank"+id;
 	    newTank.hp = 100;
         newTank.status = "alive";
 	    newTank.x = randomX;  // tank coordinates
 	    newTank.y = randomY;
-	        newTank.numShots = 0;
-	        newTank.bullets = Array();
+	    newTank.numShots = 0;
+	    newTank.bullets = Array();
 	    newTank.turretAngle = 0;
 	    newTank.wheelAngle = 0;
 	    newTank.destX = newTank.x;
@@ -122,56 +117,53 @@ io.sockets.on('connection', function(socket) {
 	    console.log(id);
 	    socket.emit('setID', id);
 	    socket.set('idClient', id);
-
+	    
 	    for (var i=0; i < mapWidth; i++) {
-	        pixelMap[i] = Array();
-	        for (var j=0; j < mapHeight; j++) {
-			pixelMap[i][j] = Object();
-
-	                pixelMap[i][j].type = "empty"; //0 : empty
-	     	        pixelMap[i][j].id = -1;
-	        	   };
-		        };
+        	pixelMap[i] = Array();
+        	for (var j=0; j < mapHeight; j++) {
+				pixelMap[i][j] = Object();
+                pixelMap[i][j].type = "empty"; 
+     	        pixelMap[i][j].id = -1; //-1 means empty
+     	    };
+        };
 	});
 
-	socket.on('createUserTank', function(tank_id, username)
-	{
+	socket.on('createUserTank', function(tank_id, username){
 		//id++;
-    var newTank = Object();
+    	var newTank = Object();
 
-    randomX = Math.floor((Math.random()*mapWidth)+1);
-    randomY = Math.floor((Math.random()*mapHeight)+1);
+    	randomX = Math.floor((Math.random()*mapWidth)+1);
+    	randomY = Math.floor((Math.random()*mapHeight)+1);
 
-    newTank.id = tank_id;
-	//id++;
-	newTank.username = username;
-    newTank.hp = 100;
-    newTank.status = "alive";
-    newTank.x = randomX;  // tank coordinates
-    newTank.y = randomY;
-        newTank.numShots = 0;
-        newTank.bullets = Array();
-    newTank.turretAngle = 0;
-    newTank.wheelAngle = 0;
-    newTank.destX = newTank.x;
-    newTank.destY = newTank.y;
-    tanksArray[tanksArray.length] = newTank;
-    console.log("Tank Array Length: ");
-    console.log(tanksArray.length);
-    console.log("Tank ID:");
-    console.log(tank_id);
-    socket.emit('setID', tank_id);
-    socket.set('idClient', tank_id);
-
-    for (var i=0; i < mapWidth; i++) {
-        pixelMap[i] = Array();
-        for (var j=0; j < mapHeight; j++) {
-		pixelMap[i][j] = Object();
-
-                pixelMap[i][j].type = "empty"; //0 : empty
-     	        pixelMap[i][j].id = -1;
-        	   };
-	        };
+		newTank.id = tank_id;
+		//id++;
+		newTank.username = username;
+    	newTank.hp = 100;
+    	newTank.status = "alive";
+    	newTank.x = randomX;  // tank coordinates
+    	newTank.y = randomY;
+    	newTank.numShots = 0;
+    	newTank.bullets = Array();
+    	newTank.turretAngle = 0;
+    	newTank.wheelAngle = 0;
+    	newTank.destX = newTank.x;
+    	newTank.destY = newTank.y;
+    	tanksArray[tanksArray.length] = newTank;
+    	console.log("Tank Array Length: ");
+    	console.log(tanksArray.length);
+    	console.log("Tank ID:");
+    	console.log(tank_id);
+    	socket.emit('setID', tank_id);
+    	socket.set('idClient', tank_id);
+		//initial pixelMap
+    	for (var i=0; i < mapWidth; i++) {
+        	pixelMap[i] = Array();
+        	for (var j=0; j < mapHeight; j++) {
+				pixelMap[i][j] = Object();
+                pixelMap[i][j].type = "empty"; 
+     	        pixelMap[i][j].id = -1; //-1 means empty
+     	    };
+        };
 	});
 
 	
@@ -260,10 +252,7 @@ io.sockets.on('connection', function(socket) {
 	});
     */
 
-
-
     socket.on('mouse_click', function(mouseX, mouseY) {
-
 		var index;
         socket.get('idClient', function(err, idClient) {
           	index = 0;
@@ -445,9 +434,7 @@ io.sockets.on('connection', function(socket) {
 });	
 
 
-function clearObject (x, y, type) 
-{
-	
+function clearObject (x, y, type) {
 	x = Math.floor(x);
 	y = Math.floor(y);
 	if(type == "tank")
@@ -517,8 +504,8 @@ function drawObject(x, y, type, object)
 				for (var j=0; j < 5; j++) {
 					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 					{
-					pixelMap[x+i][y+j].type = "bullet";
-					pixelMap[x+i][y+j].id = object.clientID;
+						pixelMap[x+i][y+j].type = "bullet";
+						pixelMap[x+i][y+j].id = object.clientID;
 					}
 				};
 			};
@@ -605,40 +592,32 @@ function moveBullets () {
 		{
 			var hitClientID = detectHit(bulletArray[i]);
             clearObject(bulletArray[i].x, bulletArray[i].y, "bullet", bulletArray[i]);
-			if(hitClientID != -1)
+			if(hitClientID != -1)// -1 means empty
 			{
-				console.log("HIT!");
-				
+				/* when the bullet hit the target */	
+				//console.log("HIT!");				
 				var index;
 	            for (j=0; j<tanksArray.length; j++) {
 	                if (tanksArray[j].id == hitClientID) {
 	                    index = j;
 	                }
 	            };
-				
-				tanksArray[clientIndex].numShots = tanksArray[clientIndex].numShots - 1; //Decrease numShots when bullets goes off
-				
+	            //Decrease numShots when bullets goes off
+				tanksArray[clientIndex].numShots = tanksArray[clientIndex].numShots - 1;
 				
 				if(tanksArray[index].hp > 0)
 				{
-					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?
-					//tanksArray[index].destX = tanksArray[index].x;
-                    //tanksArray[index].destY = tanksArray[index].y;
+					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?				
                     if (tanksArray[index].hp <= 0) {
                         tanksArray[index].status = "dead";
                         tanksArray[index].destX = tanksArray[index].x;
                         tanksArray[index].destY = tanksArray[index].y;
-                    }
-                    //tanksArray[index].x = bulletArray[i].x;
-                    //tanksArray[index].y = bulletArray[i].y;
-                    io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
-                    
-
+                    } 
+                    /*send updated status to all palyer*/            
+                    io.sockets.volatile.emit('updatePlayerStatus', tanksArray);                   
 				}
-
-
+				/*remove the bullet from the bullet array when it hits the target.*/
                 bulletArray.splice(i, 1);
-				
 			}
 			else
 			{
