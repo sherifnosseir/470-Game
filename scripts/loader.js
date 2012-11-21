@@ -41,12 +41,14 @@ if(environment == "development")
 	var socket = io.connect('http://localhost:8080');
 	
 	tankCount++;
-	username = "Developer";
-	nickname = "Dev";
+	username = "Developer"+tankCount;
+	nickname = "Dev"+tankCount;
 	team_id = 1;
-	tank_id = 1;
+	tank_id = tankCount;
+	tankCount++;
 
-	socket.emit('createUserTank', tank_id, username);
+	//socket.emit('createUserTank', tank_id, username);
+	socket.emit('createIndiviualUserTank');
 	$("#row_two").show();
 	load();
 }

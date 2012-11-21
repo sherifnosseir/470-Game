@@ -128,6 +128,7 @@ socket.on('connect', function() {
 
 socket.on('setID', function(id) {
 	clientID = id;
+	tank_id = clientID;
 });
 
 socket.on('draw', function(tanksArray, bulletArray, pixelMap) {

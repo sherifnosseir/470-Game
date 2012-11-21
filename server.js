@@ -39,7 +39,7 @@ function handler (req, res) {
 }
 
 
-var id = 1;
+var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
@@ -95,6 +95,44 @@ io.sockets.on('connection', function(socket) {
 	
 	});
 
+	socket.on('createIndiviualUserTank', function()
+	{
+		var newTank = Object();
+
+	    randomX = Math.floor((Math.random()*mapWidth)+1);
+	    randomY = Math.floor((Math.random()*mapHeight)+1);
+
+		id++
+	    newTank.id = id;
+		newTank.username = "Server Tank"+id;
+	    newTank.hp = 100;
+	    newTank.x = randomX;  // tank coordinates
+	    newTank.y = randomY;
+	        newTank.numShots = 0;
+	        newTank.bullets = Array();
+	    newTank.turretAngle = 0;
+	    newTank.wheelAngle = 0;
+	    newTank.destX = newTank.x;
+	    newTank.destY = newTank.y;
+	    tanksArray[tanksArray.length] = newTank;
+	    console.log("Tank Array Length: ");
+	    console.log(tanksArray.length);
+	    console.log("Tank ID:");
+	    console.log(id);
+	    socket.emit('setID', id);
+	    socket.set('idClient', id);
+
+	    for (var i=0; i < mapWidth; i++) {
+	        pixelMap[i] = Array();
+	        for (var j=0; j < mapHeight; j++) {
+			pixelMap[i][j] = Object();
+
+	                pixelMap[i][j].type = "empty"; //0 : empty
+	     	        pixelMap[i][j].id = -1;
+	        	   };
+		        };
+	});
+
 	socket.on('createUserTank', function(tank_id, username)
 	{
 		//id++;
@@ -103,7 +141,8 @@ io.sockets.on('connection', function(socket) {
     randomX = Math.floor((Math.random()*mapWidth)+1);
     randomY = Math.floor((Math.random()*mapHeight)+1);
 
-    newTank.id = tank_id;
+    newTank.id = tank_id+id;
+	id++;
 	newTank.username = username;
     newTank.hp = 100;
     newTank.x = randomX;  // tank coordinates
