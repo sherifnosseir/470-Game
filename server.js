@@ -91,7 +91,7 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
-	socket.on('createIndiviualUserTank', function()
+/*	socket.on('createIndiviualUserTank')
 	{
 		var newTank = Object();
 
@@ -126,6 +126,19 @@ io.sockets.on('connection', function(socket) {
      	        pixelMap[i][j].id = -1; //-1 means empty
      	    };
         };
+	});*/
+	
+	socket.on('createGuestAccount', function()
+	{
+		user_info = new Array();
+
+		user_info[0] = "guest"+id; //username
+		user_info[1] = "guest"+id; //nickname
+		user_info[2] = id%2; //team id
+		user_info[3] = id*1000;	//tank id
+		id++;
+		
+		socket.emit('guestResponse', user_info);
 	});
 
 	socket.on('createUserTank', function(tank_id, username){

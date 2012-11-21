@@ -39,16 +39,22 @@ if(environment == "development")
 {
 	var socket = io.connect('http://localhost:8080');
 	
-	tankCount++;
-	username = "Developer"+tankCount;
-	nickname = "Dev"+tankCount;
-	team_id = 1;
-	tank_id = tankCount;
-	tankCount++;
 
-	//socket.emit('createUserTank', tank_id, username);
-	socket.emit('createIndiviualUserTank');
-	load();
+	socket.emit("createGuestAccount");
+//socket.emit('createUserTank', tank_id, username);
+		//socket.emit('createIndiviualUserTank');
+		socket.on('guestResponse', function(user_info)
+		{
+			username = user_info[0];
+			nickname = user_info[1];
+			team_id = user_info[2];
+			tank_id = user_info[3];
+			
+			socket.emit('createUserTank', tank_id, username);
+			$("#row_one").fadeOut("slow");
+			$(".row_two").fadeIn("slow");
+			load();
+		});
 }
 else
 {
@@ -84,19 +90,24 @@ else
 					}
 				});
 			});
+			
 			$("#guest_button").click(function() {
-				tankCount++;
-				username = "Developer"+tankCount;
-				nickname = "Dev"+tankCount;
-				team_id = 1;
-				tank_id = tankCount;
-				tankCount++;
 
-	//socket.emit('createUserTank', tank_id, username);
-				socket.emit('createIndiviualUserTank');
-				$("#row_one").fadeOut("slow");
-				$(".row_two").fadeIn("slow");
-				load();
+				socket.emit("createGuestAccount");
+			//socket.emit('createUserTank', tank_id, username);
+					//socket.emit('createIndiviualUserTank');
+				socket.on('guestResponse', function(user_info)
+				{
+					username = user_info[0];
+					nickname = user_info[1];
+					team_id = user_info[2];
+					tank_id = user_info[3];
+
+					socket.emit('createUserTank', tank_id, username);
+					$("#row_one").fadeOut("slow");
+					$(".row_two").fadeIn("slow");
+					load();
+				});
 			});
 		});
 
