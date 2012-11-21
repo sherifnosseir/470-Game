@@ -1,5 +1,5 @@
+var stage = Object();
 function load(){
-	var stage = Object();
 	stage.status = "onload";
 
 	// start dynamic loading

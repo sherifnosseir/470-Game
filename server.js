@@ -318,12 +318,12 @@ io.sockets.on('connection', function(socket) {
 			
 	});
 
-    socket.on('chatsend', function(msg) {
+    socket.on('chatsend', function(msg, username) {
         //need to socket.get nickname, for now clientID
         socket.get('idClient', function(err, idClient) {
             msg = msg.replace(/</g,"&lt;");
             msg = msg.replace(/>/g,"&gt;");
-            msg = idClient + ': ' + msg; // we'd replace this with usernames if we got a login
+            msg = username + ': ' + msg; // we'd replace this with usernames if we got a login
             var sendmsg = '';
             var result = msg.match(/.{1,55}/g);
 
@@ -337,7 +337,7 @@ io.sockets.on('connection', function(socket) {
             //console.log(msg.length);
             
             if (msg.length > 200) {
-                sendmsg = idClient + ": Message too long! Stop spamming bro!";
+                sendmsg = username + ": Message too long! Stop spamming bro!";
             }
             
 /*

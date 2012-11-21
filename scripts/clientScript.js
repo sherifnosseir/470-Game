@@ -93,7 +93,7 @@ document.addEventListener("keydown", function(e) {
 			}
 			else {
 				//console.log($('#chatmsg').val());
-				socket.emit('chatsend', $('#chatmsg').val()); //also need sender's id, or socket.getit later
+				socket.emit('chatsend', $('#chatmsg').val(), username); //also need sender's id, or socket.getit later
 				$('#chatmsg').val('');
 				//somesocketemitgoeshere
 				$('#chatmsg').blur();
