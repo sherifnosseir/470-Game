@@ -32,9 +32,6 @@ function drawTank(tank,frameNum){
 		
 		//Calculate Turret Angle
 		var turretAngle = Math.PI;
-		var xDirection = mouseX - x;
-		var yDirection = mouseY - y;
-		turretAngle = Math.atan2(yDirection, xDirection);
 		
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
@@ -50,6 +47,10 @@ function drawTank(tank,frameNum){
 			ctx.save();
 
 			
+			var xDirection = mouseX - x;
+			var yDirection = mouseY - y;
+			turretAngle = Math.atan2(yDirection, xDirection);
+			
 			//Draw User Turret
 			ctx.translate(x+17, y+17);
 			ctx.rotate((turretAngle+(Math.PI)/2)%(2*Math.PI));
@@ -63,6 +64,8 @@ function drawTank(tank,frameNum){
 			ctx.restore();
 
 			ctx.save();
+			
+			turretAngle = tank[i].turretAngle;
 			
 			//Draw Turret
 			ctx.translate(x+17, y+17);

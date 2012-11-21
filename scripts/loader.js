@@ -18,7 +18,7 @@ function load(){
 			complete : function() {
 				stage.status = "gamePlay";
 				console.log("All files loaded!");
-				document.getElementById("loadingView").className = "loadingHide";
+				$("#loadingView").fadeOut("slow");
 
 
 			}
@@ -37,7 +37,6 @@ var environment = "development";
 
 if(environment == "development")
 {
-	$("#row_one").hide();
 	var socket = io.connect('http://localhost:8080');
 	
 	tankCount++;
@@ -49,7 +48,6 @@ if(environment == "development")
 
 	//socket.emit('createUserTank', tank_id, username);
 	socket.emit('createIndiviualUserTank');
-	$("#row_two").show();
 	load();
 }
 else
@@ -80,8 +78,8 @@ else
 						tank_id = user_info[3];
 
 						socket.emit('createUserTank', tank_id, username);
-						$("#row_one").hide();
-						$("#row_two").show();
+						$("#row_one").fadeOut("slow");
+						$("#row_two").fadeIn("slow");
 						load();
 					}
 				});

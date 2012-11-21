@@ -142,8 +142,8 @@ io.sockets.on('connection', function(socket) {
     randomX = Math.floor((Math.random()*mapWidth)+1);
     randomY = Math.floor((Math.random()*mapHeight)+1);
 
-    newTank.id = tank_id+id;
-	id++;
+    newTank.id = tank_id;
+	//id++;
 	newTank.username = username;
     newTank.hp = 100;
     newTank.status = "alive";
@@ -373,13 +373,13 @@ io.sockets.on('connection', function(socket) {
             msg = msg.replace(/</g,"&lt;");
             msg = msg.replace(/>/g,"&gt;");
             msg = username + ': ' + msg; // we'd replace this with usernames if we got a login
-            var sendmsg = '';
-            var result = msg.match(/.{1,55}/g);
+            var sendmsg = msg;
+            /*var result = msg.match(/.{1,55}/g);
 
             for (i = 0; i<result.length-1; i++) {
                 sendmsg = sendmsg + result[i] + "<br>";
             }
-            sendmsg = sendmsg + result[result.length-1];
+            sendmsg = sendmsg + result[result.length-1];*/
 
             //headoflongmessage...asefasefseafasefasefasefsea...tailoflongmessage
 

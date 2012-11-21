@@ -158,8 +158,8 @@ socket.on('chatbroadcast', function(newmsg) {
 	//$("#insideChat").animate({ scrollTop: $('#insideChat').scrollHeight() }, "fast");
 	//$("#insideChat").scrollTop(100);
 
-	var chatbox = $('#insideChat');
-	chatbox.scrollTop(chatbox[0].scrollHeight - chatbox.height());
+	var chatbox = $('#chat');
+	$(chatbox).animate({ scrollTop: $(chatbox).height()+10000 }, 100);
 
 
 });
