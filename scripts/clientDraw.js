@@ -7,7 +7,18 @@ turret.src = "images/tankturret.png";
 userturret=new Image();
 userturret.src = "images/usertankturret.png";
 
-function drawBody(tank,frameNum){
+smoke0 = new Image();
+smoke0.src = "images/explosionframe0.png";
+smoke1 = new Image();
+smoke1.src = "images/explosionframe1.png";
+smoke2 = new Image();
+smoke2.src = "images/explosionframe2.png";
+smoke3 = new Image();
+smoke3.src = "images/explosionframe3.png";
+smoke4 = new Image();
+smoke4.src = "images/explosionframe4.png";
+
+function drawTank(tank,frameNum){
 	
  	var canvas = document.getElementById("canvas");
  	var ctx = canvas.getContext("2d");
@@ -63,9 +74,26 @@ function drawBody(tank,frameNum){
 		ctx.restore();
 		
 		
-		if(tank[i].state == "dead")
+		if(tank[i].status == "dead")
 		{
+			frameNum = frameNum%4;
 			
+			switch(frameNum)
+			{
+				case 1:
+					ctx.drawImage(smoke1,0,0,50,150,x-17,y-133,50,150);
+					break;
+				case 2:
+					ctx.drawImage(smoke2,0,0,50,150,x-17,y-133,50,150);
+					break;
+				case 3:
+					ctx.drawImage(smoke3,0,0,50,150,x-17,y-133,50,150);
+					break;
+				default:
+					ctx.drawImage(smoke0,0,0,50,150,x-17,y-133,50,150);
+					break;
+					
+			}
 		}
 		else
 		{
@@ -86,20 +114,19 @@ function drawBody(tank,frameNum){
 				{
 					ctx.fillStyle = 'red';
 				}
-			}
+			}	
+	
+			//Draw HP
+			ctx.fill();
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = 'black';
+	   		ctx.stroke();
+	
+			ctx.fillStyle = "black";
+	      	ctx.font = "8pt sans-serif";
+			ctx.textAlign = 'left';
+		    ctx.fillText(tank[i].hp+"%", tank[i].x+5, tank[i].y-13);
 		}
-	
-	
-		//Draw HP
-		ctx.fill();
-		ctx.lineWidth = 2;
-		ctx.strokeStyle = 'black';
-   		ctx.stroke();
-	
-		ctx.fillStyle = "black";
-      	ctx.font = "8pt sans-serif";
-		ctx.textAlign = 'left';
-	    ctx.fillText(tank[i].hp+"%", tank[i].x+5, tank[i].y-13);
 		
 		
 		//Draw Username
@@ -189,7 +216,7 @@ function drawCursor () {
 }
 
 function draw(tanks, bullets, frameNum){
-	drawBody(tanks, frameNum);
+	drawTank(tanks, frameNum);
 	drawBullets(bullets);
 	drawCursor();
 }

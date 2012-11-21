@@ -106,6 +106,7 @@ io.sockets.on('connection', function(socket) {
 	    newTank.id = id;
 		newTank.username = "Server Tank"+id;
 	    newTank.hp = 100;
+        newTank.status = "alive";
 	    newTank.x = randomX;  // tank coordinates
 	    newTank.y = randomY;
 	        newTank.numShots = 0;
@@ -145,6 +146,7 @@ io.sockets.on('connection', function(socket) {
 	id++;
 	newTank.username = username;
     newTank.hp = 100;
+    newTank.status = "alive";
     newTank.x = randomX;  // tank coordinates
     newTank.y = randomY;
         newTank.numShots = 0;
@@ -619,13 +621,18 @@ function moveBullets () {
 				
 				if(tanksArray[index].hp > 0)
 				{
-					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - bulletDamage?
-					tanksArray[index].destX = tanksArray[index].x;
-                    tanksArray[index].destY = tanksArray[index].y;
+					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?
+					//tanksArray[index].destX = tanksArray[index].x;
+                    //tanksArray[index].destY = tanksArray[index].y;
+                    if (tanksArray[index].hp <= 0) {
+                        tanksArray[index].status = "dead";
+                        tanksArray[index].destX = tanksArray[index].x;
+                        tanksArray[index].destY = tanksArray[index].y;
+                    }
                     //tanksArray[index].x = bulletArray[i].x;
                     //tanksArray[index].y = bulletArray[i].y;
                     io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
-                    io.sockets.volatile.emit('drawSmokes', tanksArray[index].x, tanksArray[index].y);
+                    
 
 				}
 
@@ -651,7 +658,7 @@ function moveBullets () {
 function respawn(index){
 
 	mytank=tanksArray[index];
-	if(mytank.hp <= 200){
+	if(mytank.status == "dead"){
 		console.log("respawn!");
 		clearObject(mytank.x,mytank.y,'tank');
 		mytank.hp=100;
@@ -661,6 +668,7 @@ function respawn(index){
 		mytank.y=randomY;
 		mytank.destX = mytank.x;
 	    mytank.destY = mytank.y;
+		mytank.status = "alive";
 		
 	}
 	
