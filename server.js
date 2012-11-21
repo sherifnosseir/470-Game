@@ -305,6 +305,13 @@ io.sockets.on('connection', function(socket) {
             tanksArray[index].destX = tanksArray[index].destX-15;
             tanksArray[index].destY = tanksArray[index].destY-21;
 		}
+		else
+		{
+			socket.emit('askRespawn');
+			
+			
+			
+		}
 
 /*
             if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
@@ -418,6 +425,19 @@ io.sockets.on('connection', function(socket) {
 
 		console.log('Disconnect', id);
 		console.log(tanksArray.length);
+	});
+	
+	socket.on('respawn',function(){
+		var respindex;
+		socket.get('idClient', function(err, idClient) {
+			respindex = 0;
+			for (i=0; i<tanksArray.length; i++) {
+				if (tanksArray[i].id == idClient) {
+					respindex = i;
+				}
+			};
+		})
+		respawn(respindex);
 	});
 });	
 
@@ -618,7 +638,24 @@ function moveBullets () {
 		}
 	};
 }
+function respawn(index){
 
+	mytank=tanksArray[index];
+	if(mytank.hp <= 200){
+		console.log("respawn!");
+		clearObject(mytank.x,mytank.y,'tank');
+		mytank.hp=100;
+		randomX = Math.floor((Math.random()*mapWidth)+1);
+	    randomY = Math.floor((Math.random()*mapHeight)+1);
+		mytank.x=randomX;
+		mytank.y=randomY;
+		mytank.destX = mytank.x;
+	    mytank.destY = mytank.y;
+		
+	}
+	
+	
+}
 setInterval(function() {
     moveTank();
 	moveBullets();

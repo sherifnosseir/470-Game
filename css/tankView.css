@@ -1,6 +1,6 @@
 #loadingView{
-	width:960 px;
-	height:540 px;
+	width:960px;
+	height:540px;
 	position:absolute;
 
 }
@@ -74,4 +74,13 @@ h1{
 	background-color:green;
 	text-align:center;
 	color:white;
+}
+
+#respawn
+{
+	position:absolute;
+	left:200px;
+	top:300px;
+	z-index: 1000;
+	visibility: hidden;
 }

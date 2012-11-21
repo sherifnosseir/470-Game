@@ -56,7 +56,7 @@ $('canvas').click(function(e){
 	socket.emit('mouse_click', mouseX, mouseY);
 });
 
-
+//chat focus and unfocus
 $('#chatmsg').focus( function(){
 	chatActive = true;
 });
@@ -162,4 +162,16 @@ socket.on('chatbroadcast', function(newmsg) {
 	chatbox.scrollTop(chatbox[0].scrollHeight - chatbox.height());
 
 
+});
+
+//respawn function goes here
+socket.on('askRespawn',function(){
+	console.log('askrespon');
+	$("#respawn_but").click(function() {
+		socket.emit("respawn");
+		$("#respawn").css('visibility','hidden');
+		
+	});
+	$("#respawn").css('visibility',"visible");
+	
 });
