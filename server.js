@@ -649,6 +649,7 @@ function respawn(index){
 	    mytank.destY = mytank.y;
 		mytank.status = "alive";
 		
+		io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 	}
 	
 	

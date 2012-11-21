@@ -94,6 +94,9 @@ else
 
 	//socket.emit('createUserTank', tank_id, username);
 				socket.emit('createIndiviualUserTank');
+				$("#row_one").fadeOut("slow");
+				$(".row_two").fadeIn("slow");
+				load();
 			});
 		});
 
