@@ -14,43 +14,83 @@ function drawBody(tank,frameNum){
 
 	for (var i=0; i < tank.length; i++) {
 
+		//Calculate Tank Angle
 		var x = tank[i].x;
 		var y = tank[i].y;
-		var angle = tank[i].wheelAngle;
+		var tankAngle = tank[i].wheelAngle;
+		
+		//Calculate Turret Angle
+		var turretAngle = Math.PI;
+		var xDirection = mouseX - x;
+		var yDirection = mouseY - y;
+		turretAngle = Math.atan2(yDirection, xDirection);
 		
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
 		ctx.translate(x+17, y+17);
-		ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
+		ctx.rotate((tankAngle+(Math.PI)/2)%(2*Math.PI));
 		if(tank[i].id == tank_id)
 		{
+			//Draw User Tank
 			ctx.drawImage(userTankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+			ctx.translate(-x, -y);
+			ctx.restore();
+
+			ctx.save();
+
+			
+			//Draw User Turret
+			ctx.translate(x+17, y+17);
+			ctx.rotate((turretAngle+(Math.PI)/2)%(2*Math.PI));
+			ctx.drawImage(userturret,0,0,67,67,-17,-17,34,34);
 		}
 		else
 		{
+			//Draw Tank
 			ctx.drawImage(tankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+			ctx.translate(-x, -y);
+			ctx.restore();
+
+			ctx.save();
+			
+			//Draw Turret
+			ctx.translate(x+17, y+17);
+			ctx.rotate((turretAngle+(Math.PI)/2)%(2*Math.PI));
+			
+			ctx.drawImage(turret,0,0,67,67,-17,-17,34,34);
 		}
 		ctx.translate(-x, -y);
 		ctx.restore();
 		
-		ctx.beginPath();
-		ctx.rect(tank[i].x-8, tank[i].y-25, tank[i].hp/2, 15);
-		if(tank[i].hp > 75)
+		
+		if(tank[i].state == "dead")
 		{
-			ctx.fillStyle = 'green';
+			
 		}
 		else
 		{
-			if(tank[i].hp > 30)
+			//Draw Health
+			ctx.beginPath();
+			ctx.rect(tank[i].x-8, tank[i].y-25, tank[i].hp/2, 15);
+			if(tank[i].hp > 75)
 			{
-				ctx.fillStyle = 'yellow';
+				ctx.fillStyle = 'green';
 			}
 			else
 			{
-				ctx.fillStyle = 'red';
+				if(tank[i].hp > 30)
+				{
+					ctx.fillStyle = 'yellow';
+				}
+				else
+				{
+					ctx.fillStyle = 'red';
+				}
 			}
 		}
 	
+	
+		//Draw HP
 		ctx.fill();
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = 'black';
@@ -60,7 +100,9 @@ function drawBody(tank,frameNum){
       	ctx.font = "8pt sans-serif";
 		ctx.textAlign = 'left';
 	    ctx.fillText(tank[i].hp+"%", tank[i].x+5, tank[i].y-13);
-	
+		
+		
+		//Draw Username
 		ctx.fillStyle = "black";
       	ctx.font = "8pt sans-serif";
 		ctx.textAlign = 'center';
@@ -146,11 +188,8 @@ function drawCursor () {
 	ctx.fill();
 }
 
-
-
 function draw(tanks, bullets, frameNum){
 	drawBody(tanks, frameNum);
-	drawTurret(tanks);
 	drawBullets(bullets);
 	drawCursor();
 }
