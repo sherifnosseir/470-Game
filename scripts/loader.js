@@ -31,6 +31,81 @@ nickname = "";
 team_id = "";
 tank_id = "";
 
+
+var tankCount = 0;
+var environment = "development";
+
+if(environment == "development")
+{
+	$("#row_one").hide();
+	var socket = io.connect('http://localhost:8080');
+	
+	tankCount++;
+	username = "Developer";
+	nickname = "Dev";
+	team_id = 1;
+	tank_id = 1;
+
+	socket.emit('createUserTank', tank_id);
+	$("#row_two").show();
+	load();
+}
+else
+{
+	var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+	
+	var state = 0;
+	var details = "";
+
+	if(state==0){
+		$(document).ready(function() {
+			$("#row_two").hide();
+			$("#submit_button").click(function() {
+
+				details = new Array();
+				details[0] = $("#username").val(); //username
+				details[1] = calcMD5($("#password").val()); //password (will be encrypted to md5)
+				console.log(details);
+				//var socket = io.connect('http://localhost:8080');
+				//var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+				socket.emit('login',state,details);
+				socket.on('response', function(response,user_info) {
+					console.log(response);
+					if(response=="Login Successful"){
+						username = user_info[0];
+						nickname = user_info[1];
+						team_id = user_info[2];
+						tank_id = user_info[3];
+
+						socket.emit('createUserTank', tank_id);
+						$("#row_one").hide();
+						$("#row_two").show();
+						load();
+					}
+				});
+			});
+		});
+
+		console.log('waiting for successful login');
+		//hide canvas
+	}
+
+	else if (state==1){
+		load();
+
+	}
+}
+
+/*==========================================
+  =====FINAL CODE WITH NO ENVIRONMENTS======
+  ==========================================*/
+/*
+//global scope stuff
+username = "";
+nickname = "";
+team_id = "";
+tank_id = "";
+
 var state = 0;
 var details = "";
 
@@ -39,7 +114,7 @@ if(state==0){
 	$(document).ready(function() {
 		$("#row_two").hide();
 		$("#submit_button").click(function() {
-			
+
 			details = new Array();
 			details[0] = $("#username").val(); //username
 			details[1] = calcMD5($("#password").val()); //password (will be encrypted to md5)
@@ -72,3 +147,4 @@ else if (state==1){
 	load();
 
 }
+*/
