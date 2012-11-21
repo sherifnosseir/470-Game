@@ -307,6 +307,7 @@ io.sockets.on('connection', function(socket) {
 		}
 		else
 		{
+            //udead
 			socket.emit('askRespawn');
 			
 			
@@ -614,13 +615,22 @@ function moveBullets () {
 	            };
 				
 				tanksArray[clientIndex].numShots = tanksArray[clientIndex].numShots - 1; //Decrease numShots when bullets goes off
-				bulletArray.splice(i, 1);
+				
 				
 				if(tanksArray[index].hp > 0)
 				{
 					tanksArray[index].hp = tanksArray[index].hp - 10; // tdl: this 10 should be a variable - bulletDamage?
-					io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
+					tanksArray[index].destX = tanksArray[index].x;
+                    tanksArray[index].destY = tanksArray[index].y;
+                    //tanksArray[index].x = bulletArray[i].x;
+                    //tanksArray[index].y = bulletArray[i].y;
+                    io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
+                    io.sockets.volatile.emit('drawSmokes', tanksArray[index].x, tanksArray[index].y);
+
 				}
+
+
+                bulletArray.splice(i, 1);
 				
 			}
 			else
