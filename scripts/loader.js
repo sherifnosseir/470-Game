@@ -59,7 +59,7 @@ else
 
 	if(state==0){
 		$(document).ready(function() {
-			$("#row_two").hide();
+			$(".row_two").hide();
 			$("#submit_button").click(function() {
 
 				details = new Array();
@@ -79,7 +79,7 @@ else
 
 						socket.emit('createUserTank', tank_id, username);
 						$("#row_one").fadeOut("slow");
-						$("#row_two").fadeIn("slow");
+						$(".row_two").fadeIn("slow");
 						load();
 					}
 				});

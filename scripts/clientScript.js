@@ -10,7 +10,6 @@ clientData.frameNum=0;
 
 var chatActive = false;
 
-
 document.onselectstart = function(){ return false; }
 $('canvas').mousemove(function(e) {
 	//var pageCoords = "(" + e.pageX + ", " + e.pageY + ")";
@@ -45,6 +44,27 @@ $('canvas').mousemove(function(e) {
 	//console.log("(" + mouseX + ", " + mouseY + ")");
 	//draw(e.pageX, e.pageY, 1);
 
+});
+
+$('.help #help-button').click(function(e)
+{
+	e.preventDefault();
+	if($('#help-instructions').attr("toggle") == 0)
+	{
+		$('#help-instructions').attr("toggle", 1);
+		$('#help-instructions').fadeIn('slow');
+	}
+	else
+	{
+		$('#help-instructions').attr("toggle", 0);
+		$('#help-instructions').fadeOut('slow');
+	}
+});
+
+$('#help-instructions').click(function()
+{
+	$('#help-instructions').attr("toggle", 0);
+	$('#help-instructions').fadeOut('slow');
 });
 
 
