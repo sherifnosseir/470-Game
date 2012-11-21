@@ -146,7 +146,9 @@ function drawCursor () {
 	ctx.fill();
 }
 
-
+function drawSmoke () {
+	
+}
 
 function draw(tanks, bullets, frameNum){
 	drawBody(tanks, frameNum);
