@@ -84,6 +84,17 @@ else
 					}
 				});
 			});
+			$("#guest_button").click(function() {
+				tankCount++;
+				username = "Developer"+tankCount;
+				nickname = "Dev"+tankCount;
+				team_id = 1;
+				tank_id = tankCount;
+				tankCount++;
+
+	//socket.emit('createUserTank', tank_id, username);
+				socket.emit('createIndiviualUserTank');
+			});
 		});
 
 		console.log('waiting for successful login');
