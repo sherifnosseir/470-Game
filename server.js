@@ -95,7 +95,7 @@ io.sockets.on('connection', function(socket) {
 	
 	});
 
-	socket.on('createUserTank', function(tank_id)
+	socket.on('createUserTank', function(tank_id, username)
 	{
 		//id++;
     var newTank = Object();
@@ -104,6 +104,7 @@ io.sockets.on('connection', function(socket) {
     randomY = Math.floor((Math.random()*mapHeight)+1);
 
     newTank.id = tank_id;
+	newTank.username = username;
     newTank.hp = 100;
     newTank.x = randomX;  // tank coordinates
     newTank.y = randomY;

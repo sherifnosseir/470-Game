@@ -1,7 +1,11 @@
 tankSprite=new Image();
 tankSprite.src = "images/tankssheet.png";
+userTankSprite = new Image();
+userTankSprite.src = "images/usertankssheet.png";
 turret=new Image();
 turret.src = "images/tankturret.png";
+userturret=new Image();
+userturret.src = "images/usertankturret.png";
 
 function drawBody(tank,frameNum){
 	
@@ -18,7 +22,14 @@ function drawBody(tank,frameNum){
 		ctx.save();
 		ctx.translate(x+17, y+17);
 		ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
-	 	ctx.drawImage(tankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+		if(tank[i].id == tank_id)
+		{
+			ctx.drawImage(userTankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+		}
+		else
+		{
+			ctx.drawImage(tankSprite,0,frameNum*81,63,81,-16,-20,32,41);
+		}
 		ctx.translate(-x, -y);
 		ctx.restore();
 		
@@ -53,7 +64,7 @@ function drawBody(tank,frameNum){
 		ctx.fillStyle = "black";
       	ctx.font = "8pt sans-serif";
 		ctx.textAlign = 'center';
-	    ctx.fillText(tank[i].id, tank[i].x+14, tank[i].y+52);
+	    ctx.fillText(tank[i].username, tank[i].x+14, tank[i].y+52);
 	}
  	
 }
@@ -86,7 +97,14 @@ function drawTurret(tank){
 		ctx.save();
 		ctx.translate(x+17, y+17);
 		ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
-	 	ctx.drawImage(turret,0,0,67,67,-17,-17,34,34);
+		if(tank[i].id == tank_id)
+		{
+			ctx.drawImage(userturret,0,0,67,67,-17,-17,34,34);
+		}
+		else
+		{
+			ctx.drawImage(turret,0,0,67,67,-17,-17,34,34);
+		}
 		ctx.translate(-x, -y);
 		ctx.restore();
 	};

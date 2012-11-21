@@ -46,7 +46,7 @@ if(environment == "development")
 	team_id = 1;
 	tank_id = 1;
 
-	socket.emit('createUserTank', tank_id);
+	socket.emit('createUserTank', tank_id, username);
 	$("#row_two").show();
 	load();
 }
@@ -77,7 +77,7 @@ else
 						team_id = user_info[2];
 						tank_id = user_info[3];
 
-						socket.emit('createUserTank', tank_id);
+						socket.emit('createUserTank', tank_id, username);
 						$("#row_one").hide();
 						$("#row_two").show();
 						load();
