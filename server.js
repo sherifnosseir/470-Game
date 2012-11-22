@@ -96,6 +96,10 @@ io.sockets.on('connection', function(socket) {
 		username = details[0];
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
+		var post = {username: username, password: password};
+		var query = connection.query('INSERT INTO posts SET ?', post, function(err, result) {
+  		// Neat!
+		});
 	});
 
 /*	socket.on('createIndiviualUserTank')
