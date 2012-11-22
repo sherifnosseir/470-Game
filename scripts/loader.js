@@ -105,7 +105,7 @@ else
 
 				socket.on('signup_response', function(signup_response)
 				{
-					if(signup_reponse==1){
+					if(signup_response==1){
 						console.log('Signup successful');
 					}
 				});
