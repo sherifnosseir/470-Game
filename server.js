@@ -91,6 +91,13 @@ io.sockets.on('connection', function(socket) {
 		});
 	});
 
+		socket.on('signup',function(state,details){
+		console.log("STATE:"+state);
+		username = details[0];
+		password = details[1];
+		console.log("Username: " + username + " Password: " + password);
+	});
+
 /*	socket.on('createIndiviualUserTank')
 	{
 		var newTank = Object();

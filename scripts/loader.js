@@ -96,6 +96,13 @@ else
 				$("#login").hide();
 				$("#signup_div").show();
 			});
+
+			$("#signup_button2").click(function() {
+				details = new Array();
+				details[0] = $("#username").val(); //username
+				details[1] = calcMD5($("#password").val()); //password (will be encrypted to md5)
+				socket.emit('signup',state,details);
+			});
 			
 			$("#guest_button").click(function() {
 
