@@ -97,7 +97,7 @@ io.sockets.on('connection', function(socket) {
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
 		var post = {username: username, password: password};
-		var query = connection.query('INSERT INTO posts SET ?', post, function(err, result) {
+		var query = connection.query('INSERT INTO users SET ?', post, function(err, result) {
   		// Neat!
 		});
 	});
