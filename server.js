@@ -277,7 +277,7 @@ io.sockets.on('connection', function(socket) {
 		});
 
             //15*21
-		if(tanksArray[index].hp == undefined){
+		if(tanksArray[index] == undefined){
 		tanksArray.splice(index, 1);
 		}
 		else{
