@@ -97,11 +97,11 @@ io.sockets.on('connection', function(socket) {
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
 
-		sql="SELECT MAX(tank_id) from users";
+		sql="SELECT MAX(tank_id) as max from users";
 		console.log(sql);
 		connection.query(sql, function(err, rows, fields) {
 			if (err) throw err;
-			result = rows[0];
+			result = rows['max'];
 			tank_id = result+1;
 			console.log("Tank ID:");
 			console.log(tank_id);
