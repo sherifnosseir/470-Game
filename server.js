@@ -103,13 +103,15 @@ io.sockets.on('connection', function(socket) {
 			if (err) throw err;
 			result = rows[0];
 			tank_id = result+1;
-		});
-
-
-		var post = {username: username, password: password, tank_id: tank_id};
-		var query = connection.query('INSERT INTO users SET ?', post, function(err, result) {
+			console.log(tank_id);
+			var post = {username: username, password: password, tank_id: tank_id};
+			var query = connection.query('INSERT INTO users SET ?', post, function(err, result) {
   		// Neat!
+			});
 		});
+
+
+
 	});
 
 /*	socket.on('createIndiviualUserTank')
