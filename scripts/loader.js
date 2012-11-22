@@ -91,6 +91,11 @@ else
 					}
 				});
 			});
+
+			$("#signup_button1").click(function() {
+				$("#login").hide();
+				$("#signup_div").show();
+			});
 			
 			$("#guest_button").click(function() {
 
