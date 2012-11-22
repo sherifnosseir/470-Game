@@ -95,7 +95,6 @@ io.sockets.on('connection', function(socket) {
 		console.log("STATE:"+state);
 		username = details[0];
 		password = details[1];
-		var tank_id = 0;
 		console.log("Username: " + username + " Password: " + password);
 
 		sql="SELECT MAX(tank_id) from users";
