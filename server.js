@@ -95,8 +95,19 @@ io.sockets.on('connection', function(socket) {
 		console.log("STATE:"+state);
 		username = details[0];
 		password = details[1];
+		var tank_id = 0;
 		console.log("Username: " + username + " Password: " + password);
-		var post = {username: username, password: password};
+
+		sql="SELECT MAX(tank_id) from users";
+		console.log(sql);
+		connection.query(sql, function(err, rows, fields) {
+			if (err) throw err;
+			result = rows[0];
+			tank_id = result+1;
+		});
+
+
+		var post = {username: username, password: password, tank_id: tank_id};
 		var query = connection.query('INSERT INTO users SET ?', post, function(err, result) {
   		// Neat!
 		});
