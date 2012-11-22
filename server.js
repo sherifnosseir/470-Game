@@ -348,6 +348,10 @@ io.sockets.on('connection', function(socket) {
             };
 		});
 		//console.log(index);
+			if(tanksArray[index] == undefined){
+				tanksArray.splice(index, 1);
+			}
+			else{
 			if(tanksArray[index].numShots <=3 && tanksArray[index].hp > 0) //Check if user has more than 4 shots
 			{
 				tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
@@ -369,6 +373,7 @@ io.sockets.on('connection', function(socket) {
 				tanksArray[index].turretAngle = angle;
 				bulletArray[bulletArray.length] = newBullet;
 			}
+		}
 			
 	});
 
