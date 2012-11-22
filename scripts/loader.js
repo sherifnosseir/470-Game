@@ -107,6 +107,8 @@ else
 				{
 					if(signup_response==1){
 						console.log('Signup successful');
+							$("#login").show();
+							$("#signup_div").hide();
 					}
 				});
 			});
