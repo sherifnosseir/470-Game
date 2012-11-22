@@ -277,8 +277,10 @@ io.sockets.on('connection', function(socket) {
 		});
 
             //15*21
-		
-		if(tanksArray[index].hp > 0)
+		if(tanksArray[index].hp == undefined){
+			tanksArray.splice(index,1);
+		}
+		else
 		{
             tanksArray[index].destX = mouseX;
             tanksArray[index].destY = mouseY;
