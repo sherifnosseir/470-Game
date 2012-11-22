@@ -278,9 +278,10 @@ io.sockets.on('connection', function(socket) {
 
             //15*21
 		if(tanksArray[index].hp == undefined){
-			tanksArray.splice(index,1);
+		tanksArray.splice(index, 1);
 		}
-		else
+		else{
+		if(tanksArray[index].hp > 0)
 		{
             tanksArray[index].destX = mouseX;
             tanksArray[index].destY = mouseY;
@@ -319,7 +320,7 @@ io.sockets.on('connection', function(socket) {
 			
 			
 		}
-
+}
 /*
             if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
                 tanksArray[index].x = currentX - velocityX;
