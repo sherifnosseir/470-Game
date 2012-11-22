@@ -101,7 +101,7 @@ io.sockets.on('connection', function(socket) {
 		console.log(sql);
 		connection.query(sql, function(err, rows, fields) {
 			if (err) throw err;
-			result = rows['max'];
+			result = rows[0]['MAX(tank_id)'];
 			tank_id = result+1;
 			console.log("Tank ID:");
 			console.log(tank_id);
