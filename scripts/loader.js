@@ -66,7 +66,6 @@ else
 	if(state==0){
 		$(document).ready(function() {
 			$(".row_two").hide();
-			$("#signup").hide();
 			$("#submit_button").click(function() {
 
 				details = new Array();
