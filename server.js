@@ -101,13 +101,21 @@ io.sockets.on('connection', function(socket) {
 		console.log(sql);
 		connection.query(sql, function(err, rows, fields) {
 			if (err) throw err;
-			result = rows[0]['MAX(tank_id)'];
+			result = rows[0]['max'];
 			tank_id = result+1;
 			console.log("Tank ID:");
 			console.log(tank_id);
 			var post = {username: username, password: password, tank_id: tank_id};
 			var query = connection.query('INSERT INTO users SET ?', post, function(err, result) {
-  		// Neat!
+  		// Neat!        
+  				console.log("USER SIGNUP RESULT");
+                console.log(result);
+                var signup_response = result['affectedRows'];
+                if(signup_response==1){
+                	console.log('signup succesful');
+                	socket.emit('signup_response', signup_response);
+                }
+
 			});
 		});
 

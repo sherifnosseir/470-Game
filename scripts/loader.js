@@ -102,6 +102,13 @@ else
 				details[0] = $("#username2").val(); //username
 				details[1] = calcMD5($("#password2").val()); //password (will be encrypted to md5)
 				socket.emit('signup',state,details);
+
+				socket.on('signup_response', function(signup_response)
+				{
+					if(signup_reponse==1){
+						console.log('Signup successful');
+					}
+				});
 			});
 			
 			$("#guest_button").click(function() {
