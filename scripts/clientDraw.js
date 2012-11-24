@@ -131,6 +131,21 @@ function drawTank(tank,frameNum){
 		    ctx.fillText(tank[i].hp+"%", tank[i].x+5, tank[i].y-13);
 		}
 		
+		//draw bullet
+		var bullets=tank[i].weapon.bullets;
+		for(var j = 0; j<bullets.length; j++)
+		{
+			//if(tank[i].id == tank_id)
+			//{
+				ctx.fillStyle = "rgb(0,0,255)";
+			//}
+			//else
+			//{
+			//	ctx.fillStyle = "rgb(255,0,0)";
+			//}
+		
+			ctx.fillRect (bullets[j].x, bullets[j].y, 5, 5);
+		}
 		
 		//Draw Username
 		ctx.fillStyle = "black";
@@ -220,7 +235,7 @@ function drawCursor () {
 
 function draw(tanks, bullets, frameNum){
 	drawTank(tanks, frameNum);
-	drawBullets(bullets);
+	//drawBullets(bullets);
 	drawCursor();
 }
 

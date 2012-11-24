@@ -193,6 +193,18 @@ io.sockets.on('connection', function(socket) {
     	newTank.wheelAngle = 0;
     	newTank.destX = newTank.x;
     	newTank.destY = newTank.y;
+    	// weapon setup here
+    	
+    	var we=Object();
+    	we.type='squre'
+    	we.numShots=0;
+    	we.maxload=4;
+    	we.bullets=Array();
+    	
+    	newTank.weapon=we;
+    	// weapon done
+    	
+    	
     	tanksArray[tanksArray.length] = newTank;
     	console.log("Tank Array Length: ");
     	console.log(tanksArray.length);
@@ -403,7 +415,7 @@ io.sockets.on('connection', function(socket) {
 			
 				
 				tanksArray[index].turretAngle = angle;
-				bulletArray[bulletArray.length] = newBullet;
+				tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=newBullet;
 			}
 		}
 			
@@ -566,10 +578,11 @@ function drawObject(x, y, type, object)
 }
 
 function moveTank() {
+	
     for (index = 0; index < tanksArray.length; index++) {
-
-		
+    	//loop for each tank
 		//pixelMap
+		currentTank = tanksArray[index];
 		clearObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
 		
 		
@@ -600,12 +613,95 @@ function moveTank() {
 
         }
         drawObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
-		
-
-
-    };
+        //loop for each buulet of this tank
+        /* the repalcement of movebullet() function */
+        for(var j=currentTank.weapon.bullets.length-1;j>=0;j--){
+        	//console.log("tankbullet j:"+currentTank.weapon.bullets);
+        	
+        	currentBullet=currentTank.weapon.bullets[j];
+        		
+			if((currentBullet.x < mapWidth && currentBullet.x > 0) && (currentBullet.y > 0 && currentBullet.y < mapHeight)){
+				 //Check if a bullet is out of bound
+				var hitClientID = colDetect(currentBullet);
+            	clearObject(currentBullet.x, currentBullet.y, "bullet", currentBullet);
+				if(hitClientID != -1)// -1 means empty
+				{
+					/* when the bullet hit the target */	
+					//console.log("HIT!");				
+					var hitIndex;
+	            	for (var k=0; k<tanksArray.length; k++) {
+	                	if (tanksArray[k].id == hitClientID) {
+	                    	hitIndex = k;
+	                	}
+	            	}
+	            	//Decrease numShots when bullets goes off
+					currentTank.weapon.numShots = currentTank.numShots - 1;
+					var hitTank=tanksArray[hitIndex];
+					if(hitTank.status=='alive')
+					{
+					/*hits a tank*/
+						hitTank.hp = hitTank.hp - 10; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?				
+                    	if (hitTank.hp <= 0) {
+                        	hitTank.status = "dead";
+                        	hitTank.destX = hitTank.x;
+                        	hitTank.destY = hitTank.y;
+                    	} 
+                    	/*send updated status to all palyer*/            
+                    	io.sockets.volatile.emit('updatePlayerStatus', tanksArray);                   
+					}
+					/*remove the bullet from the bullet array when it hits the target.*/
+                	currentTank.weapon.bullets.splice(j, 1);
+				}
+				else{
+					//bullet not hiting anything
+					currentBullet.x = currentBullet.x + Math.cos(currentBullet.angle)*bulletVelocity;
+					currentBullet.y = currentBullet.y + Math.sin(currentBullet.angle)*bulletVelocity;
+					drawObject(currentBullet.x, currentBullet.y, "bullet", currentBullet);
+				}
+			}
+			else{
+				// out of bound
+				currentTank.weapon.numShots = currentTank.weapon.numShots - 1; //Decrease numShots when bullets goes off
+				currentTank.weapon.bullets.splice(j, 1);
+			}
+        }
+    }
 };
-
+/** collision detection fucntion , use for all puepose*/
+/** if there is a collision, will return the object id. **/
+function colDetect(type,mapid,object){
+	
+	if(type=='buulet'){
+		var bullet=object;
+		//detect bullet hit
+		for (var i=0; i < 5; i++) {
+			for (var j=0; j < 5; j++) {
+				var x=Math.floor(bullet.x)+i;
+				var y=Math.floor(bullet.y)+j;
+            //console.log("detecthit x" + x);
+            //console.log("detecthit y" + y);
+            //console.log("detectHit id " + pixelMap[x][y].id + " detectHit clientID " + bullet.clientID);
+			//if(x<0||y<0)console.log("Zero!!");
+				if(x<mapWidth&&y<mapHeight){
+					//we dont want the bullet to hit the bullet
+					if(pixelMap[x][y].type == "tank" && pixelMap[x][y].id != bullet.clientID){
+						//hit tanks.
+						console.log("detectHit Type " + pixelMap[x][y].type);
+						console.log("detectHit id " + pixelMap[x][y].id);
+						console.log("detectHit clientID " + bullet.clientID);
+						return pixelMap[x][y].id;
+					}else if(pixelMap[x][y].type=="otherobject"){
+						//hit object.
+						
+					}
+				}	
+			}
+		}
+		return -1;
+	}
+	return -1;
+	
+}
 function detectHit (bullet) {
 	for (var i=0; i < 5; i++) {
 		for (var j=0; j < 5; j++) {
@@ -621,7 +717,7 @@ function detectHit (bullet) {
 					console.log("detectHit Type " + pixelMap[x][y].type);
 					console.log("detectHit id " + pixelMap[x][y].id);
 					console.log("detectHit clientID " + bullet.clientID);
-				  return pixelMap[x][y].id;
+				    return pixelMap[x][y].id;
 				}
 			}
 			
@@ -709,7 +805,7 @@ function respawn(index){
 }
 setInterval(function() {
     moveTank();
-	moveBullets();
+	//moveBullets();
     io.sockets.volatile.emit('draw', tanksArray, bulletArray);
 }, fps);
 

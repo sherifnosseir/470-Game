@@ -33,7 +33,7 @@ tank_id = "";
 
 
 var tankCount = 0;
-var environment = "develop";
+var environment = "development";
 
 if(environment == "development")
 {
