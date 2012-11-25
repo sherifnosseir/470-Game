@@ -363,7 +363,7 @@ io.sockets.on('connection', function(socket) {
 
             //15*21
 		if(tanksArray[index] == undefined){
-		tanksArray.splice(index, 1);
+			tanksArray.splice(index, 1);
 		}
 		else{
 		if(tanksArray[index].hp > 0)
