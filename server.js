@@ -52,38 +52,40 @@ var mapHeight = 540;
 
 
 //Create map tile
-for (var i=0; i < mapWidth.length; i++) {
+for (var i=0; i < mapWidth; i++) {
 	pixelMap[i] = Array();
-	for (var j=0; j < mapHeight.length; j++) {
-		pixelMap[i][j] = Object;
-		pixelMap[i][j].type = "empty";
-		pixelMap[i][j].id = -1;
-	};
+	for (var j=0; j < mapHeight; j++) {
+		pixelMap[i][j] = Object();
+        pixelMap[i][j].type = "empty"; 
+        pixelMap[i][j].id = -1; //-1 means empty
+    };
 };
 
 
 //Testing Water tiles
-for (var i=0; i < mapWidth.length; i++) {
+for (var i=0; i < mapWidth; i++) {
 		pixelMap[i][250].type = "water";
 		pixelMap[i][250].id = -1;
 };
 
-for (var j=0; j < mapHeight.length; j++) {
+for (var j=0; j < mapHeight; j++) {
 		pixelMap[500][j].type = "water";
 		pixelMap[500][j].id = -1;
 };
 //End of water tile test
 
 //Testing rock tiles
-for (var i=0; i < mapWidth.length; i++) {
-		pixelMap[i][250].type = "rock";
-		pixelMap[i][250].id = -1;
+for (var i=0; i < mapWidth; i++) {
+		pixelMap[i][125].type = "rock";
+		pixelMap[i][125].id = -1;
 };
 
-for (var i=0; i < mapWidth.length; i++) {
-		pixelMap[i][650].type = "rock";
-		pixelMap[i][650].id = -1;
+for (var i=0; i < mapWidth; i++) {
+		pixelMap[i][375].type = "rock";
+		pixelMap[i][375].id = -1;
 };
+
+console.log("Map drawing completed");
 //End of rock tile test
 
 /*
@@ -159,7 +161,7 @@ io.sockets.on('connection', function(socket) {
 	//Send Map
 	socket.on('requestPixelMap', function()
 	{
-		socket.emit('drawMap', pixelMap);
+		socket.emit('requestedTile', pixelMap);
 	});
 
 /*	socket.on('createIndiviualUserTank')
@@ -252,14 +254,14 @@ io.sockets.on('connection', function(socket) {
     	socket.emit('setID', tank_id);
     	socket.set('idClient', tank_id);
 		//initial pixelMap
-    	for (var i=0; i < mapWidth; i++) {
+    	/*for (var i=0; i < mapWidth; i++) {
         	pixelMap[i] = Array();
         	for (var j=0; j < mapHeight; j++) {
 				pixelMap[i][j] = Object();
                 pixelMap[i][j].type = "empty"; 
      	        pixelMap[i][j].id = -1; //-1 means empty
      	    };
-        };
+        };*/
 	});
 
 	

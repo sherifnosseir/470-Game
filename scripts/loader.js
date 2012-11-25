@@ -31,6 +31,7 @@ nickname = "";
 team_id = "";
 tank_id = "";
 
+pixelMap = "";
 
 var tankCount = 0;
 var environment = "development";
@@ -53,6 +54,13 @@ if(environment == "development")
 			socket.emit('createUserTank', tank_id, username);
 			$("#row_one").fadeOut("slow");
 			$(".row_two").fadeIn("slow");
+			
+			socket.emit('requestPixelMap');
+			socket.on('requestedTile', function(tile)
+			{
+				pixelMap = tile;
+			});
+			
 			load();
 		});
 }

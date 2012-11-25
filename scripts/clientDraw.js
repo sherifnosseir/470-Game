@@ -233,7 +233,30 @@ function drawCursor () {
 	ctx.fill();
 }
 
+function drawMap() {
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	
+	for (var i=0; i < 960; i++) {
+		for (var j=0; j < 540; j++) {
+			if (pixelMap[i][j].type == "water") {
+				ctx.fillStyle = "rgb(0,0,255)";
+				ctx.fillRect (i, j, 1, 1);
+			}
+			else
+			{
+				if(pixelMap[i][j].type == "rock")
+				{
+					ctx.fillStyle = "rgb(139,69,19)";
+					ctx.fillRect (i, j, 1, 1);
+				}
+			}
+		};
+	};
+}
+
 function draw(tanks, bullets, frameNum){
+	drawMap();
 	drawTank(tanks, frameNum);
 	//drawBullets(bullets);
 	drawCursor();
