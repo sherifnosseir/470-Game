@@ -45,6 +45,19 @@ function drawTank(tank,frameNum){
 			ctx.restore();
 
 			ctx.save();
+			/* draw tank circle
+			for (var m=0; m < 42; m++) {
+			for (var n=0; n < 31; n++) {
+				if((Math.pow(m-21, 2) + Math.pow(n-15, 2)) < Math.pow(15, 2))
+				{
+				
+					
+						ctx.fillStyle = "rgb(0,0,255)";
+						ctx.fillRect (x+m, y+n,1,1);
+					
+				}
+			}
+			}*/
 
 			
 			var xDirection = mouseX - x;
