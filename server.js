@@ -51,7 +51,40 @@ var mapWidth = 960;
 var mapHeight = 540;
 
 
+//Create map tile
+for (var i=0; i < mapWidth.length; i++) {
+	pixelMap[i] = Array();
+	for (var j=0; j < mapHeight.length; j++) {
+		pixelMap[i][j] = Object;
+		pixelMap[i][j].type = "empty";
+		pixelMap[i][j].id = -1;
+	};
+};
 
+
+//Testing Water tiles
+for (var i=0; i < mapWidth.length; i++) {
+		pixelMap[i][250].type = "water";
+		pixelMap[i][250].id = -1;
+};
+
+for (var j=0; j < mapHeight.length; j++) {
+		pixelMap[500][j].type = "water";
+		pixelMap[500][j].id = -1;
+};
+//End of water tile test
+
+//Testing rock tiles
+for (var i=0; i < mapWidth.length; i++) {
+		pixelMap[i][250].type = "rock";
+		pixelMap[i][250].id = -1;
+};
+
+for (var i=0; i < mapWidth.length; i++) {
+		pixelMap[i][650].type = "rock";
+		pixelMap[i][650].id = -1;
+};
+//End of rock tile test
 
 /*
     tank size = 31*42
@@ -121,6 +154,12 @@ io.sockets.on('connection', function(socket) {
 
 
 
+	});
+	
+	//Send Map
+	socket.on('requestPixelMap', function()
+	{
+		socket.emit('drawMap', pixelMap);
 	});
 
 /*	socket.on('createIndiviualUserTank')
@@ -694,7 +733,7 @@ function colDetect(type,mapid,object){
 						console.log("detectHit Type " + pixelMap[x][y].type);
 						console.log("detectHit id " + pixelMap[x][y].id);
 						console.log("detectHit clientID " + bullet.clientID);
-						return pixelMap[x][y].id;
+						return pixelMap[x][y];
 					}else if(pixelMap[x][y].type=="otherobject"){
 						//hit object.
 						
