@@ -51,6 +51,7 @@ var mapWidth = 960;
 var mapHeight = 540;
 
 
+
 //Create map tile
 for (var i=0; i < mapWidth; i++) {
 	pixelMap[i] = Array();
@@ -87,6 +88,12 @@ for (var i=0; i < mapWidth; i++) {
 
 console.log("Map drawing completed");
 //End of rock tile test
+
+//added world map;
+var worldMap = Array();
+worldMap[0]=pixelMap;
+//inital worldMap
+
 
 /*
     tank size = 31*42
@@ -558,11 +565,10 @@ function clearObject (x, y, type) {
 			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
-                        {
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
                         pixelMap[x+i][y+j].type = "empty";
                         pixelMap[x+i][y+j].id = -1;
-                        }
+					}
 				}
 			};
 		};
@@ -571,10 +577,9 @@ function clearObject (x, y, type) {
 		{
 				for (var i=0; i < 5; i++) {
 					for (var j=0; j < 5; j++) {
-						if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
-						{
-						pixelMap[x+i][y+j].type = "empty";
-						pixelMap[x+i][y+j].id = -1;
+						if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
+							pixelMap[x+i][y+j].type = "empty";
+							pixelMap[x+i][y+j].id = -1;
 						}
 					};
 				};
@@ -627,55 +632,74 @@ function moveTank() {
     for (index = 0; index < tanksArray.length; index++) {
     	//loop for each tank
 		//pixelMap
-		currentTank = tanksArray[index];
-		clearObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
+		var currentTank = tanksArray[index];
+		clearObject(currentTank.x,currentTank.y,"tank", currentTank);
 		
 		
-        if ((Math.abs(tanksArray[index].x - tanksArray[index].destX) < 6) && 
-            (Math.abs(tanksArray[index].y - tanksArray[index].destY) < 6)) {
-                tanksArray[index].x = tanksArray[index].destX;
-                tanksArray[index].y = tanksArray[index].destY;
+		
+        if ((Math.abs(currentTank.x - currentTank.destX) < 6) && 
+            (Math.abs(currentTank.y - currentTank.destY) < 6)) {
+                currentTank.x = currentTank.destX;
+                currentTank.y = currentTank.destY;
         }
         else {
-            var currentX = tanksArray[index].x;
-            var currentY = tanksArray[index].y;
+        	//update tank's x and y
+            var currentX = currentTank.x;
+            var currentY = currentTank.y;
             
-            var angle = tanksArray[index].wheelAngle;
+            var angle = currentTank.wheelAngle;
 
             //console.log(angle);
             
             var velocityX = (Math.cos(angle))*velocity;
             var velocityY = (Math.sin(angle))*velocity;
 
-            if ((tanksArray[index].x - tanksArray[index].destX) > 0) {
-                tanksArray[index].x = currentX - velocityX;
-                tanksArray[index].y = currentY - velocityY;
+            if ((currentTank.x - currentTank.destX) > 0) {
+                currentTank.x = currentX - velocityX;
+                currentTank.y = currentY - velocityY;
             }
             else {
-                tanksArray[index].x = currentX + velocityX;
-                tanksArray[index].y = currentY + velocityY;
+                currentTank.x = currentX + velocityX;
+                currentTank.y = currentY + velocityY;
+            }
+            //if collision ,roll back
+            var colObj=Object();
+            colObj=colDetect('tank',0,currentTank);
+            var mytype=colObj.type;
+            if(mytype !='empty'){
+            	//roll back and stop the tank
+            	currentTank.x=currentX;
+            	currentTank.y=currentY;
+            	currentTank.destX=currentX;
+            	currentTank.destY=currentY;
             }
 
         }
-        drawObject(tanksArray[index].x,tanksArray[index].y,"tank", tanksArray[index]);
+        drawObject(currentTank.x,currentTank.y,"tank", currentTank);
+        
+        
         //loop for each buulet of this tank
         /* the repalcement of movebullet() function */
         for(var j=currentTank.weapon.bullets.length-1;j>=0;j--){
         	//console.log("tankbullet j:"+currentTank.weapon.bullets);
         	
-        	currentBullet=currentTank.weapon.bullets[j];
+        	var currentBullet=currentTank.weapon.bullets[j];
         		
 			if((currentBullet.x < mapWidth && currentBullet.x > 0) && (currentBullet.y > 0 && currentBullet.y < mapHeight)){
 				 //Check if a bullet is out of bound
-				var hitClientID = colDetect('bullet',0,currentBullet);
+				var hitObject =Object();
+				hitObject = colDetect('bullet',0,currentBullet);
+				console.log("hit:"+hitObject.type+" "+hitObject.id);
+				var mytype =hitObject.type;
+				var myid =hitObject.id;
+				console.log("mytype:"+mytype);
             	clearObject(currentBullet.x, currentBullet.y, "bullet", currentBullet);
-				if(hitClientID != -1)// -1 means empty
-				{
-					/* when the bullet hit the target */	
-					//console.log("HIT!");				
-					var hitIndex;
+				if(hitObject.type=='tank'){
+					/* when the bullet hit the tank */	
+					console.log("HIT!");				
+					var hitIndex=0;
 	            	for (var k=0; k<tanksArray.length; k++) {
-	                	if (tanksArray[k].id == hitClientID) {
+	                	if (tanksArray[k].id ==myid) {
 	                    	hitIndex = k;
 	                	}
 	            	}
@@ -697,6 +721,9 @@ function moveTank() {
 					/*remove the bullet from the bullet array when it hits the target.*/
                 	currentTank.weapon.bullets.splice(j, 1);
 				}
+				else if(hitObject.type=='object'){//water or rock;
+					
+				}
 				else{
 					//bullet not hiting anything
 					currentBullet.x = currentBullet.x + Math.cos(currentBullet.angle)*bulletVelocity;
@@ -716,6 +743,11 @@ function moveTank() {
 //** collision detection fucntion , use for all puepose
 //** if there is a collision, will return the object id. 
 function colDetect(type,mapid,object){
+	var emptyObj=Object();
+	emptyObj.type='empty';
+	emptyObj.id=-1;
+	
+	var pixelMap=worldMap[mapid];
 	
 	if(type=='bullet'){
 		var bullet=object;
@@ -735,7 +767,7 @@ function colDetect(type,mapid,object){
 						console.log("detectHit Type " + pixelMap[x][y].type);
 						console.log("detectHit id " + pixelMap[x][y].id);
 						console.log("detectHit clientID " + bullet.clientID);
-						return pixelMap[x][y];
+						return {type:"tank",id:pixelMap[x][y].id};
 					}else if(pixelMap[x][y].type=="otherobject"){
 						//hit object.
 						
@@ -743,9 +775,32 @@ function colDetect(type,mapid,object){
 				}	
 			}
 		}
-		return -1;
+		return emptyObj;
+	}else if(type=='tank'){
+		
+		var x=Math.floor(object.x);
+		var y=Math.floor(object.y);
+		
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
+				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+				{
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
+						//check if is in the bound of the map;
+						if(pixelMap[x+i][y+j].type!='empty'&& pixelMap[x+i][y+j].type!='bullet'){
+							//run into objects.
+							return {type:pixelMap[x+i][y+j].type,id:pixelMap[x+i][y+j].id};
+							
+						}
+						
+					}
+				}
+			}
+		}
+		return emptyObj;
+		
 	}
-	return -1;
+	
 	
 }
 /*
