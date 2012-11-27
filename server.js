@@ -110,7 +110,7 @@ io.sockets.on('connection', function(socket) {
 		username = details[0];
 		password = details[1];
 		console.log("Username: " + username + " Password: " + password);
-		sql="SELECT * FROM users WHERE username ='"+connection.escape(username)+"'and password='"+connection.escape(password)+"'";
+		sql="SELECT * FROM users WHERE username ="+connection.escape(username)+"and password="+connection.escape(password);
 		console.log(sql);
 		var result = "";
 		var response = "";
