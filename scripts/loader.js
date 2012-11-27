@@ -25,6 +25,15 @@ function load(){
 		}]);
 }
 
+function loadMap()
+{
+	socket.emit('requestPixelMap');
+	socket.on('requestedTile', function(tile)
+	{
+		pixelMap = tile;
+	});
+}
+
 //global scope stuff
 username = "";
 nickname = "";
@@ -34,7 +43,7 @@ tank_id = "";
 pixelMap = "";
 
 var tankCount = 0;
-var environment = "development";
+var environment = "developmenasdt";
 
 if(environment == "development")
 {
@@ -54,14 +63,8 @@ if(environment == "development")
 			socket.emit('createUserTank', tank_id, username);
 			$("#row_one").fadeOut("slow");
 			$(".row_two").fadeIn("slow");
-			
-			socket.emit('requestPixelMap');
-			socket.on('requestedTile', function(tile)
-			{
-				pixelMap = tile;
-			});
-			
-			load();
+			loadMap();
+	                load();
 		});
 }
 else
@@ -95,6 +98,7 @@ else
 						socket.emit('createUserTank', tank_id, username);
 						$("#row_one").fadeOut("slow");
 						$(".row_two").fadeIn("slow");
+						loadMap();
 						load();
 					}
 				});
@@ -136,6 +140,7 @@ else
 					socket.emit('createUserTank', tank_id, username);
 					$("#row_one").fadeOut("slow");
 					$(".row_two").fadeIn("slow");
+					loadMap();
 					load();
 				});
 			});
@@ -146,7 +151,8 @@ else
 	}
 
 	else if (state==1){
-		load();
+			loadMap();
+                       load();
 
 	}
 }
