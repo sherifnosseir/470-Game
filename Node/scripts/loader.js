@@ -42,7 +42,7 @@ tank_id = "";
 pixelMap = "";
 
 var tankCount = 0;
-var environment = "development";
+var environment = "evelopment";
 
 if(environment == "development")
 {

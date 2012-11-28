@@ -9,7 +9,7 @@ userturret.src = "images/usertankturret.png";
 //background
 backGround = new Image();
 
-backGround.src = "images/background.png";
+backGround.src = "images/backGround.png";
 smoke0 = new Image();
 smoke0.src = "images/explosionframe0.png";
 smoke1 = new Image();
@@ -153,7 +153,7 @@ function drawTank(tank,frameNum){
 		{
 			//if(tank[i].id == tank_id)
 			//{
-				ctx.fillStyle = "rgb(0,0,255)";
+				ctx.fillStyle = "rgb(0,255,255)";
 			//}
 			//else
 			//{

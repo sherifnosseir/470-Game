@@ -558,19 +558,12 @@ io.sockets.on('connection', function(socket) {
             };
 		});
 		
-		var id;
-		socket.get('idClient', function(err, idClient) {
-			id = idClient;
-		});
-
-		var len = bulletArray.length;
-		var tracker = 0;
-		for(trk=bulletArray.length-1;trk>=0;trk--)
-		{
-			if(bulletArray[trk].clientID==id){
-				bulletArray.splice(trk,1);
-			}
-		}
+		
+		currentTank=tanksArray[index];
+		
+		clearObject(currentTank.x,currentTank.y,"tank", currentTank);
+		
+		
 		tanksArray.splice(index,1);
 
 		console.log('Disconnect', id);
@@ -964,6 +957,9 @@ function spawnTank(tank)
 	
 		tank.x = randomX;  // tank coordinates
 		tank.y = randomY;
+		
+		tank.DestX=tank.x;
+		tank.DestY=tank.y;
 	}
 }
 
