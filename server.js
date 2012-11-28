@@ -18,7 +18,8 @@ var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app,{log:false})
   , fs = require('fs')
   , path = require('path')
-
+  , PNG = require('png-js');
+  
 app.listen(8080);
 
 function handler (req, res) {
@@ -49,8 +50,7 @@ var fps = 42;
 var pixelMap = Array();
 var mapWidth = 960;
 var mapHeight = 540;
-
-
+var pixelArrayLength = mapWidth * mapHeight *4;
 
 //Create map tile
 for (var i=0; i < mapWidth; i++) {
@@ -62,7 +62,7 @@ for (var i=0; i < mapWidth; i++) {
     };
 };
 
-
+/*
 //Testing Water tiles
 for (var i=0; i < mapWidth; i++) {
 		pixelMap[i][250].type = "water";
@@ -76,6 +76,7 @@ for (var j=0; j < mapHeight; j++) {
 //End of water tile test
 
 //Testing rock tiles
+
 for (var i=0; i < mapWidth; i++) {
 		pixelMap[i][125].type = "rock";
 		pixelMap[i][125].id = -1;
@@ -85,14 +86,59 @@ for (var i=0; i < mapWidth; i++) {
 		pixelMap[i][375].type = "rock";
 		pixelMap[i][375].id = -1;
 };
-
+*/
 console.log("Map drawing completed");
 //End of rock tile test
 
 //added world map;
 var worldMap = Array();
-worldMap[0]=pixelMap;
+//worldMap[0]=pixelMap;
 //inital worldMap
+for(var i=0;i<10;i++){
+	worldMap[i]=Array();
+	for(var j=0;j<10;j++){
+		//get from files
+		PNG.decode('mapDatax'+i+'y'+j+'.png', function(pixels) {
+			var pMap=Array();
+    		// pixels is a 1d array of decoded pixel data
+    		if(pixels.length<pixelArrayLength){
+    			for(var m=0;m<mapWidth;m++){
+    				pMap[m]=Array();
+    				for(var n=0;n<mapHeight;n++){
+    					pMap[m][n]=empty;
+    					
+    				}
+    			}
+    		}else{
+    			for(var m=0;m<mapWidth;m++){
+    				pMap[m]=Array();
+    				for(var n=0;n<mapHeight;n++){
+    					var pixel=Object();
+    					pixel.r=pixels[m*mapWidth*4+n*4];
+    					pixel.g=pixels[m*mapWidth*4+n*4+1];
+    					pixel.b=pixels[m*mapWidth*4+n*4+2];
+    					pixel.a=pixels[m*mapWidth*4+n*4+3];
+    					if(pixel.r==0 && pixel.g==0 && pixel.b==255 &&pixel.a!=0){
+    						//blue
+    						pMap.type="water";
+    						pMap.id=-1;
+    					}else if(pixel.r==0 && pixel.g==0 && pixel.b==0 &&pixel.a!=0){
+    						//black
+    						pMap.type="rock";
+    						pMap.id=-1;
+    					}else{
+    						//empty
+    						pMap.type="empty";
+    						pMap.id=-1;
+    					}
+    				}
+    			}
+    		}
+		});
+		worldMap[i][j]=pMap;	
+	}
+}
+
 
 
 /*
@@ -746,7 +792,7 @@ function colDetect(type,mapid,object){
 	emptyObj.type='empty';
 	emptyObj.id=-1;
 	
-	var pixelMap=worldMap[mapid];
+	var pixelMap=worldMap[mapid][0];
 	
 	if(type=='bullet'){
 		var bullet=object;
