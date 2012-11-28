@@ -958,8 +958,8 @@ function spawnTank(tank)
 		tank.x = randomX;  // tank coordinates
 		tank.y = randomY;
 		
-		tank.DestX=tank.x;
-		tank.DestY=tank.y;
+		tank.destX=tank.x;
+		tank.destY=tank.y;
 	}
 }
 
