@@ -17,14 +17,12 @@
 switch (ENVIRONMENT)
 {
 	case 'development':
-		//fb keys local
-		$config['base_url']	= 'http://localhost/470-Game-Data/';
+		$config['base_url']	= 'http://localhost/470-Game/PHP/';
 	break;
 	case 'testing':
 	break;
 	case 'production':
-		//fb keys server
-		$config['base_url']	= 'http://cmpt470.csil.sfu.ca:8016/The-Game/';
+		$config['base_url']	= 'http://cmpt470.csil.sfu.ca:8016/elTanko/PHP';
 	break;
 
 	default:

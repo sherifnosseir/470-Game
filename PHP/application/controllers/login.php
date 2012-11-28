@@ -12,6 +12,10 @@ function __construct()
 		$data["title"] = "TheGame Login";
 		$data['assets'] = array('css' => null,
 							'js' => null);
+		
+		//Assets are used to load LESSCSS, or Javascript
+/*		$data['assets'] = array('css' => null,
+								'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
 		$data["view"] = 'login/index.php';
 		$this->load->view('template/template', $data);
 	}
