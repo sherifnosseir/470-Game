@@ -132,14 +132,13 @@ for(var i=0;i<1;i++){
 		    			}
 		    		}else{
 		    			for(var m=0;m<mapWidth;m++){
-		    				pMap[m]=Array();
 		    				for(var n=0;n<mapHeight;n++){
 		    					pMap[m][n] = new Object();
 		    					var pixel=Object();
-		    					pixel.r=pixels[m*mapHeight*4+n*4];
-		    					pixel.g=pixels[m*mapHeight*4+n*4+1];
-		    					pixel.b=pixels[m*mapHeight*4+n*4+2];
-		    					pixel.a=pixels[m*mapHeight*4+n*4+3];
+		    					pixel.r=pixels[n*mapWidth*4+m*4];
+		    					pixel.g=pixels[n*mapWidth*4+m*4+1];
+		    					pixel.b=pixels[n*mapWidth*4+m*4+2];
+		    					pixel.a=pixels[n*mapWidth*4+m*4+3];
 		    					if(pixel.r==0 && pixel.g==0 && pixel.b==255 ){
 		    						//blue
 		    						pMap[m][n].type="water";
@@ -156,7 +155,7 @@ for(var i=0;i<1;i++){
 		    					
 		    					//console.log(pixel.r+" "+pixel.g+" "+pixel.b+" "+pixel.a);
 		    				}
-		    				console.log(pMap[m][n].type);
+		    				//console.log(pMap[m][0].type);
 		    			}
 		    		}
 				});
@@ -313,6 +312,7 @@ io.sockets.on('connection', function(socket) {
 
     	randomX = Math.floor((Math.random()*mapWidth)+1);
     	randomY = Math.floor((Math.random()*mapHeight)+1);
+    	
 
 		newTank.id = tank_id;
 		//id++;
@@ -338,6 +338,17 @@ io.sockets.on('connection', function(socket) {
     	newTank.weapon=we;
     	// weapon done
     	
+    	while(colDetect('tank',0,newTank).type!="emtpy")
+    	{
+    		var s=colDetect('tank',0,newTank).type;
+    		if(s=="empty")break;
+    		console.log("x:"+colDetect('tank',0,newTank).type);
+    		randomX = Math.floor((Math.random()*mapWidth)+1);
+    		randomY = Math.floor((Math.random()*mapHeight)+1);
+    	
+    		newTank.x = randomX;  // tank coordinates
+    		newTank.y = randomY;
+    	}
     	
     	tanksArray[tanksArray.length] = newTank;
     	console.log("Tank Array Length: ");
@@ -806,8 +817,8 @@ function moveTank() {
 					/*remove the bullet from the bullet array when it hits the target.*/
                 	currentTank.weapon.bullets.splice(j, 1);
 				}
-				else if(hitObject.type=='object'){//water or rock;
-					
+				else if(mytype=='rock'){//water or rock;
+					currentTank.weapon.bullets.splice(j, 1);
 				}
 				else{
 					//bullet not hiting anything
@@ -853,8 +864,9 @@ function colDetect(type,mapid,object){
 						console.log("detectHit id " + pixelMap[x][y].id);
 						console.log("detectHit clientID " + bullet.clientID);
 						return {type:"tank",id:pixelMap[x][y].id};
-					}else if(pixelMap[x][y].type=="otherobject"){
+					}else if(pixelMap[x][y].type=="rock"){
 						//hit object.
+						return {type:'rock',id:-1};
 						
 					}
 				}	
@@ -882,7 +894,7 @@ function colDetect(type,mapid,object){
 				}
 			}
 		}
-		return emptyObj;
+		return {type:'empty',id:-1};
 		
 	}
 	
@@ -986,6 +998,15 @@ function respawn(index){
 		mytank.destX = mytank.x;
 	    mytank.destY = mytank.y;
 		mytank.status = "alive";
+		while(colDetect('tank',0,mytank).type!='emtpy')
+    	{
+    		randomX = Math.floor((Math.random()*mapWidth)+1);
+    		randomY = Math.floor((Math.random()*mapHeight)+1);
+    	
+    		mytank.x = randomX;  // tank coordinates
+    		mytank.y = randomY;
+    	}
+    	
 		
 		io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 	}

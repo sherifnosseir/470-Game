@@ -150,7 +150,7 @@ else
 	}
 
 	else if (state==1){
-			loadMap();
+		//	loadMap();
 			load();
 
 	}

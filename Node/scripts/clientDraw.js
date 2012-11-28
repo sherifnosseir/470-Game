@@ -222,7 +222,7 @@ function drawBullets (bullets) {
 	{
 		if(bullets[i].clientID == tank_id)
 		{
-			ctx.fillStyle = "rgb(0,0,255)";
+			ctx.fillStyle = "rgb(0,255,0)";
 		}
 		else
 		{
