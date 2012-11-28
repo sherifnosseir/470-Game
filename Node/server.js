@@ -301,17 +301,8 @@ io.sockets.on('connection', function(socket) {
     	newTank.weapon=we;
     	// weapon done
     	
-    	while(colDetect('tank',0,newTank).type!="emtpy")
-    	{
-    		var s=colDetect('tank',0,newTank).type;
-    		if(s=="empty")break;
-    		console.log("x:"+colDetect('tank',0,newTank).type);
-    		randomX = Math.floor((Math.random()*mapWidth)+1);
-    		randomY = Math.floor((Math.random()*mapHeight)+1);
-    	
-    		newTank.x = randomX;  // tank coordinates
-    		newTank.y = randomY;
-    	}
+		//Spawn new Tank
+    	spawnTank(newTank);
     	
     	tanksArray[tanksArray.length] = newTank;
     	console.log("Tank Array Length: ");
@@ -320,15 +311,6 @@ io.sockets.on('connection', function(socket) {
     	console.log(tank_id);
     	socket.emit('setID', tank_id);
     	socket.set('idClient', tank_id);
-		//initial pixelMap
-    	/*for (var i=0; i < mapWidth; i++) {
-        	pixelMap[i] = Array();
-        	for (var j=0; j < mapHeight; j++) {
-				pixelMap[i][j] = Object();
-                pixelMap[i][j].type = "empty"; 
-     	        pixelMap[i][j].id = -1; //-1 means empty
-     	    };
-        };*/
 	});
 
 	
@@ -963,21 +945,28 @@ function respawn(index){
 		mytank.destX = mytank.x;
 	    mytank.destY = mytank.y;
 		mytank.status = "alive";
-		while(colDetect('tank',0,mytank).type!='emtpy')
-    	{
-    		randomX = Math.floor((Math.random()*mapWidth)+1);
-    		randomY = Math.floor((Math.random()*mapHeight)+1);
-    	
-    		mytank.x = randomX;  // tank coordinates
-    		mytank.y = randomY;
-    	}
-    	
+		
+    	spawnTank(mytank);
 		
 		io.sockets.volatile.emit('updatePlayerStatus', tanksArray);
 	}
-	
-	
 }
+
+function spawnTank(tank)
+{
+	while(colDetect('tank',0,tank).type!="emtpy")
+	{
+		var s=colDetect('tank',0,tank).type;
+		if(s=="empty")break;
+		console.log("x:"+colDetect('tank',0,tank).type);
+		randomX = Math.floor((Math.random()*mapWidth)+1);
+		randomY = Math.floor((Math.random()*mapHeight)+1);
+	
+		tank.x = randomX;  // tank coordinates
+		tank.y = randomY;
+	}
+}
+
 setInterval(function() {
     moveTank();
 	//moveBullets();
