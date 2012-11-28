@@ -46,6 +46,13 @@ $('canvas').mousemove(function(e) {
 
 });
 
+$(document).ready( function() {
+	$("#canvas").rightClick( function(e) 
+	{
+		socket.emit('shoot', mouseX, mouseY);
+	});
+});
+
 $('.help #help-button').click(function(e)
 {
 	e.preventDefault();

@@ -7,7 +7,6 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				"scripts/jquery-1.8.2.min.js",
 				"socket.io/socket.io.js",
 				"scripts/clientDraw.js",
 				"scripts/clientScript.js"
@@ -43,7 +42,7 @@ tank_id = "";
 pixelMap = "";
 
 var tankCount = 0;
-var environment = "developmenasdt";
+var environment = "development";
 
 if(environment == "development")
 {
@@ -64,7 +63,7 @@ if(environment == "development")
 			$("#row_one").fadeOut("slow");
 			$(".row_two").fadeIn("slow");
 			loadMap();
-	                load();
+	        load();
 		});
 }
 else
@@ -152,7 +151,7 @@ else
 
 	else if (state==1){
 			loadMap();
-                       load();
+			load();
 
 	}
 }
