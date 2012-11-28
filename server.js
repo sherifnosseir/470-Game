@@ -18,7 +18,7 @@ var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app,{log:false})
   , fs = require('fs')
   , path = require('path')
-  , PNG = require('png-js');
+  , PNG = require('png-js')
   
 app.listen(8080);
 
@@ -94,48 +94,88 @@ console.log("Map drawing completed");
 var worldMap = Array();
 //worldMap[0]=pixelMap;
 //inital worldMap
-for(var i=0;i<10;i++){
+for(var i=0;i<1;i++){
 	worldMap[i]=Array();
-	for(var j=0;j<10;j++){
+	for(var j=0;j<1;j++){
+		var pMap=Array();
+		for(var m=0;m<mapWidth;m++){
+	    			pMap[m]=Array();
+	    			for(var n=0;n<mapHeight;n++){
+	    				pMap[m][n]=Object();
+	    				pMap[m][n].type='empty';
+	    				pMap[m][n].id=-1;
+	   					
+	   				}
+	    		}
+		//var ii=i;
+		//var jj=j;
+		var filename=__dirname +'/mapDataFiles/mapDatax0y0.png';
+		//console.log(filename);
+		
 		//get from files
-		PNG.decode('mapDatax'+i+'y'+j+'.png', function(pixels) {
-			var pMap=Array();
-    		// pixels is a 1d array of decoded pixel data
-    		if(pixels.length<pixelArrayLength){
-    			for(var m=0;m<mapWidth;m++){
-    				pMap[m]=Array();
-    				for(var n=0;n<mapHeight;n++){
-    					pMap[m][n]=empty;
-    					
-    				}
-    			}
-    		}else{
-    			for(var m=0;m<mapWidth;m++){
-    				pMap[m]=Array();
-    				for(var n=0;n<mapHeight;n++){
-    					var pixel=Object();
-    					pixel.r=pixels[m*mapWidth*4+n*4];
-    					pixel.g=pixels[m*mapWidth*4+n*4+1];
-    					pixel.b=pixels[m*mapWidth*4+n*4+2];
-    					pixel.a=pixels[m*mapWidth*4+n*4+3];
-    					if(pixel.r==0 && pixel.g==0 && pixel.b==255 &&pixel.a!=0){
-    						//blue
-    						pMap.type="water";
-    						pMap.id=-1;
-    					}else if(pixel.r==0 && pixel.g==0 && pixel.b==0 &&pixel.a!=0){
-    						//black
-    						pMap.type="rock";
-    						pMap.id=-1;
-    					}else{
-    						//empty
-    						pMap.type="empty";
-    						pMap.id=-1;
-    					}
-    				}
-    			}
-    		}
+		//var fs=require('fs');
+		path.exists(filename,function(ex){
+			if(ex){
+				//console.log("esist"+filename);
+				PNG.decode(filename, function(pixels) {
+				
+	    			// pixels is a 1d array of decoded pixel data
+		    		if(pixels.length<pixelArrayLength){
+		    			consloe.log("small"+(pixels.length-pixelArrayLength));
+		    			for(var m=0;m<mapWidth;m++){
+		    				pMap[m]=Array();
+		    				for(var n=0;n<mapHeight;n++){
+		    					pMap[m][n]=Object();
+		    					pMap[m][n].type='empty';
+		    					pMap[m][n].id=-1;
+		    				}
+		    			}
+		    		}else{
+		    			for(var m=0;m<mapWidth;m++){
+		    				pMap[m]=Array();
+		    				for(var n=0;n<mapHeight;n++){
+		    					pMap[m][n] = new Object();
+		    					var pixel=Object();
+		    					pixel.r=pixels[m*mapHeight*4+n*4];
+		    					pixel.g=pixels[m*mapHeight*4+n*4+1];
+		    					pixel.b=pixels[m*mapHeight*4+n*4+2];
+		    					pixel.a=pixels[m*mapHeight*4+n*4+3];
+		    					if(pixel.r==0 && pixel.g==0 && pixel.b==255 ){
+		    						//blue
+		    						pMap[m][n].type="water";
+		    						pMap[m][n].id=-1;
+		    					}else if(pixel.r==0 && pixel.g==0 && pixel.b==0 ){
+		    						//black
+		    						pMap[m][n].type="rock";
+		    						pMap[m][n].id=-1;
+		    					}else{
+		    						//empty
+		    						pMap[m][n].type="empty";
+		    						pMap[m][n].id=-1;
+		    					}
+		    					
+		    					//console.log(pixel.r+" "+pixel.g+" "+pixel.b+" "+pixel.a);
+		    				}
+		    				console.log(pMap[m][n].type);
+		    			}
+		    		}
+				});
+				
+			}else{
+				for(var m=0;m<mapWidth;m++){
+	    			pMap[m]=Array();
+	    			for(var n=0;n<mapHeight;n++){
+	    				pMap[m][n]=Object();
+	    				pMap[m][n].type='empty';
+	    				pMap[m][n].id=-1;
+	   					
+	   				}
+	    		}
+			}
 		});
-		worldMap[i][j]=pMap;	
+		worldMap[i][j]=pMap;
+		//console.log(worldMap[0][0][0][0].type);
+			
 	}
 }
 

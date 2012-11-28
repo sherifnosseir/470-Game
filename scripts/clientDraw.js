@@ -6,7 +6,10 @@ turret=new Image();
 turret.src = "images/tankturret.png";
 userturret=new Image();
 userturret.src = "images/usertankturret.png";
+//background
+backGround = new Image();
 
+backGround.src = "images/background.png";
 smoke0 = new Image();
 smoke0.src = "images/explosionframe0.png";
 smoke1 = new Image();
@@ -250,6 +253,9 @@ function drawMap() {
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 	
+	ctx.drawImage(backGround,0,0);
+	
+	/*
 	for (var i=0; i < 960; i++) {
 		for (var j=0; j < 540; j++) {
 			if (pixelMap[i][j].type == "water") {
@@ -265,7 +271,7 @@ function drawMap() {
 				}
 			}
 		};
-	};
+	};*/
 }
 
 function draw(tanks, bullets, frameNum){
