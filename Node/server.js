@@ -52,43 +52,6 @@ var mapWidth = 960;
 var mapHeight = 540;
 var pixelArrayLength = mapWidth * mapHeight *4;
 
-//Create map tile
-for (var i=0; i < mapWidth; i++) {
-	pixelMap[i] = Array();
-	for (var j=0; j < mapHeight; j++) {
-		pixelMap[i][j] = Object();
-        pixelMap[i][j].type = "empty"; 
-        pixelMap[i][j].id = -1; //-1 means empty
-    };
-};
-
-/*
-//Testing Water tiles
-for (var i=0; i < mapWidth; i++) {
-		pixelMap[i][250].type = "water";
-		pixelMap[i][250].id = -1;
-};
-
-for (var j=0; j < mapHeight; j++) {
-		pixelMap[500][j].type = "water";
-		pixelMap[500][j].id = -1;
-};
-//End of water tile test
-
-//Testing rock tiles
-
-for (var i=0; i < mapWidth; i++) {
-		pixelMap[i][125].type = "rock";
-		pixelMap[i][125].id = -1;
-};
-
-for (var i=0; i < mapWidth; i++) {
-		pixelMap[i][375].type = "rock";
-		pixelMap[i][375].id = -1;
-};
-*/
-console.log("Map drawing completed");
-//End of rock tile test
 
 //added world map;
 var worldMap = Array();
@@ -650,6 +613,7 @@ io.sockets.on('connection', function(socket) {
 function clearObject (x, y, type) {
 	x = Math.floor(x);
 	y = Math.floor(y);
+	pixelMap = worldMap[0][0];
 	if(type == "tank")
 	{
 		/*
@@ -673,7 +637,7 @@ function clearObject (x, y, type) {
 		{
 				for (var i=0; i < 5; i++) {
 					for (var j=0; j < 5; j++) {
-						if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
+						if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight && pixelMap[x+i][y+j] == "empty"){
 							pixelMap[x+i][y+j].type = "empty";
 							pixelMap[x+i][y+j].id = -1;
 						}
@@ -687,6 +651,7 @@ function drawObject(x, y, type, object)
 	
 	x = Math.floor(x);
 	y = Math.floor(y);
+	pixelMap = worldMap[0][0];
 	if(type == "tank")
 	{
 		/*
@@ -713,7 +678,7 @@ function drawObject(x, y, type, object)
             //console.log("drawobject ase" + object.clientID);
 			for (var i=0; i < 5; i++) {
 				for (var j=0; j < 5; j++) {
-					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight && pixelMap[x+i][y+j] == "empty")
 					{
 						pixelMap[x+i][y+j].type = "bullet";
 						pixelMap[x+i][y+j].id = object.clientID;
