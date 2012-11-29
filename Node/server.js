@@ -154,6 +154,7 @@ for(var i=0;i<1;i++){
 io.sockets.on('connection', function(socket) {
 	/*login handler*/
 	socket.on('login',function(state,details){
+		socket.set('idClient', -1);
 		console.log("STATE:"+state);
 		username = details[0];
 		password = details[1];
@@ -548,9 +549,9 @@ io.sockets.on('connection', function(socket) {
 	
 	
     socket.on('disconnect', function() {
-		var index;
+		var index=-1;
         socket.get('idClient', function(err, idClient) {
-          	index = 0;
+          	
             for (i=0; i<tanksArray.length; i++) {
                 if (tanksArray[i].id == idClient) {
                     index = i;
@@ -558,6 +559,7 @@ io.sockets.on('connection', function(socket) {
             };
 		});
 		
+		if(index==-1)return;
 		
 		currentTank=tanksArray[index];
 		
