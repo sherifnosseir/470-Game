@@ -9,7 +9,18 @@ function __construct()
 	
 	function index()
 	{
-		$this->load->view('game/index.html');
+				
+		$data["title"] = "ElTanko Game";
+		$data['assets'] = array('css' => array("game/css/game.less"),
+								'js' => array(	"game/scripts/md5.js",
+										  	"game/js/game-window.js",
+											"game/scripts/socket.io-client/dist/socket.io.js",
+											"game/scripts/modernizr.js",
+											"game/scripts/loader.js",
+											"game/scripts/jquery.rightClick.js"));
+		$data['error'] = "";
+		$data['view'] = "game/index.html";
+		$this->load->view('template/template', $data);
 	}
 
 }

@@ -1,3 +1,8 @@
+$(document).ready(function() {
+			$(".game_row").hide();
+			$("#signup_div").hide();
+});
+
 $(function ()  
 {
  	$("#game_instructions_popover").popover({

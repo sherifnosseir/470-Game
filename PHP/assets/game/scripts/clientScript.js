@@ -216,8 +216,56 @@ socket.on('updatePlayerStatus', function(tanksArray)
 	for (var i=0; i < tanksArray.length; i++) {
 		if(tanksArray[i].id == tank_id)
 		{
-			$('#hp #hp_remaining').html(tanksArray[i].hp+"%");
-			$('#hp #hp_remaining').animate({width: tanksArray[i].hp+"%"});
+			var hp = tanksArray[i].hp;
+			
+			$("#hp-container").removeClass("progress progress-success progress-striped active progress-warning progress-danger");
+			if(hp == 100)
+			{
+				$("#hp-container").addClass("progress progress-success progress-striped active");
+			}
+			else
+			{
+				if(hp >= 80)
+				{
+					$("#hp-container").addClass("progress progress-success");
+				}
+				else
+				{
+					if(hp >= 40)
+					{
+						$("#hp-container").addClass("progress progress-warning");
+					}
+					else
+					{
+						if(hp >= 25)
+						{
+							$("#hp-container").addClass("progress progress-danger");
+						}
+						else
+						{
+							if(hp >= 10)
+							{
+								$("#hp-container").addClass("progress progress-danger progress-striped active");
+							}
+							else
+							{
+								$("#hp-container").addClass("progress progress-danger prgoress-striped active");
+							}
+						}
+					}
+				}
+			}
+			
+			if(hp < 0)
+			{
+				$("#hp-bar").attr("style", "width: 100%");
+				$("#hp-bar").html("DEAD");
+			}
+			else
+			{
+				$("#hp-bar").attr("style", "width: "+hp+"%");
+				$("#hp-bar").html(hp+"%");
+			}
 		}
 	};
 });
