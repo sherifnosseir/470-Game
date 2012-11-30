@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="scripts/jquery-1.8.2.min.js"></script>
+		
+		<script src="scripts/md5.js"></script>
+		<script src="scripts/socket.io-client/dist/socket.io.js"></script>
+		<link href="./css/tankView.css" rel="stylesheet">	
+		
+		<script src="scripts/modernizr.js"></script>
+		
+		<script src="scripts/loader.js"></script>
+    	<!--<script src="scripts/clientScript.js"></script>-->
+		
+		<link rel="stylesheet/less" type="text/css" href="css/css.less">
+		<script src="less.js" type="text/javascript"></script>
+		<script src="scripts/jquery.rightClick.js"></script>
+		
+		<title>Group 16 - Project</title>
+	</head>
+	<body>
+		<h1>The Game</h1>
+		
+		<div id="container">
+			<div id="row_one">
+				<div id="login">
+					<form id="formlogin" method="post">
+						Username: <input id="username" required type="text" name="username"><br>
+						Password: <input id="password" required type="password" name="password">
+						<input id="submit_button" type="button" value="Submit">
+						<input id="guest_button" type="button" value="Play as Guest">
+						<input id="signup_button1" type="button" value="Sign Up">
+					</form>
+				</div>
+				
+				<div id="signup_div">
+						<form id="formsignup" method="post">
+						Username: <input id="username2" required type="text" name="username"><br>
+						Password: <input id="password2" required type="password" name="password">
+						<input id="signup_button2" type="button" value="Sign Up">
+					</form>
+				</div>
+			</div>
+			
+			<div class="row_two">
+				<div id="loadingView">
+					<p>Loading...</p>
+				</div>
+				
+				<div class="help">
+					<a href="#" id="help-button">Game Instructions</a>
+				</div>
+				<div id="gameView">
+					<canvas id="canvas" width="960" height="540">
+						
+					</canvas>
+					<div id="respawn">
+						You are dead, Do you want to respawn?<input id="respawn_but" type="button" value="Yes">
+					</div>
+					
+					
+				</div>
+				
+				<div id="belowGame">
+					<div id="leftBar">
+						
+						<div id="weaponMenu">Choose your weapon:
+					
+						<input id="weapon1_but" type="button" value ="classic">
+				
+						<input id="weapon2_but" type="button" value ="doubleShot">
+						<input id="weapon3_but" type="button" value ="snipe">
+						</div>
+						<div id="hp">
+							<span id="hp_remaining">100%</span>
+						</div>
+					
+					</div>
+				</div>
+				</div>
+		</div>
+		
+		<div id="right-container" class="row_two">
+			<h4>Chat</h4>
+			<div id="chat">
+				<div id="insideChat"></div>
+				<input id="chatmsg" name="chatmsg" type="text" placeholder="Press Enter to start typing..."/>
+			</div>
+		</div>
+		
+		
+		<div class="help">
+			<span id="help-instructions" toggle=0 hidden="true">
+				<div>
+					<span id="help-content">
+				<h2>Welcome to The Game</h2>
+				<ul>
+					<h4>Instructions</h4>
+					<li>Click to move</li>
+					<li>Move mouse to aim</li>
+					<li>Press "Space" to shoot</li>
+					<li>Press "Enter" to activate chat and send messages</li>
+				</ul>
+				<hr/>
+				<p>Brought to you by Group 16 - Stars</p>
+				<p>Enjoy</p>
+				</span>
+				</div>
+			</span>
+		</div>
+		
+<script>
+$(document).ready(function() {
+			$(".row_two").hide();
+			$("#signup_div").hide();
+});
+
+
+
+</script>
+
+	</body>
+</html>
