@@ -22,18 +22,18 @@
 
 </head>
 
-<div class="navbar">
-  <div class="navbar-inner">
-    <a class="brand" href="#">The Game</a>
-    <ul class="nav">
-      <li class="active"><a href="#">Home</a></li>
-	</ul>
-	
-	<ul class="nav pull-right">
-      <li><a href="#">Sign Up</a></li>
-      <li><a href="#">Login</a></li>
+<body>
+
+<div id="container">
+  <div id="header">
+    <h1>Tank Logo</h1> 
+    <h1>Version Logo</h1>
+    <ul id="navigation">
+      <li><a title="Dashboard" href="index.php/"><img src="assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img>Dashboard</a></li>
+      <li><a title="Game" href="index.php/game"><img src="assets/icon/glyphicons_086_display.png" alt="Game Icon"></img>Game</a></li>
+      <li><a title="Configuration" href="index.php/config"><img src="assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img>Configuration</a></li>
+      <li><a title="Reports" href="index.php/reports"><img src="assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img>Reports</a></li>
+      <li><a title="Statistics" href="index.php/stats"><img src="assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img>Statistics</a></li>
+      <li><a title="Sign Up" href="index.php/login/signup"><img src="assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img>Sign Up</a></li>
     </ul>
   </div>
-</div>
-
-<body>
