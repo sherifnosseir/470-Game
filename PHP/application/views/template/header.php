@@ -29,7 +29,7 @@
     <h1>Tank Logo</h1> 
     <h1>Version Logo</h1>
     <ul id="navigation">
-      <li><a title="Dashboard" href="index.php/"><img src="assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img>Dashboard</a></li>
+      <li><a title="Dashboard" href="index.php"><img src="assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img>Dashboard</a></li>
       <li><a title="Game" href="index.php/game"><img src="assets/icon/glyphicons_086_display.png" alt="Game Icon"></img>Game</a></li>
       <li><a title="Configuration" href="index.php/config"><img src="assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img>Configuration</a></li>
       <li><a title="Reports" href="index.php/reports"><img src="assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img>Reports</a></li>
