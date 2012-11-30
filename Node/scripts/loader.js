@@ -68,8 +68,8 @@ if(environment == "development")
 			tank_id = user_info[3];
 			
 			socket.emit('createUserTank', tank_id, username);
-			$("#row_one").fadeOut("slow");
-			$(".row_two").fadeIn("slow");
+			$("#login_row").fadeOut("slow");
+			$(".game_row").fadeIn("slow");
 	        
 		});
 }
@@ -82,7 +82,7 @@ else
 
 	if(state==0){
 		$(document).ready(function() {
-			$(".row_two").hide();
+			$(".game_row").hide();
 			$("#signup_div").hide();
 			$("#submit_button").click(function() {
 
@@ -103,8 +103,8 @@ else
 						load();
 
 						socket.emit('createUserTank', tank_id, username);
-						$("#row_one").fadeOut("slow");
-						$(".row_two").fadeIn("slow");
+						$("#login_row").fadeOut("slow");
+						$(".game_row").fadeIn("slow");
 						//loadMap();
 						
 					}
@@ -146,8 +146,8 @@ else
 					load();
 
 					socket.emit('createUserTank', tank_id, username);
-					$("#row_one").fadeOut("slow");
-					$(".row_two").fadeIn("slow");
+					$("#login_row").fadeOut("slow");
+					$(".game_row").fadeIn("slow");
 					//loadMap();
 					
 				});
@@ -181,7 +181,7 @@ var details = "";
 var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
 if(state==0){
 	$(document).ready(function() {
-		$("#row_two").hide();
+		$("#game_row").hide();
 		$("#submit_button").click(function() {
 
 			details = new Array();
@@ -200,8 +200,8 @@ if(state==0){
 					tank_id = user_info[3];
 
 					socket.emit('createUserTank', tank_id);
-					$("#row_one").hide();
-					$("#row_two").show();
+					$("#login_row").hide();
+					$("#game_row").show();
 					load();
 				}
 			});
