@@ -39,6 +39,127 @@ function handler (req, res) {
     });
 }
 
+//wepaon class starts here
+function DoubleShot(){
+	    this.type='double';
+    	//we.numShots=0;
+    	this.maxLoad=6;
+    	this.bullets=Array();
+    	this.attackSpeed =10;
+    	this.coolDown=10;
+    	this.damage=6;
+		this.velocity=10;
+}
+DoubleShot.prototype.shoot=function(index,mouseX, mouseY){
+	if(this.coolDown>=this.attackSpeed){
+		this.coolDown--;
+		//shoot
+		var newBullet = Object();
+			
+		//Calculate Bullet Movement
+		var xDirection = mouseX - 15 - tanksArray[index].x;
+		var yDirection = mouseY - 21 - tanksArray[index].y;
+					
+		var angle = Math.atan2(yDirection, xDirection);
+				
+		newBullet.angle = angle;
+		newBullet.x = tanksArray[index].x+15 + Math.cos(angle-Math.PI/4)*15;
+		newBullet.y = tanksArray[index].y+21 + Math.sin(angle-Math.PI/4)*15;
+		newBullet.clientID = tanksArray[index].id;
+		tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=newBullet;
+				
+		var secondBullet=Object();
+		secondBullet.angle = angle;
+		
+		secondBullet.x = tanksArray[index].x+15 + Math.cos(angle+Math.PI/4)*15;
+		secondBullet.y = tanksArray[index].y+21 + Math.sin(angle+Math.PI/4)*15;
+		secondBullet.clientID = tanksArray[index].id;
+		
+		tanksArray[index].turretAngle = angle;
+		tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=secondBullet;
+		
+
+	}
+}
+DoubleShot.prototype.clean=function(){
+	for(var i=0;i<this.bullets.length;i++){
+		clearObject(this.bullets[i].x,this.bullets[i].y,'bullet');
+		
+	}
+	
+}
+
+function ClassicShot(){
+	this.type="classic";
+	this.maxLoad=4;
+    this.bullets=Array();
+    this.damage=10;
+    this.velocity=12;
+    this.coolDown=1;
+    this.attackspeed=1;
+}
+ClassicShot.prototype.shoot=function(index,mouseX, mouseY){
+	
+		//shoot
+		var newBullet = Object();
+			
+		//Calculate Bullet Movement
+		var xDirection = mouseX - 15 - tanksArray[index].x;
+		var yDirection = mouseY - 21 - tanksArray[index].y;
+					
+		var angle = Math.atan2(yDirection, xDirection);
+				
+		newBullet.angle = angle;
+		newBullet.x = tanksArray[index].x+15 ;
+		newBullet.y = tanksArray[index].y+21 ;
+		newBullet.clientID = tanksArray[index].id;
+		tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=newBullet;
+	
+}
+ClassicShot.prototype.clean=function(){
+	for(var i=0;i<this.bullets.length;i++){
+		clearObject(this.bullets[i].x,this.bullets[i].y,'bullet');		
+	}	
+}
+
+function SnipeShot(){
+	    this.type='snipe';
+    	//we.numShots=0;
+    	this.maxLoad=1;
+    	this.bullets=Array();
+    	this.attackSpeed =70;
+    	this.coolDown=70;
+    	this.damage=25;
+		this.velocity=20;
+}
+
+SnipeShot.prototype.shoot=function(index,mouseX, mouseY){
+	if(this.coolDown>=this.attackSpeed){
+		
+		this.coolDown--;
+	
+		//shoot
+		var newBullet = Object();
+			
+		//Calculate Bullet Movement
+		var xDirection = mouseX - 15 - tanksArray[index].x;
+		var yDirection = mouseY - 21 - tanksArray[index].y;
+					
+		var angle = Math.atan2(yDirection, xDirection);
+				
+		newBullet.angle = angle;
+		newBullet.x = tanksArray[index].x+15 ;
+		newBullet.y = tanksArray[index].y+21 ;
+		newBullet.clientID = tanksArray[index].id;
+		tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=newBullet;
+	}
+	
+}
+SnipeShot.prototype.clean=function(){
+	for(var i=0;i<this.bullets.length;i++){
+		clearObject(this.bullets[i].x,this.bullets[i].y,'bullet');		
+	}	
+}
 
 var id = 0;
 var tanksArray = Array();
@@ -285,21 +406,16 @@ io.sockets.on('connection', function(socket) {
     	newTank.status = "alive";
     	newTank.x = randomX;  // tank coordinates
     	newTank.y = randomY;
-    	newTank.numShots = 0;
-    	newTank.bullets = Array();
+    	//newTank.numShots = 0;
+    	//newTank.bullets = Array();
     	newTank.turretAngle = 0;
     	newTank.wheelAngle = 0;
     	newTank.destX = newTank.x;
     	newTank.destY = newTank.y;
     	// weapon setup here
     	
-    	var we=Object();
-    	we.type='squre'
-    	//we.numShots=0;
-    	we.maxLoad=4;
-    	we.bullets=Array();
-    	
-    	newTank.weapon=we;
+    	var doubleShot=new DoubleShot();
+    	newTank.weapon= doubleShot;
     	// weapon done
     	
 		//Spawn new Tank
@@ -315,7 +431,40 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	
-	
+	socket.on('changeWeapon',function(weaponType){
+		console.log("change Weapon");
+		var index = -1;
+		socket.get('idClient', function(err, idClient) {
+            
+            for (var i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
+         });
+         if(index ==-1)return;
+         
+         
+         var currentTank=tanksArray[index];
+         //still in cool down: cant change weapon;
+         if(currentTank.weapon.coolDown<currentTank.weapon.attackSpeed)return;
+         //still have bullet flying :cant change weapon;
+         if(currentTank.weapon.bullets.length>0)return;
+         
+         currentTank.weapon.clean();
+         if(weaponType=="doubleShot"){
+         	var doubleShot=new DoubleShot();
+         	currentTank.weapon=doubleShot;
+         }else if(weaponType=="classic"){
+         	var classicShot=new ClassicShot();
+         	currentTank.weapon=classicShot;
+         }else if(weaponType=="snipeShot"){
+         	currentTank.weapon=new SnipeShot();
+      
+         }
+         console.log(currentTank.weapon.type);
+         
+	});
 	// movement [server side] old
     /*
     socket.on('move_left', function() {
@@ -474,16 +623,17 @@ io.sockets.on('connection', function(socket) {
         //Get ClientID
 		var index;
         socket.get('idClient', function(err, idClient) {
-          	index = 0;
+          	index = -1;
             for (i=0; i<tanksArray.length; i++) {
                 if (tanksArray[i].id == idClient) {
                     index = i;
                 }
             };
 		});
+		if(index==-1)return;
 		var currentTank = tanksArray[index];
-		console.log("length"+currentTank.weapon.bullets.length);
-		console.log("status"+currentTank.status);
+		//console.log("length"+currentTank.weapon.bullets.length);
+		//console.log("status"+currentTank.status);
 		//console.log(index);
 		if(currentTank == undefined){
 			tanksArray.splice(index, 1);
@@ -491,25 +641,9 @@ io.sockets.on('connection', function(socket) {
 		else{
 			if(currentTank.weapon.bullets.length < currentTank.weapon.maxLoad && currentTank.status=='alive') //Check if user has more than 4 shots
 			{
-				console.log('shot');
-				//tanksArray[index].numShots = tanksArray[index].numShots+1; //Increase numShots
 			
-				var newBullet = Object();
-			
-				//Calculate Bullet Movement
-				var xDirection = mouseX - 15 - tanksArray[index].x;
-				var yDirection = mouseY - 21 - tanksArray[index].y;
-				
-				var angle = Math.atan2(yDirection, xDirection);
-				
-				newBullet.angle = angle;
-				newBullet.x = tanksArray[index].x+15;
-				newBullet.y = tanksArray[index].y+21;
-				newBullet.clientID = tanksArray[index].id;
-			
-				
-				tanksArray[index].turretAngle = angle;
-				tanksArray[index].weapon.bullets[tanksArray[index].weapon.bullets.length]=newBullet;
+					currentTank.weapon.shoot(index,mouseX,mouseY);
+
 			}
 		}
 			
@@ -714,23 +848,35 @@ function moveTank() {
 
         }
         drawObject(currentTank.x,currentTank.y,"tank", currentTank);
-        
+        ///change weapon cool down;
+        if(currentTank.weapon.coolDown<currentTank.weapon.attackSpeed){
+        	currentTank.weapon.coolDown--;
+        }
+       
+        if(currentTank.weapon.coolDown<=0){
+        	currentTank.weapon.coolDown=currentTank.weapon.attackSpeed;
+        }
         
         //loop for each buulet of this tank
         /* the repalcement of movebullet() function */
         for(var j=currentTank.weapon.bullets.length-1;j>=0;j--){
         	//console.log("tankbullet j:"+currentTank.weapon.bullets);
         	
+        	
+        	
         	var currentBullet=currentTank.weapon.bullets[j];
+        	
+        	
+        	
         		
 			if((currentBullet.x < mapWidth && currentBullet.x > 0) && (currentBullet.y > 0 && currentBullet.y < mapHeight)){
 				 //Check if a bullet is out of bound
 				var hitObject =Object();
 				hitObject = colDetect('bullet',0,currentBullet);
-				console.log("hit:"+hitObject.type+" "+hitObject.id);
+				//console.log("hit:"+hitObject.type+" "+hitObject.id);
 				var mytype =hitObject.type;
 				var myid =hitObject.id;
-				console.log("mytype:"+mytype);
+				//console.log("mytype:"+mytype);
             	clearObject(currentBullet.x, currentBullet.y, "bullet", currentBullet);
 				if(hitObject.type=='tank'){
 					/* when the bullet hit the tank */	
@@ -747,7 +893,7 @@ function moveTank() {
 					if(hitTank.status=='alive')
 					{
 					/*hits a tank*/
-						hitTank.hp = hitTank.hp - 10; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?				
+						hitTank.hp = hitTank.hp - currentTank.weapon.damage; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?				
                     	if (hitTank.hp <= 0) {
                         	hitTank.status = "dead";
                         	hitTank.destX = hitTank.x;
@@ -764,8 +910,8 @@ function moveTank() {
 				}
 				else{
 					//bullet not hiting anything
-					currentBullet.x = currentBullet.x + Math.cos(currentBullet.angle)*bulletVelocity;
-					currentBullet.y = currentBullet.y + Math.sin(currentBullet.angle)*bulletVelocity;
+					currentBullet.x = currentBullet.x + Math.cos(currentBullet.angle)*currentTank.weapon.velocity;
+					currentBullet.y = currentBullet.y + Math.sin(currentBullet.angle)*currentTank.weapon.velocity;
 					drawObject(currentBullet.x, currentBullet.y, "bullet", currentBullet);
 				}
 			}

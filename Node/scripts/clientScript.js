@@ -51,6 +51,10 @@ $(document).ready( function() {
 	{
 		socket.emit('shoot', mouseX, mouseY);
 	});
+	
+	
+	
+	
 });
 
 $('.help #help-button').click(function(e)
@@ -82,7 +86,20 @@ $('canvas').click(function(e){
 	//console.log('mouseclick@' + mouseX +", "+ mouseY);
 	socket.emit('mouse_click', mouseX, mouseY);
 });
+// cahnge weapon
+$('#weapon1_but').click(function(){
+	socket.emit('changeWeapon','classic');
+	
+});
+$('#weapon2_but').click(function(){
+	socket.emit('changeWeapon','doubleShot');
+	
+});
 
+$('#weapon3_but').click(function(){
+	socket.emit('changeWeapon','snipeShot');
+	
+});
 //chat focus and unfocus
 $('#chatmsg').focus( function(){
 	chatActive = true;

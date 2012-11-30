@@ -58,11 +58,23 @@
 						You are dead, Do you want to respawn?<input id="respawn_but" type="button" value="Yes">
 					</div>
 					
+					
 				</div>
 				
 				<div id="belowGame">
-					<div id="hp">
-						<span id="hp_remaining">100%</span>
+					<div id="leftBar">
+						
+						<div id="weaponMenu">Choose your weapon:
+					
+						<input id="weapon1_but" type="button" value ="classic">
+				
+						<input id="weapon2_but" type="button" value ="doubleShot">
+						<input id="weapon3_but" type="button" value ="snipe">
+						</div>
+						<div id="hp">
+							<span id="hp_remaining">100%</span>
+						</div>
+					
 					</div>
 				</div>
 				</div>
@@ -98,7 +110,10 @@
 		</div>
 		
 <script>
-
+$(document).ready(function() {
+			$(".row_two").hide();
+			$("#signup_div").hide();
+});
 
 
 

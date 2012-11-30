@@ -1,4 +1,19 @@
 var stage = Object();
+
+
+
+username = "";
+nickname = "";
+team_id = "";
+tank_id = "";
+
+pixelMap = "";
+
+var tankCount = 0;
+var environment = "development";
+
+
+
 function load(){
 	stage.status = "onload";
 
@@ -25,30 +40,23 @@ function load(){
 }
 
 function loadMap()
-{
+{/*
 	socket.emit('requestPixelMap');
 	socket.on('requestedTile', function(tile)
 	{
 		pixelMap = tile;
-	});
+	});*/
 }
 
 //global scope stuff
-username = "";
-nickname = "";
-team_id = "";
-tank_id = "";
 
-pixelMap = "";
-
-var tankCount = 0;
-var environment = "evelopment";
+//load();
 
 if(environment == "development")
 {
 	var socket = io.connect('http://localhost:8080');
 	
-
+	load();
 	socket.emit("createGuestAccount");
 //socket.emit('createUserTank', tank_id, username);
 		//socket.emit('createIndiviualUserTank');
@@ -62,8 +70,7 @@ if(environment == "development")
 			socket.emit('createUserTank', tank_id, username);
 			$("#row_one").fadeOut("slow");
 			$(".row_two").fadeIn("slow");
-			loadMap();
-	        load();
+	        
 		});
 }
 else
@@ -93,12 +100,13 @@ else
 						nickname = user_info[1];
 						team_id = user_info[2];
 						tank_id = user_info[3];
+						load();
 
 						socket.emit('createUserTank', tank_id, username);
 						$("#row_one").fadeOut("slow");
 						$(".row_two").fadeIn("slow");
-						loadMap();
-						load();
+						//loadMap();
+						
 					}
 				});
 			});
@@ -135,12 +143,13 @@ else
 					nickname = user_info[1];
 					team_id = user_info[2];
 					tank_id = user_info[3];
+					load();
 
 					socket.emit('createUserTank', tank_id, username);
 					$("#row_one").fadeOut("slow");
 					$(".row_two").fadeIn("slow");
-					loadMap();
-					load();
+					//loadMap();
+					
 				});
 			});
 		});
