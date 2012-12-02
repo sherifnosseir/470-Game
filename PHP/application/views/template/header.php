@@ -32,7 +32,7 @@
 	  <div class="navbar-inner">
 	    <a class="brand" href="#"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img> Dashboard</a>
 	    <ul class="nav pull-right">
-	      	<li class="active"><a href="/index.php/game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
+	      	<li class="active"><a href="/PHP/index.php/game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 	      	<li><a href="/PHP/index.php/config"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img> Configuration</a></li>
 	      	<li><a href="/PHP/index.php/reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 			<li><a href="/PHP/index.php/stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>
