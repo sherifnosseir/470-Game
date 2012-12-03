@@ -7,18 +7,36 @@ function __construct()
 		parent::__construct();
 	}
 	
+	function isLoggedIn()
+	{
+		$isLoggedIn = $this->session->userdata('isLoggedIn');
+
+		if(!isset($isLoggedIn)||$isLoggedIn != true)
+		{
+			return false;
+		}
+		return true;
+	}
+	
 	function index()
 	{
-		$data["title"] = "Tanks Sign Up";
-		$data["assets"] = array('css' => array("signup/less/signup.less"),
-								'js' => array("signup/js/signup.js"));
-		$data['error'] = "";
+		if($this->isLoggedIn())
+		{
+			redirect("dashboard");
+		}
+		else
+		{
+			$data["title"] = "Tanks Sign Up";
+			$data["assets"] = array('css' => array("signup/less/signup.less"),
+									'js' => array("signup/js/signup.js"));
+			$data['error'] = "";
 		
-		//Assets are used to load LESSCSS, or Javascript
-/*		$data['assets'] = array('css' => null,
-								'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
-		$data["view"] = 'signup/index.php';
-		$this->load->view('template/template', $data);
+			//Assets are used to load LESSCSS, or Javascript
+/*			$data['assets'] = array('css' => null,
+									'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
+			$data["view"] = 'signup/index.php';
+			$this->load->view('template/template', $data);
+		}
 	}
 	
 	function addUser()

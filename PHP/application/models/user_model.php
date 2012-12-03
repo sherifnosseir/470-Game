@@ -53,22 +53,19 @@ function __construct(){
 	}
 	
 	//Get all information about a user
-	function get_user()
+	function getUserInfo($username)
 	{
-		$user = $this->session->userdata('username');
-		$this->db->where("username", $user);
+		$this->db->where("username = '$username' or email = '$username'");
 
 		$query = $this->db->get('users');
 
 		foreach ($query->result() as $row)
 	   	{
 	     	$info = Array(
-				'sid' => $row->id,
-				'name' => $row->name,
+				'id' => $row->id,
+				'email' => $row->email,
 				'username' => $row->username,
-				'phone' => $row->phone,
-				'fleetid' => $row->fleet_id,
-				'address' => $row->address,
+				'tank_id' => $row->tank_id
 			);
 	   	}
 

@@ -7,34 +7,52 @@ function __construct()
 		parent::__construct();
 	}
 	
+	function isLoggedIn()
+	{
+		$isLoggedIn = $this->session->userdata('isLoggedIn');
+
+		if(!isset($isLoggedIn)||$isLoggedIn != true)
+		{
+			return false;
+		}
+		return true;
+	}
+	
 	function index()
 	{
-		$data["title"] = "TheGame Login";
-		$data['assets'] = array('css' => null,
-							'js' => null);
+		if($this->isLoggedIn())
+		{
+			redirect("dashboard");
+		}
+		else
+		{	
+			$data["title"] = "TheGame Login";
+			$data['assets'] = array('css' => null,
+								'js' => null);
 		
-		//Assets are used to load LESSCSS, or Javascript
-/*		$data['assets'] = array('css' => null,
-								'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
+			//Assets are used to load LESSCSS, or Javascript
+/*			$data['assets'] = array('css' => null,
+									'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
 								
-		$data["username"] = array(
-			              'name'        => 'username',
-			              'id'          => 'username',
-			              'value'       => '',
-			              'maxlength'   => '100',
-			         	'class'		=> 'login_username'
-			            );
-		$data["password"] = array(
-					              'name'        => 'password',
-					              'id'          => 'password',
-					              'value'       => '',
-					              'maxlength'   => '100',
-					              'class'		=> 'login_password'
-					            );
-		$data['error'] = "";
+			$data["username"] = array(
+				              'name'        => 'username',
+				              'id'          => 'username',
+				              'value'       => '',
+				              'maxlength'   => '100',
+				         	'class'		=> 'login_username'
+				            );
+			$data["password"] = array(
+						              'name'        => 'password',
+						              'id'          => 'password',
+						              'value'       => '',
+						              'maxlength'   => '100',
+						              'class'		=> 'login_password'
+						            );
+			$data['error'] = "";
 		
-		$data["view"] = 'login/index.php';
-		$this->load->view('template/template', $data);
+			$data["view"] = 'login/index.php';
+			$this->load->view('template/template', $data);
+		}
 	}
 	
 	function check_login_info(){
@@ -53,9 +71,11 @@ function __construct()
 			
 			if($reason == false)
 			{
+				$userInfo = $this->user_model->getUserInfo($username);
+				
 				$data = array(
-					'username'=> $username,
-					'is_logged_in'=> true
+					'username'=> $userInfo["username"],
+					'isLoggedIn'=> true
 					);
 
 				$this->session->set_userdata($data);
@@ -116,6 +136,12 @@ function __construct()
 		$data['view'] = 'login/banned';
 		$data['assets'] = null;
 		$this->load->view('template/template.php', $data);
+	}
+	
+	function logout()
+	{
+		$this->session->sess_destroy();
+		redirect("dashboard");
 	}
 
 }
