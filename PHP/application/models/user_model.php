@@ -1,6 +1,6 @@
 <?php if(!defined('BASEPATH')) exit('No direct script access allowed');
 
-class user_model extends CI_Model{
+class User_model extends CI_Model{
 
 function __construct(){
 		parent::__construct();
@@ -22,38 +22,16 @@ function __construct(){
 		}
 	}
 	
-	//When applying, check that no other user has the same username
-	function check_duplicate()
-	{
-		$this->db->where("username", $this->input->post('username'));
-		$query = $this->db->get('users');
-		
-		//$query->num_rows() returns how many rows there are in the query
-		//in this case... if it's 1, then there is already a user in the database with the same username as the one the applyee is trying to use.
-		if($query->num_rows() == 1)
-		{
-			return false;
-		}
-		
-		else
-		{
-			return true;
-		}
-	}
-	
 	//Insert a user into database
 	function add_user()
 	{
-		$data = Array(
-			'name' => $this->input->post('full_name'),
-			'address' => $this->input->post('address'),
-			'phone' => $this->input->post('phone'),
-			'username' => $this->input->post('username'),
-			'password' => md5($this->input->post('password'))
+		$data = array(
+			'username'=>$this->input->post('username'),
+			'email'=>$this->input->post('email_address'),
+			'password'=>md5($this->input->post('password')),
 			);
-		
-		$insert = $this->db->insert('user', $data);
-		
+
+		$insert = $this->db->insert('users', $data);
 		return $insert;
 	}
 	

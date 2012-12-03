@@ -16,7 +16,7 @@ else{
 <title><?php echo $title; ?></title>
 
 <SCRIPT type="text/javascript">
-    gameRootURL = "<?=base_url() ?>";
+    base_url = "<?=base_url() ?>";
 </SCRIPT>
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/global/css/bootstrap.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
