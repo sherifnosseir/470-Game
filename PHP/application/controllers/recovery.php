@@ -140,6 +140,13 @@ function __construct()
 		
 		if ($this->form_validation->run() == FALSE){
 			//Error
+			$data['assets'] = null;
+			$data['title'] = 'Reset Password';
+			$data['email'] = $email;
+			$data['token'] = $token;
+			$data['error'] = validation_errors('<div class="alert span3"><a class="close" data-dismiss="alert"">×</a>','</div>');
+			$data['view'] = 'recovery/resetPassword.php';
+			$this->load->view('template/template', $data);
 		}
 		else
 		{

@@ -6,6 +6,10 @@
 
 	<form action="<?php echo base_url(); ?>recovery/resetPassword2" method="post" accept-charset="utf-8">
 		
+		<div class="row">
+			<div class="submit-error-div span4 offset1"><?php echo $error; ?></div>
+		</div>
+		
 		<br />
 		<div class="row">
 			<div class="control-group span4 offset1">
@@ -40,7 +44,5 @@
 			<input type="submit" name="submit" value="Reset Password" id="reset" class="login_submit btn btn-primary offset1">
 		</div>
 	<hr>
-	<div class="submit-error-div span4 offset1"><?php echo $error; ?></div>
-	
 	</form>
 </div>
