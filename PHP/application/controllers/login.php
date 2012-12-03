@@ -79,7 +79,7 @@ function __construct()
 					);
 
 				$this->session->set_userdata($data);
-				echo "Excellent";
+				redirect("dashboard");
 			}
 			else
 			{
@@ -131,6 +131,7 @@ function __construct()
 	
 	function bannedUser($username, $reason)
 	{	
+		$data['title'] = 'Banned';
 		$data['reason'] = $reason;
 		$data['username'] = $username;
 		$data['view'] = 'login/banned';
@@ -143,5 +144,4 @@ function __construct()
 		$this->session->sess_destroy();
 		redirect("dashboard");
 	}
-
 }

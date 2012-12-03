@@ -26,7 +26,7 @@
 		</div>
 		
 		<div class="row">
-			<a href="<?php echo base_url(); ?>login/recover" class="offset1">Forgot Password?</a>
+			<a href="<?php echo base_url(); ?>recovery/forgotPassword" class="offset1">Forgot Password?</a>
 			<input type="submit" name="submit" value="Login" id="login" class="login_submit btn btn-primary offset1">
 		</div>
 		
