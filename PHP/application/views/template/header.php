@@ -1,3 +1,13 @@
+<? 
+$state  = 1;
+if ($state =1){
+	$url = "http://localhost:8080/index.html";
+}
+else{
+	$url = "http://cmpt470.csil.sfu.ca:9016/index.html";
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -16,7 +26,7 @@
   	<?endforeach;?>
 <?endif;?>
 
-<? echo base_url();?>
+<?// echo base_url();?>
 
 <script src="<?php echo base_url(); ?>assets/global/js/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="<?php echo base_url(); ?>assets/global/js/less.js"></script>
@@ -31,13 +41,13 @@
 <body>
 	<div class="navbar">
 	  <div class="navbar-inner">
-	    <a class="brand" href="#"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img> Dashboard</a>
+	    <a class="brand" href="<?php echo base_url(); ?>index.php/dashboard"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img> Dashboard</a>
 	    <ul class="nav pull-right">
-	      	<li class="active"><a href="<?php echo base_url(); ?>index.php/game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
+	      	<li class="active"><a href="<? echo $url;?>"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 	      	<li><a href="<?php echo base_url(); ?>index.php/config"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img> Configuration</a></li>
 	      	<li><a href="<?php echo base_url(); ?>index.php/reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 			<li><a href="<?php echo base_url(); ?>index.php/stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>
-			<li><a href="<?php echo base_url(); ?>index.php/login/signup"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img> Sign Up</a></li>
+			<li><a href="<?php echo base_url(); ?>index.php/signup"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img> Sign Up</a></li>
 	    </ul>
 	  </div>
 	</div>

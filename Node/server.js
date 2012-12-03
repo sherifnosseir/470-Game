@@ -13,7 +13,7 @@ connection.connect(function(err) {
 
 
 
-/*
+
 var app = require('http').createServer(handler)
   , io = require('socket.io').listen(app,{log:false})
   , fs = require('fs')
@@ -21,16 +21,7 @@ var app = require('http').createServer(handler)
   , PNG = require('png-js')
   
 app.listen(8080);
-*/
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(8080)
-  , fs = require('fs')
-  , path = require('path')
-  , PNG = require('png-js');
 
-
-  
-  
 function handler (req, res) {
 	/*use to handle http request*/
     var filePath=__dirname+req.rul;
@@ -174,64 +165,59 @@ var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
 var velocity = 6;
-//var bulletVelocity = 12;
+var bulletVelocity = 12;
 var fps = 42;
 //Map Variables
-//var pixelMap = Array();
+var pixelMap = Array();
 var mapWidth = 960;
 var mapHeight = 540;
 var pixelArrayLength = mapWidth * mapHeight *4;
-var maxMapTileX=4;
-var maxMapTileY=4;
+
 
 //added world map;
-//initial world Map
-var worldMap = new Array(maxMapTileX);
-for(var i=0;i<maxMapTileX;i++){
-	worldMap[i]=new Array(maxMapTileY);
-	for(var j=0;j<maxMapTileY;j++){
-		
-		worldMap[i][j]=new Array();
-		var pMap=worldMap[i][j];
+var worldMap = Array();
+//worldMap[0]=pixelMap;
+//inital worldMap
+for(var i=0;i<1;i++){
+	worldMap[i]=Array();
+	for(var j=0;j<1;j++){
+		var pMap=Array();
 		for(var m=0;m<mapWidth;m++){
-	    			pMap[m]=new Array();
+	    			pMap[m]=Array();
 	    			for(var n=0;n<mapHeight;n++){
-	    				pMap[m][n]={type:'etmpy',id:-1};
-	    				//pMap[m][n].type='empty';
-	    				//pMap[m][n].id=-1;
+	    				pMap[m][n]=Object();
+	    				pMap[m][n].type='empty';
+	    				pMap[m][n].id=-1;
 	   					
 	   				}
-	    }
-
-	    
-	}
-	console.log(i);
-	
-}
-
-
-
-//load worldMap Data
-
-for(var i=0;i<maxMapTileX;i++){
-	
-	for(var j=0;j<maxMapTileY;j++){
-		var mapFile='mapDataFiles/mapDatax'+i+'y'+j+'.png';
-
-		if(fs.existsSync(mapFile)){
-			var pMap=worldMap[i][j];
-			
-				console.log("esist"+mapFile);
-				PNG.decode(mapFile, function(pixels) {
+	    		}
+		//var ii=i;
+		//var jj=j;
+		var filename=__dirname +'/mapDataFiles/mapDatax0y0.png';
+		//console.log(filename);
+		
+		//get from files
+		//var fs=require('fs');
+		path.exists(filename,function(ex){
+			if(ex){
+				//console.log("esist"+filename);
+				PNG.decode(filename, function(pixels) {
 				
 	    			// pixels is a 1d array of decoded pixel data
 		    		if(pixels.length<pixelArrayLength){
 		    			consloe.log("small"+(pixels.length-pixelArrayLength));
-		    			
+		    			for(var m=0;m<mapWidth;m++){
+		    				pMap[m]=Array();
+		    				for(var n=0;n<mapHeight;n++){
+		    					pMap[m][n]=Object();
+		    					pMap[m][n].type='empty';
+		    					pMap[m][n].id=-1;
+		    				}
+		    			}
 		    		}else{
 		    			for(var m=0;m<mapWidth;m++){
 		    				for(var n=0;n<mapHeight;n++){
-		    					//pMap[m][n] = new Object();
+		    					pMap[m][n] = new Object();
 		    					var pixel=Object();
 		    					pixel.r=pixels[n*mapWidth*4+m*4];
 		    					pixel.g=pixels[n*mapWidth*4+m*4+1];
@@ -253,19 +239,27 @@ for(var i=0;i<maxMapTileX;i++){
 		    					
 		    					//console.log(pixel.r+" "+pixel.g+" "+pixel.b+" "+pixel.a);
 		    				}
-		    				
+		    				//console.log(pMap[m][0].type);
 		    			}
 		    		}
-		    		console.log(worldMap[0][0][10][10].type);
 				});
 				
+			}else{
+				for(var m=0;m<mapWidth;m++){
+	    			pMap[m]=Array();
+	    			for(var n=0;n<mapHeight;n++){
+	    				pMap[m][n]=Object();
+	    				pMap[m][n].type='empty';
+	    				pMap[m][n].id=-1;
+	   					
+	   				}
+	    		}
 			}
-
-
-		
+		});
+		worldMap[i][j]=pMap;
+		//console.log(worldMap[0][0][0][0].type);
 			
 	}
-	
 }
 
 
@@ -279,10 +273,6 @@ for(var i=0;i<maxMapTileX;i++){
 
 
 io.sockets.on('connection', function(socket) {
-
-	console.log("pp"+worldMap.length+" and "+worldMap[0].length+" and "+worldMap[0][0].length);
-	var ppMap=worldMap[1][0];
-console.log("pp"+ppMap[10][10].type);
 	/*login handler*/
 	socket.on('login',function(state,details){
 		socket.set('idClient', -1);
@@ -734,7 +724,7 @@ console.log("pp"+ppMap[10][10].type);
 function clearObject (x, y, type) {
 	x = Math.floor(x);
 	y = Math.floor(y);
-	var pixelMap = worldMap[0][0];
+	pixelMap = worldMap[0][0];
 	if(type == "tank")
 	{
 		/*
@@ -746,9 +736,9 @@ function clearObject (x, y, type) {
 			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					if(x+j > 0  && y+i > 0 && x+j < mapWidth && y+i < mapHeight){
-                        pixelMap[x+j][y+i].type = "empty";
-                        pixelMap[x+j][y+i].id = -1;
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
+                        pixelMap[x+i][y+j].type = "empty";
+                        pixelMap[x+i][y+j].id = -1;
 					}
 				}
 			};
@@ -772,8 +762,7 @@ function drawObject(x, y, type, object)
 	
 	x = Math.floor(x);
 	y = Math.floor(y);
-	var pixelMap = worldMap[0][0];
-	//console.log(worldMap[0][0][10][10].type);
+	pixelMap = worldMap[0][0];
 	if(type == "tank")
 	{
 		/*
@@ -784,10 +773,10 @@ function drawObject(x, y, type, object)
 			for (var j=0; j < 31; j++) {
 				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
-					if(x+j > 0  && y+i > 0 && x+j < mapWidth && y+i < mapHeight)
+					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 					{
-						pixelMap[x+j][y+i].type = "tank";
-						pixelMap[x+j][y+i].id = object.id;
+						pixelMap[x+i][y+j].type = "tank";
+						pixelMap[x+i][y+j].id = object.id;
 					}
 				}
 			};
@@ -942,7 +931,7 @@ function colDetect(type,mapid,object){
 	emptyObj.type='empty';
 	emptyObj.id=-1;
 	
-	var pixelMap=worldMap[0][0];
+	var pixelMap=worldMap[mapid][0];
 	
 	if(type=='bullet'){
 		var bullet=object;
@@ -977,9 +966,9 @@ function colDetect(type,mapid,object){
 		var x=Math.floor(object.x);
 		var y=Math.floor(object.y);
 		
-		for (var i=0; i < 31; i++){
-			for (var j=0; j < 42; j++){
-				if((Math.pow(i-15, 2) + Math.pow(j-21, 2)) < Math.pow(15, 2))
+		for (var i=0; i < 42; i++) {
+			for (var j=0; j < 31; j++) {
+				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
 				{
 					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
 						//check if is in the bound of the map;

@@ -38,7 +38,7 @@ function drawTank(tank,frameNum){
 		
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
-		ctx.translate(x+15, y+21);
+		ctx.translate(x+17, y+17);
 		ctx.rotate((tankAngle+(Math.PI)/2)%(2*Math.PI));
 		if(tank[i].id == tank_id)
 		{
@@ -48,7 +48,7 @@ function drawTank(tank,frameNum){
 			ctx.restore();
 
 			ctx.save();
-			// draw tank circle
+			/* draw tank circle
 			for (var m=0; m < 42; m++) {
 			for (var n=0; n < 31; n++) {
 				if((Math.pow(m-21, 2) + Math.pow(n-15, 2)) < Math.pow(15, 2))
@@ -56,11 +56,11 @@ function drawTank(tank,frameNum){
 				
 					
 						ctx.fillStyle = "rgb(0,0,255)";
-						ctx.fillRect (x+n, y+m,1,1);
+						ctx.fillRect (x+m, y+n,1,1);
 					
 				}
 			}
-			}
+			}*/
 
 			
 			var xDirection = mouseX - x;
@@ -68,7 +68,7 @@ function drawTank(tank,frameNum){
 			turretAngle = Math.atan2(yDirection, xDirection);
 			
 			//Draw User Turret
-			ctx.translate(x+15, y+21);
+			ctx.translate(x+17, y+17);
 			ctx.rotate((turretAngle+(Math.PI)/2)%(2*Math.PI));
 			ctx.drawImage(userturret,0,0,67,67,-17,-17,34,34);
 		}
@@ -84,7 +84,7 @@ function drawTank(tank,frameNum){
 			turretAngle = tank[i].turretAngle;
 			
 			//Draw Turret
-			ctx.translate(x+15, y+21);
+			ctx.translate(x+17, y+17);
 			ctx.rotate((turretAngle+(Math.PI)/2)%(2*Math.PI));
 			
 			ctx.drawImage(turret,0,0,67,67,-17,-17,34,34);
@@ -198,7 +198,7 @@ function drawTurret(tank){
 
 		//This is a transformation to rotate objects on canvas
 		ctx.save();
-		ctx.translate(x+15, y+21);
+		ctx.translate(x+17, y+17);
 		ctx.rotate((angle+(Math.PI)/2)%(2*Math.PI));
 		if(tank[i].id == tank_id)
 		{

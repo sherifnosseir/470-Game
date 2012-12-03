@@ -22,7 +22,7 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				"socket.io-client/dist/socket.io.js",
+				"socket.io/socket.io.js",
 				"scripts/clientDraw.js",
 				"scripts/clientScript.js"
 			],
