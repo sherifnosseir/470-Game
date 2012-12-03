@@ -17,7 +17,7 @@
 switch (ENVIRONMENT)
 {
 	case 'development':
-		$config['base_url']	= 'http://localhost/470-Game/PHP/';
+		$config['base_url']	= 'http://localhost/elTanko/PHP/';
 	break;
 	case 'testing':
 	break;
@@ -39,7 +39,7 @@ switch (ENVIRONMENT)
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------

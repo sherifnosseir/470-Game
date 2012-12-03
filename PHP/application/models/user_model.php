@@ -7,7 +7,7 @@ function __construct(){
 	}
 	
 	//validate user information when logging in (make sure that the user does exist)
-	function validate_user()
+	function validate()
 	{
 		//$this->input->post('name_of_input') is used to grab information from an input box (used instead of $_POST['name_of_input'])
 		$this->db->where("username", $this->input->post('username'));
@@ -20,6 +20,7 @@ function __construct(){
 		{
 			return true;
 		}
+		return false;
 	}
 	
 	//Insert a user into database
@@ -72,6 +73,19 @@ function __construct(){
 	   	}
 
 		return $info;
+	}
+	
+	function isBanned($info)
+	{
+		$this->db->where("username = '$info' OR email = '$info'");
+		$query = $this->db->get("bannedUsers");
+		
+		if($query->num_rows()>0)
+		{
+			$query = $query->result();
+			return $query[0]->reason;
+		}
+		return false;
 	}
 	
 	//update information about a user
