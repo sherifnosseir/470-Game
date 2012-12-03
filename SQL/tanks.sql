@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 03, 2012 at 09:56 AM
+-- Generation Time: Dec 03, 2012 at 11:21 PM
 -- Server version: 5.1.44
 -- PHP Version: 5.3.1
 
@@ -63,6 +63,25 @@ CREATE TABLE IF NOT EXISTS `game_stats` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `userRecovery`
+--
+
+CREATE TABLE IF NOT EXISTS `userRecovery` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) NOT NULL,
+  `token` varchar(225) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+--
+-- Dumping data for table `userRecovery`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -85,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `nickname`, `team_id`, `tank_id`, `date_created`, `db_time_stamp`) VALUES
 (1, 'kennych', '869ab5e4754de802a9b2f5c6916fca22', 'kennychetal@gmail.com', 'xor-kenny', 1, 1, '2012-11-18 20:28:00', '2012-11-18 20:28:32'),
-(2, 'sherif', 'c8570e8aa5717ce8860122cec48ba2b2', 'sherifnosseir@gmail.com', 'sherifzilla', 2, 2, '', '2012-11-19 22:10:53'),
+(2, 'sherif', 'c8570e8aa5717ce8860122cec48ba2b2', 'sherifnosseir@gmail.com', 'sherifzilla', 2, 2, '', '2012-12-03 15:19:05'),
 (3, 'guest', '77f99348fb83cef7667843e1b95134d5', '', '', 3, 3, '', '2012-11-19 22:12:41'),
 (4, 'default', 'c21f969b5f03d33d43e04f8f136e7682', 'default@default.default', 'dEfAuLt', 4, 4, '', '2012-11-21 01:47:07'),
 (6, 'admin', '21232f297a57a5a743894a0e4a801fc3', '', '', 0, 5, '', '2012-11-21 22:45:31'),
