@@ -13,7 +13,6 @@ function __construct()
 		$data["title"] = "ElTanko Game";
 		$data['assets'] = array('css' => array("game/css/game.less"),
 								'js' => array(	"game/scripts/md5.js",
-										  	"game/js/game-window.js",
 											"game/scripts/socket.io-client/dist/socket.io.js",
 											"game/scripts/modernizr.js",
 											"game/scripts/loader.js",

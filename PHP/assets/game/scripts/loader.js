@@ -22,9 +22,9 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				gameRootURL+"assets/game/scripts/socket.io-client/dist/socket.io.js",
-				gameRootURL+"assets/game/scripts/clientDraw.js",
-				gameRootURL+"assets/game/scripts/clientScript.js"
+				base_url+"assets/game/scripts/socket.io-client/dist/socket.io.js",
+				base_url+"assets/game/scripts/clientDraw.js",
+				base_url+"assets/game/scripts/clientScript.js"
 			],
 			// called when all files have finished loading
 			// and executing

@@ -1,25 +1,25 @@
 tankSprite=new Image();
-tankSprite.src = gameRootURL+"assets/game/images/tankssheet.png";
+tankSprite.src = base_url+"assets/game/images/tankssheet.png";
 userTankSprite = new Image();
-userTankSprite.src = gameRootURL+"assets/game/images/usertankssheet.png";
+userTankSprite.src = base_url+"assets/game/images/usertankssheet.png";
 turret=new Image();
-turret.src = gameRootURL+"assets/game/images/tankturret.png";
+turret.src = base_url+"assets/game/images/tankturret.png";
 userturret=new Image();
-userturret.src = gameRootURL+"assets/game/images/usertankturret.png";
+userturret.src = base_url+"assets/game/images/usertankturret.png";
 //background
 backGround = new Image();
 
-backGround.src = gameRootURL+"assets/game/images/backGround.png";
+backGround.src = base_url+"assets/game/images/backGround.png";
 smoke0 = new Image();
-smoke0.src = gameRootURL+"assets/game/images/explosionframe0.png";
+smoke0.src = base_url+"assets/game/images/explosionframe0.png";
 smoke1 = new Image();
-smoke1.src = gameRootURL+"assets/game/images/explosionframe1.png";
+smoke1.src = base_url+"assets/game/images/explosionframe1.png";
 smoke2 = new Image();
-smoke2.src = gameRootURL+"assets/game/images/explosionframe2.png";
+smoke2.src = base_url+"assets/game/images/explosionframe2.png";
 smoke3 = new Image();
-smoke3.src = gameRootURL+"assets/game/images/explosionframe3.png";
+smoke3.src = base_url+"assets/game/images/explosionframe3.png";
 smoke4 = new Image();
-smoke4.src = gameRootURL+"assets/game/images/explosionframe4.png";
+smoke4.src = base_url+"assets/game/images/explosionframe4.png";
 
 function drawTank(tank,frameNum){
 	
