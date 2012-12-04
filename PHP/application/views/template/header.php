@@ -61,10 +61,9 @@ else{
 	?>	
 		<script>var userid = "<?php echo $this->session->userdata("username"); ?>"</script>
 		<li class="active"><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
-	  	<li><a href="<?php echo base_url(); ?>config"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img> Configuration</a></li>
 	  	<li><a href="<?php echo base_url(); ?>reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 		<li><a href="<?php echo base_url(); ?>stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>
-		<li><a href="#"><i class="icon-user"></i> <?php echo $this->session->userdata("username"); ?></a></li>
+		<li><a href="<?php echo base_url(); ?>config"><i class="icon-user"></i> <?php echo $this->session->userdata("username"); ?></a></li>
 		<li><a href="<?php echo base_url(); ?>login/logout"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img> Logout</a></li>
 	<?php
 
