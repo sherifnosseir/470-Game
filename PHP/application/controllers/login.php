@@ -67,9 +67,9 @@ function __construct()
 		if($this->form_validation->run()== TRUE){
 			$this->load->model('user_model');
 			
-			$reason = $this->user_model->isBanned($username);
+			$banInfo = $this->user_model->isBanned($username);
 			
-			if($reason == false)
+			if($banInfo == false)
 			{
 				$userInfo = $this->user_model->getUserInfo($username);
 				
@@ -83,7 +83,7 @@ function __construct()
 			}
 			else
 			{
-				$this->bannedUser($username, $reason);
+				$this->bannedUser($banInfo[0]->username, $banInfo[0]->reason);
 			}
 		}
 		else

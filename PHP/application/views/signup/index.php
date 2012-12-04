@@ -1,4 +1,4 @@
-<div class="row well span6 offset3">
+<div class="row well span6 offset3" id="signup_form">
 
 	<fieldset>
 	<legend><h2>Signup</h2></legend>

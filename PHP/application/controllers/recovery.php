@@ -18,6 +18,7 @@ function __construct()
 		$data["assets"] = array('css' => null,
 							'js' => null);
 		
+		$data["error"] = "";
 		$data["title"] = "recover password";
 		$data['view'] = 'recovery/forgotPassword';
 		$this->load->view('template/template.php', $data);
@@ -28,57 +29,73 @@ function __construct()
 		$email = $this->input->post("email");
 		$this->load->model('recovery_model');
 		
-		if($this->recovery_model->validateEmail($email))
-		{
-			$config = Array(
-			'protocol'=> 'smtp',
-			'smtp_host' => 'ssl://smtp.googlemail.com',
-			'smtp_port' => 465,
-			'smtp_user' =>'elTankoTeam@gmail.com',
-			'smtp_pass'=>'elTankoSuperGame'
-			);
-			
-			$this->load->library('email', $config);
-			
-			$token = $this->recovery_model->checkExistingRecovery($email);
-			if($token == false)
-			{
-				//generate new recovery token and send it	
-				$token = md5($email);
-				$this->recovery_model->insertToken($email, $token);
-			}
-			
-			$message = "Click here to continue reseting your password!: ".base_url()."recovery/recover/$token";
-			
-			$this->email->set_newline("\r\n");
+		$this->load->library("form_validation");
+		$this->form_validation->set_rules('email','Email Address','trim|required|valid_email');
 
-			$this->email->from('elTankoTeam@gmail.com', "ElTanko");
-			$this->email->to($email);
-			$this->email->subject("ElTanko Password Recovery");
-			$this->email->message($message);
+		if($this->form_validation->run()== FALSE){
+			$data["title"] = "TheGame Login";
+			$data["assets"] = array('css' => null,
+								'js' => null);
 
-			if($this->email->send())
-			{
-				$data['assets'] = null;
-				$data['title'] = 'Email sent';
-				$data['message_title'] = "Email Sent...";
-				$data['message'] = "You should receive an email momentarily with the rest of the instructions";
-				$data['view'] = 'recovery/message.php';
-				$this->load->view('template/template', $data);
-			}
-			else
-			{
-				show_error($this->email->print_debugger());
-			}
+			$data["error"] = validation_errors('<div class="alert span3"><a class="close" data-dismiss="alert"">×</a>','</div>');
+			$data["title"] = "recover password";
+			$data['view'] = 'recovery/forgotPassword';
+			$this->load->view('template/template.php', $data);
 		}
 		else
 		{
-			$data['assets'] = null;
-			$data['title'] = 'Error';
-			$data['message_title'] = "Email Not Found...";
-			$data['message'] = "Sorry, We don't have this email in our records.";
-			$data['view'] = 'recovery/message.php';
-			$this->load->view('template/template', $data);
+			if($this->recovery_model->validateEmail($email))
+			{
+				$config = Array(
+				'protocol'=> 'smtp',
+				'smtp_host' => 'ssl://smtp.googlemail.com',
+				'smtp_port' => 465,
+				'smtp_user' =>'elTankoTeam@gmail.com',
+				'smtp_pass'=>'elTankoSuperGame'
+				);
+			
+				$this->load->library('email', $config);
+			
+				$token = $this->recovery_model->checkExistingRecovery($email);
+				if($token == false)
+				{
+					//generate new recovery token and send it	
+					$token = md5($email);
+					$this->recovery_model->insertToken($email, $token);
+				}
+			
+				$message = "Click here to continue reseting your password!: ".base_url()."recovery/recover/$token";
+			
+				$this->email->set_newline("\r\n");
+
+				$this->email->from('elTankoTeam@gmail.com', "ElTanko");
+				$this->email->to($email);
+				$this->email->subject("ElTanko Password Recovery");
+				$this->email->message($message);
+
+				if($this->email->send())
+				{
+					$data['assets'] = null;
+					$data['title'] = 'Email sent';
+					$data['message_title'] = "Email Sent...";
+					$data['message'] = "You should receive an email momentarily with the rest of the instructions";
+					$data['view'] = 'recovery/message.php';
+					$this->load->view('template/template', $data);
+				}
+				else
+				{
+					show_error($this->email->print_debugger());
+				}
+			}
+			else
+			{
+				$data['assets'] = null;
+				$data['title'] = 'Error';
+				$data['message_title'] = "Email Not Found...";
+				$data['message'] = "Sorry, We don't have this email in our records.";
+				$data['view'] = 'recovery/message.php';
+				$this->load->view('template/template', $data);
+			}
 		}
 	}
 	

@@ -10,7 +10,8 @@ function __construct(){
 	function validate()
 	{
 		//$this->input->post('name_of_input') is used to grab information from an input box (used instead of $_POST['name_of_input'])
-		$this->db->where("username", $this->input->post('username'));
+		$username = $this->input->post("username");
+		$this->db->where("username = '$username' or email = '$username'");
 		//md5 is a built in function in php to encrypt the password (security)
 		$this->db->where("password", md5($this->input->post('password')));
 		
@@ -41,7 +42,9 @@ function __construct(){
 	function get_id()
 	{
 		$this->db->select('id');
-		$this->db->where("username", $this->input->post('username'));
+		$username = $this->input->post("username");
+		$this->db->where("username = '$username' or email = '$username'");
+
 		$query = $this->db->get('users');
 		
 		foreach($query->result() as $row)
@@ -80,7 +83,7 @@ function __construct(){
 		if($query->num_rows()>0)
 		{
 			$query = $query->result();
-			return $query[0]->reason;
+			return $query;
 		}
 		return false;
 	}

@@ -6,6 +6,10 @@
 	<div class="form-actions">
 		<form action="<?php echo base_url(); ?>recovery/resetPassword" method="post" accept-charset="utf-8">
 
+			<div class="row">
+				<div class="submit-error-div span4"><?php echo $error; ?></div>
+			</div>
+			
 			<br />
 			<div class="row">
 				<div class="control-group span4">

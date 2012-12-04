@@ -205,7 +205,7 @@ $(document).ready(function(){
 						$('input.signup_password').val("");
 						$('input.signup_password2').val("");
 						$('.submit-error-div').fadeIn(250);
-						$('.submit-error-div').html("Account created successfully");
+						$('#signup_form').html("Account created successfully");
 					}
 					else if(msg=="db_error")
 					{
