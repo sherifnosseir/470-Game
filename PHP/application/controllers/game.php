@@ -18,7 +18,7 @@ function __construct()
 											"game/scripts/loader.js",
 											"game/scripts/jquery.rightClick.js"));
 		$data['error'] = "";
-		$data['view'] = "game/index.html";
+		$data['view'] = "game/index.php";
 		$this->load->view('template/template', $data);
 	}
 

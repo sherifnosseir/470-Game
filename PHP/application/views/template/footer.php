@@ -1,5 +1,5 @@
 <?php
-if($view != "game/index.html")
+if($view != "game/index.php")
 {
 ?>
 	</div>

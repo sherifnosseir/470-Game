@@ -10,7 +10,7 @@ tank_id = "";
 pixelMap = "";
 
 var tankCount = 0;
-var environment = "development";
+var environment = "developmenpopo";
 
 
 
@@ -75,7 +75,7 @@ if(environment == "development")
 }
 else
 {
-	var socket = io.connect('http://cmpt470.csil.sfu.ca:9016');
+	var socket = io.connect('http://localhost:8080');
 	
 	var state = 0;
 	var details = "";

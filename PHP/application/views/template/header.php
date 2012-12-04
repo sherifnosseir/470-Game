@@ -1,12 +1,14 @@
 <? 
 $state  = 1;
 if ($state =1){
-	$url = "http://localhost:8080/index.html";
+	$url = "http://localhost/elTanko/PHP/game";
 }
 else{
 	$url = "http://cmpt470.csil.sfu.ca:9016/index.html";
 }
+
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -48,29 +50,34 @@ else{
 	if(!isset($isLoggedIn)||$isLoggedIn != true)
 	{
 	?>
-		<li class="active"><a href="<? echo $url;?>"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
+		<li class="active"><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 		<li><a href="<?php echo base_url(); ?>login"><i class="icon-user"></i> Login</a></li>
 		<li><a href="<?php echo base_url(); ?>signup"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img> Sign Up</a></li>
 	<?php
 	}
 	else
 	{
+
 	?>	
-		<li class="active"><a href="<? echo $url;?>"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
+		<script>var userid = "<?php echo $this->session->userdata("username"); ?>"</script>
+		<li class="active"><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 	  	<li><a href="<?php echo base_url(); ?>config"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_019_cogwheel.png" alt="Configuration Icon"></img> Configuration</a></li>
 	  	<li><a href="<?php echo base_url(); ?>reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 		<li><a href="<?php echo base_url(); ?>stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>
 		<li><a href="#"><i class="icon-user"></i> <?php echo $this->session->userdata("username"); ?></a></li>
 		<li><a href="<?php echo base_url(); ?>login/logout"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_063_power.png" alt="Log Out Icon"></img> Logout</a></li>
 	<?php
+
 	}
+	
 	?>
+
 	    </ul>
 	  </div>
 	</div>
 
 <?php
-if($view != "game/index.html")
+if($view != "game/index.php")
 {
 ?>
 	<div class="container">
