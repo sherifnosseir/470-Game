@@ -10,7 +10,7 @@ tank_id = "";
 pixelMap = "";
 
 var tankCount = 0;
-var environment = "developmentpopo";
+var environment = "developmenpt";
 
 
 
@@ -22,9 +22,8 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				base_url+"assets/game/scripts/socket.io-client/dist/socket.io.js",
-				base_url+"assets/game/scripts/clientDraw.js",
-				base_url+"assets/game/scripts/clientScript.js"
+				"scripts/clientDraw.js",
+				"scripts/clientScript.js"
 			],
 			// called when all files have finished loading
 			// and executing
@@ -47,11 +46,29 @@ function loadMap()
 		pixelMap = tile;
 	});*/
 }
+load();
+if(environment=="development"){
+	var socket=io.connect('http://localhost:8080');
+}else{
+	var socket=io.connect('http://cmpt470.csil.sfu.ca:8016');
+}
 
+socket.emit('connecting',userid);
+
+socket.on('response', function(response,user_info) {
+	console.log(response);
+					
+	nickname = user_info[1];
+	team_id = user_info[2];
+	tank_id = user_info[3];
+				
+						//loadMap();						
+					
+});
 //global scope stuff
 
 //load();
-
+/*
 if(environment == "development")
 {
 	var socket = io.connect('http://localhost:8080');
@@ -83,7 +100,6 @@ else
 	if(state==0){
 		$(document).ready(function() {
 			$(".game_row").hide();
-			$("#signup_div").hide();
 			$("#submit_button").click(function() {
 
 				details = new Array();
@@ -164,7 +180,7 @@ else
 
 	}
 }
-
+*/
 /*==========================================
   =====FINAL CODE WITH NO ENVIRONMENTS======
   ==========================================*/

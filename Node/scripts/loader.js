@@ -22,9 +22,9 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				"socket.io/socket.io.js",
-				"scripts/clientDraw.js",
-				"scripts/clientScript.js"
+				base_url+"socket.io/socket.io.js",
+				base_url+"scripts/clientDraw.js",
+				base_url+"scripts/clientScript.js"
 			],
 			// called when all files have finished loading
 			// and executing
@@ -47,11 +47,14 @@ function loadMap()
 		pixelMap = tile;
 	});*/
 }
+load();
+var socket=io.connect('localhost:8080');
+socket.emit('connecting','bottlezz');
 
 //global scope stuff
 
 //load();
-
+/*
 if(environment == "development")
 {
 	var socket = io.connect('http://localhost:8080');
@@ -83,7 +86,6 @@ else
 	if(state==0){
 		$(document).ready(function() {
 			$(".game_row").hide();
-			$("#signup_div").hide();
 			$("#submit_button").click(function() {
 
 				details = new Array();
@@ -164,7 +166,7 @@ else
 
 	}
 }
-
+*/
 /*==========================================
   =====FINAL CODE WITH NO ENVIRONMENTS======
   ==========================================*/

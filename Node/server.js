@@ -161,6 +161,47 @@ SnipeShot.prototype.clean=function(){
 	}	
 }
 
+function TankObject(tank_id,username,randomX,randomY,kills,deaths){
+	this.id = tank_id;
+			//id++;
+	this.username = username;
+	this.hp = 100;
+	this.kills=kills;
+	this.deaths=deaths;
+	
+	this.status = "alive";
+	this.x = randomX;  // tank coordinates
+	this.y = randomY;
+	    	//newTank.numShots = 0;
+	    	//newTank.bullets = Array();
+	this.turretAngle = 0;
+	this.wheelAngle = 0;
+	this.destX = this.x;
+	this.destY = this.y;
+	this.weapon=new DoubleShot();
+	
+	
+	this.connectionStatus='on';
+	this.timeOut=900; //40s time out, after 40 second, will move the tank out;
+
+	
+	
+}
+TankObject.prototype.updateDeathsDB=function(){
+	sql = "UPDATE users SET deaths = " +this.deaths + " WHERE users.tank_id = " + this.id;
+	connection.query(sql, function(err, result) {       
+		console.log(result);
+
+	});
+}
+
+TankObject.prototype.updateKillsDB=function(){
+	sql = "UPDATE users SET kills = " +this.kills + " WHERE users.tank_id = " + this.id;
+	connection.query(sql, function(err, result) {       
+		console.log(result);
+	});
+}
+
 var id = 0;
 var tanksArray = Array();
 var bulletArray = Array();
@@ -273,13 +314,14 @@ for(var i=0;i<1;i++){
 
 
 io.sockets.on('connection', function(socket) {
-	/*login handler*/
+	console.log('connect');
+	/*login handler*//*
 	socket.on('login',function(state,details){
 		socket.set('idClient', -1);
-		console.log("STATE:"+state);
+	//	console.log("STATE:"+state);
 		username = details[0];
 		password = details[1];
-		console.log("Username: " + username + " Password: " + password);
+		console.log("Username: " + username );
 		sql="SELECT * FROM users WHERE username ="+connection.escape(username)+"and password="+connection.escape(password);
 		console.log(sql);
 		var result = "";
@@ -301,8 +343,8 @@ io.sockets.on('connection', function(socket) {
 			}			
 			console.log('MYSQL: ', result);		
 		});
-	});
-
+	});*/
+	/*
 		socket.on('signup',function(state,details){
 		console.log("STATE:"+state);
 		username = details[0];
@@ -334,6 +376,79 @@ io.sockets.on('connection', function(socket) {
 
 
 	});
+	*/
+	socket.on('connecting',function(username){
+		socket.set('idClient', -1);
+		//console.log("STATE:"+state);
+		//console.log("Username: " + username + " Password: " + password);
+		sql="SELECT * FROM users WHERE username ="+connection.escape(username);
+		console.log(sql);
+		var result = "";
+		var response = "";
+		connection.query(sql, function(err, rows, fields) {
+			if (err) throw err;
+			result = rows[0];
+			user_info = new Array();
+			if(result==undefined){
+				response = "Invalid Login";
+				//socket.emit('response', response, user_info);
+			}else{
+				response = "Login Successful";
+				console.log(response);
+				user_info[0] = rows[0]['username'];
+				user_info[1] = rows[0]['nickname'];
+				user_info[2] = rows[0]['team_id'];
+				user_info[3] = rows[0]['tank_id'];
+				var tank_id=rows[0]['tank_id'];
+				var tank_deaths=rows[0]['deaths'];
+				var tank_kills=rows[0]['kills'];
+				socket.emit('response', response, user_info);
+				//createUserTank
+				var index=-1;
+		        
+		
+		            for (i=0; i<tanksArray.length; i++) {
+		                if (tanksArray[i].id == tank_id) {
+		                    index = i;
+		                }
+		            };
+				
+				console.log(index);
+				
+				if(index==-1){
+					//create new tank
+					
+			    	randomX = Math.floor((Math.random()*(mapWidth-31))+1);
+			    	randomY = Math.floor((Math.random()*(mapHeight-42))+1);
+			    	
+					var newTank = new TankObject(tank_id,username,randomX,randomY,tank_deaths,tank_kills);
+		
+			    	// weapon done
+			    	
+					//Spawn new Tank
+			    	spawnTank(newTank);
+			    	
+			    	tanksArray[tanksArray.length] = newTank;
+			    	console.log("Tank Array Length: ");
+			    	console.log(tanksArray.length);
+			    	console.log("Tank ID:");
+			    	console.log(tank_id);
+			    	socket.emit('setID', tank_id);
+			    	socket.set('idClient', tank_id);
+					
+				}else{
+					tanksArray[index].timeout=900;
+					tanksArray[index].connectionStatus='on';
+					socket.emit('setID', tank_id);
+			    	socket.set('idClient', tank_id);
+				}
+			}			
+			console.log('MYSQL: ', result);		
+		});
+	});
+		
+		
+		
 	
 	//Send Map
 	socket.on('requestPixelMap', function()
@@ -341,43 +456,8 @@ io.sockets.on('connection', function(socket) {
 		socket.emit('requestedTile', pixelMap);
 	});
 
-/*	socket.on('createIndiviualUserTank')
-	{
-		var newTank = Object();
-
-	    randomX = Math.floor((Math.random()*mapWidth)+1);
-	    randomY = Math.floor((Math.random()*mapHeight)+1);
-		id++;
-	    newTank.id = id;
-		newTank.username = "Server Tank"+id;
-	    newTank.hp = 100;
-        newTank.status = "alive";
-	    newTank.x = randomX;  // tank coordinates
-	    newTank.y = randomY;
-	    newTank.numShots = 0;
-	    newTank.bullets = Array();
-	    newTank.turretAngle = 0;
-	    newTank.wheelAngle = 0;
-	    newTank.destX = newTank.x;
-	    newTank.destY = newTank.y;
-	    tanksArray[tanksArray.length] = newTank;
-	    console.log("Tank Array Length: ");
-	    console.log(tanksArray.length);
-	    console.log("Tank ID:");
-	    console.log(id);
-	    socket.emit('setID', id);
-	    socket.set('idClient', id);
-	    
-	    for (var i=0; i < mapWidth; i++) {
-        	pixelMap[i] = Array();
-        	for (var j=0; j < mapHeight; j++) {
-				pixelMap[i][j] = Object();
-                pixelMap[i][j].type = "empty"; 
-     	        pixelMap[i][j].id = -1; //-1 means empty
-     	    };
-        };
-	});*/
 	
+	/*
 	socket.on('createGuestAccount', function()
 	{
 		user_info = new Array();
@@ -389,8 +469,47 @@ io.sockets.on('connection', function(socket) {
 		id++;
 		
 		socket.emit('guestResponse', user_info);
-	});
+	});*/
+	/*
+	function createUserTank(tank_id,username){
+		var index=-1;
+        socket.get('idClient', function(err, idClient) {
 
+            for (i=0; i<tanksArray.length; i++) {
+                if (tanksArray[i].id == idClient) {
+                    index = i;
+                }
+            };
+		});
+		console.log(index);
+		
+		if(index==-1){
+			//create new tank
+			
+	    	randomX = Math.floor((Math.random()*(mapWidth-31))+1);
+	    	randomY = Math.floor((Math.random()*(mapHeight-42))+1);
+	    	
+			var newTank = new TankObject(tank_id,username,randomX,randomY);
+
+	    	// weapon done
+	    	
+			//Spawn new Tank
+	    	spawnTank(newTank);
+	    	
+	    	tanksArray[tanksArray.length] = newTank;
+	    	console.log("Tank Array Length: ");
+	    	console.log(tanksArray.length);
+	    	console.log("Tank ID:");
+	    	console.log(tank_id);
+	    	socket.emit('setID', tank_id);
+	    	socket.set('idClient', tank_id);
+			
+		}else{
+			return;
+		}
+		
+	}*/
+/*
 	socket.on('createUserTank', function(tank_id, username){
 		//id++;
     	var newTank = Object();
@@ -430,7 +549,7 @@ io.sockets.on('connection', function(socket) {
     	socket.set('idClient', tank_id);
 	});
 
-	
+	*/
 	socket.on('changeWeapon',function(weaponType){
 		console.log("change Weapon");
 		var index = -1;
@@ -447,9 +566,13 @@ io.sockets.on('connection', function(socket) {
          
          var currentTank=tanksArray[index];
          //still in cool down: cant change weapon;
-         if(currentTank.weapon.coolDown<currentTank.weapon.attackSpeed)return;
+         if(currentTank.weapon.coolDown<currentTank.weapon.attackSpeed ||currentTank.weapon.bullets.length>0)
+         {
+         	socket.emit('changeWeaponFailed');
+         	return;
+         }
          //still have bullet flying :cant change weapon;
-         if(currentTank.weapon.bullets.length>0)return;
+
          
          currentTank.weapon.clean();
          if(weaponType=="doubleShot"){
@@ -681,6 +804,9 @@ io.sockets.on('connection', function(socket) {
         });
     });
 	
+	function removeTankObject(){
+		
+	}
 	
     socket.on('disconnect', function() {
 		var index=-1;
@@ -697,13 +823,7 @@ io.sockets.on('connection', function(socket) {
 		
 		currentTank=tanksArray[index];
 		
-		clearObject(currentTank.x,currentTank.y,"tank", currentTank);
-		
-		
-		tanksArray.splice(index,1);
-
-		console.log('Disconnect', id);
-		console.log(tanksArray.length);
+		currentTank.connectionStatus='off';
 	});
 	
 	socket.on('respawn',function(){
@@ -732,9 +852,9 @@ function clearObject (x, y, type) {
 		    half = 15*21
 		*/
 
-		for (var i=0; i < 42; i++) {
-			for (var j=0; j < 31; j++) {
-				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+		for (var i=0; i < 31; i++) {
+			for (var j=0; j < 42; j++) {
+				if((Math.pow(i-15, 2) + Math.pow(j-21, 2)) < Math.pow(15, 2))
 				{
 					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
                         pixelMap[x+i][y+j].type = "empty";
@@ -769,9 +889,9 @@ function drawObject(x, y, type, object)
 		    tank size = 31*42
 		    half = 15*21
 		*/
-		for (var i=0; i < 42; i++) {
-			for (var j=0; j < 31; j++) {
-				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+		for (var i=0; i < 31; i++) {
+			for (var j=0; j < 42; j++) {
+				if((Math.pow(i-15, 2) + Math.pow(j-21, 2)) < Math.pow(15, 2))
 				{
 					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight)
 					{
@@ -801,13 +921,21 @@ function drawObject(x, y, type, object)
 
 function moveTank() {
 	
-    for (index = 0; index < tanksArray.length; index++) {
+    for (index = tanksArray.length-1;index>=0; index--) {
     	//loop for each tank
 		//pixelMap
 		var currentTank = tanksArray[index];
 		clearObject(currentTank.x,currentTank.y,"tank", currentTank);
-		
-		
+
+		if(currentTank.connectionStatus=='off' && currentTank.status=='dead'){
+			if(currentTank.timeout>0){
+				currentTank.timeout--;
+			}else{
+				tanksArray.splice(index,1);
+				continue;
+			}
+			
+		}
 		
         if ((Math.abs(currentTank.x - currentTank.destX) < 6) && 
             (Math.abs(currentTank.y - currentTank.destY) < 6)) {
@@ -895,6 +1023,11 @@ function moveTank() {
 					/*hits a tank*/
 						hitTank.hp = hitTank.hp - currentTank.weapon.damage; // tdl: this 10 should be a variable - tanksArray[index].bulletDamage?				
                     	if (hitTank.hp <= 0) {
+                    		
+                    		currentTank.kills=currentTank.kills+1;
+                    		currentTank.updateKillsDB();
+                    		hitTank.deaths=hitTank.deaths+1;
+                    		hitTank.updateDeathsDB();
                         	hitTank.status = "dead";
                         	hitTank.destX = hitTank.x;
                         	hitTank.destY = hitTank.y;
@@ -966,9 +1099,9 @@ function colDetect(type,mapid,object){
 		var x=Math.floor(object.x);
 		var y=Math.floor(object.y);
 		
-		for (var i=0; i < 42; i++) {
-			for (var j=0; j < 31; j++) {
-				if((Math.pow(i-21, 2) + Math.pow(j-15, 2)) < Math.pow(15, 2))
+		for (var i=0; i < 31; i++) {
+			for (var j=0; j < 42; j++) {
+				if((Math.pow(i-15, 2) + Math.pow(j-21, 2)) < Math.pow(15, 2))
 				{
 					if(x+i > 0  && y+j > 0 && x+i < mapWidth && y+j < mapHeight){
 						//check if is in the bound of the map;

@@ -30,6 +30,14 @@ else{
 
 <?// echo base_url();?>
 
+<?php if($view == "game/index.php")
+{
+	?>
+	<script>var username = "<?php echo $this->session->userdata("username"); ?>"</script>
+	<?php
+}
+?>
+
 <script src="<?php echo base_url(); ?>assets/global/js/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="<?php echo base_url(); ?>assets/global/js/less.js"></script>
 <script src="<?php echo base_url(); ?>assets/global/js/bootstrap.min.js"></script>
@@ -59,7 +67,6 @@ else{
 	{
 
 	?>	
-		<script>var userid = "<?php echo $this->session->userdata("username"); ?>"</script>
 		<li class="active"><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 	  	<li><a href="<?php echo base_url(); ?>reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 		<li><a href="<?php echo base_url(); ?>stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>

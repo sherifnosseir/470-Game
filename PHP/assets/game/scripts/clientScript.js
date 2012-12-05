@@ -89,6 +89,10 @@ $('canvas').click(function(e){
 // cahnge weapon
 $('#weapon1_but').click(function(){
 	socket.emit('changeWeapon','classic');
+	socket.on('changeWeaponFailed'){
+		return;
+	}
+	
 	
 	$('#weapon1_but').addClass("btn-danger");
 	$('#weapon1_but').removeClass("btn-inverse");
@@ -101,6 +105,10 @@ $('#weapon1_but').click(function(){
 });
 $('#weapon2_but').click(function(){
 	socket.emit('changeWeapon','doubleShot');
+	socket.on('changeWeaponFailed'){
+		return;
+	}
+	
 	
 	$('#weapon1_but').addClass("btn-inverse");
 	$('#weapon1_but').removeClass("btn-danger");
@@ -114,6 +122,9 @@ $('#weapon2_but').click(function(){
 
 $('#weapon3_but').click(function(){
 	socket.emit('changeWeapon','snipeShot');
+	socket.on('changeWeaponFailed'){
+		return;
+	}
 	
 	$('#weapon1_but').addClass("btn-inverse");
 	$('#weapon1_but').removeClass("btn-danger");
