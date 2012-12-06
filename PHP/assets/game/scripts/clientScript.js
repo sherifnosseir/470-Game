@@ -88,52 +88,62 @@ $('canvas').click(function(e){
 });
 // cahnge weapon
 $('#weapon1_but').click(function(){
+	var allowChangeWeapon = true;
 	socket.emit('changeWeapon','classic');
 	socket.on('changeWeaponFailed'){
-		return;
+		allowChangeWeapon = false;
 	}
 	
+	if(allowChangeWeapon)
+	{
+		$('#weapon1_but').addClass("btn-danger");
+		$('#weapon1_but').removeClass("btn-inverse");
 	
-	$('#weapon1_but').addClass("btn-danger");
-	$('#weapon1_but').removeClass("btn-inverse");
+		$('#weapon2_but').addClass("btn-inverse");
+		$('#weapon2_but').removeClass("btn-danger");
 	
-	$('#weapon2_but').addClass("btn-inverse");
-	$('#weapon2_but').removeClass("btn-danger");
-	
-	$('#weapon3_but').addClass("btn-inverse");
-	$('#weapon3_but').removeClass("btn-danger");	
+		$('#weapon3_but').addClass("btn-inverse");
+		$('#weapon3_but').removeClass("btn-danger");	
+	}
 });
 $('#weapon2_but').click(function(){
+	var allowChangeWeapon = true;
 	socket.emit('changeWeapon','doubleShot');
 	socket.on('changeWeaponFailed'){
-		return;
+		allowChangeWeapon = false;
 	}
 	
+	if(allowChangeWeapon)
+	{
+		$('#weapon1_but').addClass("btn-inverse");
+		$('#weapon1_but').removeClass("btn-danger");
 	
-	$('#weapon1_but').addClass("btn-inverse");
-	$('#weapon1_but').removeClass("btn-danger");
+		$('#weapon2_but').addClass("btn-danger");
+		$('#weapon2_but').removeClass("btn-inverse");
 	
-	$('#weapon2_but').addClass("btn-danger");
-	$('#weapon2_but').removeClass("btn-inverse");
-	
-	$('#weapon3_but').addClass("btn-inverse");
-	$('#weapon3_but').removeClass("btn-danger");
+		$('#weapon3_but').addClass("btn-inverse");
+		$('#weapon3_but').removeClass("btn-danger");
+	}
 });
 
 $('#weapon3_but').click(function(){
+	var allowChangeWeapon = true;
 	socket.emit('changeWeapon','snipeShot');
 	socket.on('changeWeaponFailed'){
-		return;
+		allowChangeWeapon = false;
 	}
 	
-	$('#weapon1_but').addClass("btn-inverse");
-	$('#weapon1_but').removeClass("btn-danger");
+	if(allowChangeWeapon)
+	{
+		$('#weapon1_but').addClass("btn-inverse");
+		$('#weapon1_but').removeClass("btn-danger");
 	
-	$('#weapon2_but').addClass("btn-inverse");
-	$('#weapon2_but').removeClass("btn-danger");
+		$('#weapon2_but').addClass("btn-inverse");
+		$('#weapon2_but').removeClass("btn-danger");
 	
-	$('#weapon3_but').addClass("btn-danger");
-	$('#weapon3_but').removeClass("btn-inverse");
+		$('#weapon3_but').addClass("btn-danger");
+		$('#weapon3_but').removeClass("btn-inverse");
+	}
 	
 });
 //chat focus and unfocus
