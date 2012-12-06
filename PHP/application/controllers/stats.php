@@ -22,16 +22,12 @@ function __construct()
 	}
 
 	function getTables(){
-		$userid = $_POST['userid'];
-		$top_gun = $this->stats_model->getTopGunTable($userid);
-		$worst_gun = $this->stats_model->getWorstGunTable($userid);
-		$grave_yard = $this->stats_model->getGraveTable($userid);
-		$array = Array(
-		'top_gun' => $top_gun,
-		'worst_gun' => $worst_gun,
-		'grave_yard' => $grave_yard,
-		);
-		echo json_encode($array);
+		$data["userStats"] = $this->stats_model->getUserStats();
+		$data['topGun'] = $this->stats_model->getTopGunTable();
+		$data['worstGun'] = $this->stats_model->getWorstGunTable();
+		$data['graveYard'] = $this->stats_model->getGraveTable();
+		
+		$this->load->view('stats/topStats.php', $data);
 	}
 
 }
