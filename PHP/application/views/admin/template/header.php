@@ -42,7 +42,7 @@
 	  <div class="navbar-inner">
 	    <a class="brand" href="<?php echo base_url(); ?>admin"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_020_home.png" alt="Dashboard Icon"></img> Dashboard</a>
 	    <ul class="nav pull-right">
-	<?php $isLoggedIn = $this->session->userdata('isLoggedIn');
+	<?php $isLoggedIn = $this->session->userdata('admin_logged_in');
 	if(!isset($isLoggedIn)||$isLoggedIn != true)
 	{
 	?>

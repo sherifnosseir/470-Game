@@ -79,6 +79,9 @@ function __construct()
 					);
 
 				$this->session->set_userdata($data);
+				
+				$this->load->model('game_log_model');
+				$this->game_log_model->addUserLoginSession($username);
 				redirect("dashboard");
 			}
 			else

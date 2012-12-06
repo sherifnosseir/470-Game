@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Dec 06, 2012 at 04:57 AM
+-- Generation Time: Dec 06, 2012 at 06:39 AM
 -- Server version: 5.1.44
 -- PHP Version: 5.3.1
 
@@ -147,15 +147,27 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `nickname`, `team_id
 --
 
 CREATE TABLE IF NOT EXISTS `user_login_log` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `total_logins` int(255) NOT NULL,
-  `unique_logins` int(255) NOT NULL,
-  `unique_visits` int(255) NOT NULL,
-  `db_time_stamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(225) NOT NULL,
+  `date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `user_login_log`
 --
 
+INSERT INTO `user_login_log` (`id`, `username`, `date`) VALUES
+(2, 'kennych', '0000-00-00'),
+(3, 'kennych', '0000-00-00'),
+(4, 'kennych', '2012-12-06'),
+(5, 'chief', '2012-12-03'),
+(6, 'chief', '2012-12-03'),
+(7, 'sherif', '2012-12-04'),
+(8, 'sherif', '2012-12-04'),
+(9, 'kennych', '2012-12-02'),
+(10, 'kennych', '2012-12-02'),
+(11, 'kennych', '2012-12-01'),
+(12, 'kennych', '2012-12-01'),
+(13, 'sherif', '2012-12-01'),
+(14, 'sherif', '2012-12-01');

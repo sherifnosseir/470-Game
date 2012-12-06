@@ -11,12 +11,13 @@ function __construct()
 	{
 		$data["title"] = "Tanks Reports";
 		$data['assets'] = array('css' => null,
-							'js' => null);
+							'js' => array('reports/js/jscharts.js'));
 		$data['error'] = "";
 		
-		//Assets are used to load LESSCSS, or Javascript
-/*		$data['assets'] = array('css' => null,
-								'js' => array("login/js/bla.js", "login/js/blabla.js"));*/
+		$this->load->model('game_log_model');
+		$data['gameData'] = $this->game_log_model->getGameStatistics();
+		$data['max'] = $this->game_log_model->getMaxConnections();
+		
 		$data["view"] = 'reports/index.php';
 		$this->load->view('template/template', $data);
 	}
