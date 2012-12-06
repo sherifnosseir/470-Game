@@ -49,11 +49,13 @@ function loadMap()
 load();
 if(environment=="development"){
 	var socket=io.connect('http://localhost:8080');
+	console.log("Connecting localhost");
 }else{
 	var socket=io.connect('http://cmpt470.csil.sfu.ca:8016');
+	console.log("Connecting sfu connection");
 }
 
-socket.emit('connecting', userid);
+socket.emit('connecting', username);
 
 socket.on('response', function(response,user_info) {
 	console.log(response);
