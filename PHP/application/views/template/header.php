@@ -67,7 +67,7 @@ else{
 	{
 
 	?>	
-		<li class="active"><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
+		<li><a href="<? echo base_url();?>game"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_086_display.png" alt="Game Icon"></img> Game</a></li>
 	  	<li><a href="<?php echo base_url(); ?>reports"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_041_charts.png" alt="Reports Icon"></img> Reports</a></li>
 		<li><a href="<?php echo base_url(); ?>stats"><img src="<?php echo base_url(); ?>assets/icon/glyphicons_040_stats.png" alt="Stats Icon"></img> Statistics</a></li>
 		<li><a href="<?php echo base_url(); ?>config"><i class="icon-user"></i> <?php echo $this->session->userdata("username"); ?></a></li>
