@@ -2,7 +2,7 @@
 
 	<fieldset>
 	<legend><h2>Edit Profile</h2></legend>
-	</fieldset>	
+	</fieldset>
 	
 	<action form="<?php echo base_url(); ?>login/signup" method="post" accept-charset="utf-8" id="signup_">
 		<br />
@@ -76,5 +76,7 @@
 		</div>
 		<p id="response"></p>
 	</form>
+	
+
 	
 </div>

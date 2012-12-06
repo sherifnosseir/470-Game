@@ -24,7 +24,9 @@
 	<script>var username = "<?php echo $this->session->userdata("username"); ?>"</script>
 	<?php
 }
+
 ?>
+
 
 <script src="<?php echo base_url(); ?>assets/global/js/jquery-1.8.2.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="<?php echo base_url(); ?>assets/global/js/less.js"></script>
