@@ -22,8 +22,8 @@ function load(){
 		{
 			// these files are always loaded
 			load : [
-				"scripts/clientDraw.js",
-				"scripts/clientScript.js"
+				base_url+"assets/game/scripts/clientDraw.js",
+				base_url+"assets/game/scripts/clientScript.js"
 			],
 			// called when all files have finished loading
 			// and executing
@@ -53,7 +53,7 @@ if(environment=="development"){
 	var socket=io.connect('http://cmpt470.csil.sfu.ca:8016');
 }
 
-socket.emit('connecting',userid);
+socket.emit('connecting', userid);
 
 socket.on('response', function(response,user_info) {
 	console.log(response);
